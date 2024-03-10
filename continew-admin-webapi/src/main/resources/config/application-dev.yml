@@ -272,3 +272,7 @@ spring.servlet:
 ## 头像支持格式配置
 avatar:
   support-suffix: jpg,jpeg,png,gif
+
+openai:
+  apiKey: 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
+  apiHost: https://api.openai.com/

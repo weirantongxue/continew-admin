@@ -48,6 +48,11 @@
             <groupId>top.charles7c.continew</groupId>
             <artifactId>continew-admin-monitor</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>top.charles7c.continew</groupId>
+            <artifactId>continew-ai-front</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
