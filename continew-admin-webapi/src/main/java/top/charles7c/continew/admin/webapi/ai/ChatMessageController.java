@@ -16,11 +16,13 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
-import top.charles7c.continew.admin.front.model.query.MessageQuery;
-import top.charles7c.continew.admin.front.model.req.MessageReq;
-import top.charles7c.continew.admin.front.model.resp.MessageDetailResp;
-import top.charles7c.continew.admin.front.model.resp.MessageResp;
-import top.charles7c.continew.admin.front.service.MessageService;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.text.CharSequenceUtil;
+import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
+import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
+import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
+import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
+import top.charles7c.continew.admin.front.service.ChatMessageService;
 import top.charles7c.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.starter.extension.crud.enums.Api;
 
@@ -39,4 +41,6 @@ import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMappi
 @Tag(name = "对话消息管理 API")
 @RestController
 @CrudRequestMapping(value = "/front/message", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
-public class MessageController extends BaseController<MessageService, MessageResp, MessageDetailResp, MessageQuery, MessageReq> {}
+public class ChatMessageController extends BaseController<ChatMessageService, ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> {
+
+}

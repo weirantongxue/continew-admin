@@ -26,11 +26,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.charles7c.continew.admin.front.constant.TimerConstant;
 import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
-import top.charles7c.continew.admin.front.model.entity.MessageDO;
-import top.charles7c.continew.admin.front.model.validate.MessageRequestValidate;
-import top.charles7c.continew.admin.front.service.MessageService;
+import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
+import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
+import top.charles7c.continew.admin.front.service.ChatMessageService;
 import top.charles7c.continew.admin.front.strategy.ChatStrategy;
-import top.charles7c.continew.admin.front.util.MessageUtils;
+import top.charles7c.continew.admin.front.util.ChatMessageUtils;
 
 /**
  * Created by WeiRan on 2023.09.08 11:36
@@ -41,21 +41,21 @@ public class ChatGptHandler implements ChatStrategy {
     private final OpenAiStreamClient openAiStreamClient;
 
     @Resource
-    private MessageService messageService;
+    private ChatMessageService messageService;
 
     public ChatGptHandler(OpenAiStreamClient openAiStreamClient) {
         this.openAiStreamClient = openAiStreamClient;
     }
 
     @Override
-    public SseEmitter aiApi(MessageRequestValidate messageRequestValidate) {
+    public SseEmitter aiApi(ChatMessageRequestValidate messageRequestValidate) {
         SseEmitter sseEmitter = new SseEmitter(-1L);
         try {
             TimeInterval timer = new TimeInterval();
             timer.start(TimerConstant.RESPONSE_TIME);
             String messageId = IdUtil.fastSimpleUUID();
 
-            MessageDO message = MessageUtils.ConvertMessageUtils(messageRequestValidate, messageId);
+            ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageRequestValidate, messageId);
 
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(sseEmitter, messageId, messageService, message, timer);
             ChatCompletion completion = ChatCompletion.builder()

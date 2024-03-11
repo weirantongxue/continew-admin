@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.mapper;
+package top.charles7c.continew.admin.front.service;
 
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
-import top.charles7c.continew.admin.front.model.entity.MessageDO;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
+import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
+import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
+import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
+import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 
 /**
- * 对话消息 Mapper
+ * 对话消息业务接口
  *
  * @author weiran
  * @since 2024/03/10 23:15
  */
-public interface MessageMapper extends BaseMapper<MessageDO> {}
+public interface ChatMessageService extends BaseService<ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> {}

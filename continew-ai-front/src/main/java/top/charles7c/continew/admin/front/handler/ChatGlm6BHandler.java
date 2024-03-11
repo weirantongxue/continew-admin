@@ -25,12 +25,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.charles7c.continew.admin.front.constant.TimerConstant;
 import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
-import top.charles7c.continew.admin.front.model.entity.MessageDO;
-import top.charles7c.continew.admin.front.model.validate.MessageRequestValidate;
-import top.charles7c.continew.admin.front.service.MessageService;
+import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
+import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
+import top.charles7c.continew.admin.front.service.ChatMessageService;
 import top.charles7c.continew.admin.front.strategy.ChatStrategy;
 import top.charles7c.continew.admin.front.util.ApiTokenUtils;
-import top.charles7c.continew.admin.front.util.MessageUtils;
+import top.charles7c.continew.admin.front.util.ChatMessageUtils;
 import top.charles7c.continew.admin.front.util.StreamUtils;
 
 /**
@@ -40,16 +40,16 @@ import top.charles7c.continew.admin.front.util.StreamUtils;
 @RequiredArgsConstructor
 @Slf4j
 public class ChatGlm6BHandler implements ChatStrategy {
-    private final MessageService messageService;
+    private final ChatMessageService messageService;
 
     @Override
-    public SseEmitter aiApi(MessageRequestValidate messageCreateValidate) {
+    public SseEmitter aiApi(ChatMessageRequestValidate messageCreateValidate) {
         SseEmitter sseEmitter = new SseEmitter(-1L);
         try {
             TimeInterval timer = new TimeInterval();
             timer.start(TimerConstant.RESPONSE_TIME);
             String messageId = IdUtil.fastSimpleUUID();
-            MessageDO message = MessageUtils.ConvertMessageUtils(messageCreateValidate, messageId);
+            ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageCreateValidate, messageId);
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(sseEmitter, messageId, messageService, message, timer);
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
             System.out.println(authToken);

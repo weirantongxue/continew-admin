@@ -17,12 +17,12 @@
 package top.charles7c.continew.admin.front.strategy;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import top.charles7c.continew.admin.front.model.validate.MessageRequestValidate;
+import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
 
 /**
  * Created by WeiRan on 2021.12.10 15:11
  */
 public interface ChatStrategy {
-    SseEmitter aiApi(MessageRequestValidate messageCreateValidate);
+    SseEmitter aiApi(ChatMessageRequestValidate messageCreateValidate);
 
 }

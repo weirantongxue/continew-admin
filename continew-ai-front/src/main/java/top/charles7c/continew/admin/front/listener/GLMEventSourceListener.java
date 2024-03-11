@@ -28,8 +28,8 @@ import okhttp3.sse.EventSourceListener;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.charles7c.continew.admin.front.constant.TimerConstant;
 import top.charles7c.continew.admin.front.enums.EventNameType;
-import top.charles7c.continew.admin.front.model.entity.MessageDO;
-import top.charles7c.continew.admin.front.service.MessageService;
+import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
+import top.charles7c.continew.admin.front.service.ChatMessageService;
 
 import java.util.Objects;
 
@@ -41,9 +41,9 @@ public class GLMEventSourceListener extends EventSourceListener {
 
     private final SseEmitter sseEmitter;
     private final String messageId;
-    private final MessageService messageService;
+    private final ChatMessageService messageService;
 
-    private final MessageDO message;
+    private final ChatMessageDO message;
 
     private final TimeInterval timer;
 
@@ -51,8 +51,8 @@ public class GLMEventSourceListener extends EventSourceListener {
 
     public GLMEventSourceListener(SseEmitter sseEmitter,
                                   String messageId,
-                                  MessageService messageService,
-                                  MessageDO message,
+                                  ChatMessageService messageService,
+                                  ChatMessageDO message,
                                   TimeInterval timer) {
         this.sseEmitter = sseEmitter;
         this.messageId = messageId;

@@ -21,13 +21,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
-import top.charles7c.continew.admin.front.mapper.MessageMapper;
-import top.charles7c.continew.admin.front.model.entity.MessageDO;
-import top.charles7c.continew.admin.front.model.query.MessageQuery;
-import top.charles7c.continew.admin.front.model.req.MessageReq;
-import top.charles7c.continew.admin.front.model.resp.MessageDetailResp;
-import top.charles7c.continew.admin.front.model.resp.MessageResp;
-import top.charles7c.continew.admin.front.service.MessageService;
+import top.charles7c.continew.admin.front.mapper.ChatMessageMapper;
+import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
+import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
+import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
+import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
+import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
+import top.charles7c.continew.admin.front.service.ChatMessageService;
 
 /**
  * 对话消息业务实现
@@ -37,4 +37,11 @@ import top.charles7c.continew.admin.front.service.MessageService;
  */
 @Service
 @RequiredArgsConstructor
-public class MessageServiceImpl extends BaseServiceImpl<MessageMapper, MessageDO, MessageResp, MessageDetailResp, MessageQuery, MessageReq> implements MessageService {}
+public class ChatMessageServiceImpl extends BaseServiceImpl<ChatMessageMapper, ChatMessageDO, ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> implements ChatMessageService {
+
+
+
+
+
+
+}

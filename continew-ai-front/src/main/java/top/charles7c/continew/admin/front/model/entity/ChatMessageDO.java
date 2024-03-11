@@ -31,8 +31,8 @@ import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
  * @since 2024/03/10 23:15
  */
 @Data
-@TableName("lb_message")
-public class MessageDO extends BaseDO {
+@TableName("lb_chat_message")
+public class ChatMessageDO extends BaseDO {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -96,9 +96,4 @@ public class MessageDO extends BaseDO {
      * 聊天耗时
      */
     private Long chatResponseTime;
-
-    /**
-     * 是否删除: [0=否, 1=是]
-     */
-    private Integer isDelete;
 }

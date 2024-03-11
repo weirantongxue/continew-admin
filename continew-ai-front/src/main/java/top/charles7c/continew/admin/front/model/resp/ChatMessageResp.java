@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.model.query;
+package top.charles7c.continew.admin.front.model.resp;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 import lombok.Data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import top.charles7c.continew.starter.data.core.annotation.Query;
-import top.charles7c.continew.starter.data.core.enums.QueryType;
+import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
 
 /**
- * 对话消息查询条件
+ * 对话消息信息
  *
  * @author weiran
  * @since 2024/03/10 23:15
  */
 @Data
-@Schema(description = "对话消息查询条件")
-public class MessageQuery implements Serializable {
+@Schema(description = "对话消息信息")
+public class ChatMessageResp extends BaseResp {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -43,34 +41,71 @@ public class MessageQuery implements Serializable {
      * 会话id
      */
     @Schema(description = "会话id")
-    @Query(type = QueryType.EQ)
     private String itemId;
 
     /**
      * 消息id
      */
     @Schema(description = "消息id")
-    @Query(type = QueryType.EQ)
     private String messageId;
 
     /**
      * 提问
      */
     @Schema(description = "提问")
-    @Query(type = QueryType.LIKE)
     private String question;
+
+    /**
+     * 回答
+     */
+    @Schema(description = "回答")
+    private String answer;
+
+    /**
+     * 模型名称
+     */
+    @Schema(description = "模型名称")
+    private String model;
 
     /**
      * 是否采纳,0:未点击.1:采纳.2,未采纳
      */
     @Schema(description = "是否采纳,0:未点击.1:采纳.2,未采纳")
-    @Query(type = QueryType.EQ)
     private Boolean adopt;
 
     /**
-     * 创建人
+     * ip信息
      */
-    @Schema(description = "创建人")
-    @Query(type = QueryType.EQ)
-    private Long createUser;
+    @Schema(description = "ip信息")
+    private String ip;
+
+    /**
+     * 输入词块数
+     */
+    @Schema(description = "输入词块数")
+    private Integer inputTokens;
+
+    /**
+     * 输出词块数
+     */
+    @Schema(description = "输出词块数")
+    private Integer outputTokens;
+
+    /**
+     * 总词块数
+     */
+    @Schema(description = "总词块数")
+    private Integer totalTokens;
+
+    /**
+     * 总请求耗时
+     */
+    @Schema(description = "总请求耗时")
+    private Long responseTime;
+
+    /**
+     * 聊天耗时
+     */
+    @Schema(description = "聊天耗时")
+    private Long chatResponseTime;
 }

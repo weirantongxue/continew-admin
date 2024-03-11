@@ -27,7 +27,7 @@ import java.util.List;
 
 @Data
 @Schema(description = "PC用户查询条件")
-public class MessageRequestValidate implements Serializable {
+public class ChatMessageRequestValidate implements Serializable {
 
     @NotBlank(message = "channel参数缺失")
     @Schema(description = "请求渠道")

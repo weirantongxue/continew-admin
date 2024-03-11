@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.model.req;
+package top.charles7c.continew.admin.front.model.resp;
 
 import java.io.Serial;
-
-import jakarta.validation.constraints.*;
 
 import lombok.Data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import org.hibernate.validator.constraints.Length;
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 
-import top.charles7c.continew.starter.extension.crud.model.req.BaseReq;
+import top.charles7c.continew.starter.extension.crud.model.resp.BaseDetailResp;
 
 /**
- * 创建或修改对话消息信息
+ * 对话消息详情信息
  *
  * @author weiran
  * @since 2024/03/10 23:15
  */
 @Data
-@Schema(description = "创建或修改对话消息信息")
-public class MessageReq extends BaseReq {
+@ExcelIgnoreUnannotated
+@Schema(description = "对话消息详情信息")
+public class ChatMessageDetailResp extends BaseDetailResp {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -45,63 +45,84 @@ public class MessageReq extends BaseReq {
      * 会话id
      */
     @Schema(description = "会话id")
-    @Length(max = 255, message = "会话id长度不能超过 {max} 个字符")
+    @ExcelProperty(value = "会话id")
     private String itemId;
 
     /**
      * 消息id
      */
     @Schema(description = "消息id")
-    @NotBlank(message = "消息id不能为空")
-    @Length(max = 255, message = "消息id长度不能超过 {max} 个字符")
+    @ExcelProperty(value = "消息id")
     private String messageId;
+
+    /**
+     * 提问
+     */
+    @Schema(description = "提问")
+    @ExcelProperty(value = "提问")
+    private String question;
+
+    /**
+     * 回答
+     */
+    @Schema(description = "回答")
+    @ExcelProperty(value = "回答")
+    private String answer;
+
+    /**
+     * 模型名称
+     */
+    @Schema(description = "模型名称")
+    @ExcelProperty(value = "模型名称")
+    private String model;
 
     /**
      * 是否采纳,0:未点击.1:采纳.2,未采纳
      */
     @Schema(description = "是否采纳,0:未点击.1:采纳.2,未采纳")
-    @NotNull(message = "是否采纳,0:未点击.1:采纳.2,未采纳不能为空")
+    @ExcelProperty(value = "是否采纳,0:未点击.1:采纳.2,未采纳")
     private Boolean adopt;
+
+    /**
+     * ip信息
+     */
+    @Schema(description = "ip信息")
+    @ExcelProperty(value = "ip信息")
+    private String ip;
 
     /**
      * 输入词块数
      */
     @Schema(description = "输入词块数")
-    @NotNull(message = "输入词块数不能为空")
+    @ExcelProperty(value = "输入词块数")
     private Integer inputTokens;
 
     /**
      * 输出词块数
      */
     @Schema(description = "输出词块数")
-    @NotNull(message = "输出词块数不能为空")
+    @ExcelProperty(value = "输出词块数")
     private Integer outputTokens;
 
     /**
      * 总词块数
      */
     @Schema(description = "总词块数")
-    @NotNull(message = "总词块数不能为空")
+    @ExcelProperty(value = "总词块数")
     private Integer totalTokens;
 
     /**
      * 总请求耗时
      */
     @Schema(description = "总请求耗时")
-    @NotNull(message = "总请求耗时不能为空")
+    @ExcelProperty(value = "总请求耗时")
     private Long responseTime;
 
     /**
      * 聊天耗时
      */
     @Schema(description = "聊天耗时")
-    @NotNull(message = "聊天耗时不能为空")
+    @ExcelProperty(value = "聊天耗时")
     private Long chatResponseTime;
 
-    /**
-     * 创建人
-     */
-    @Schema(description = "创建人")
-    @NotNull(message = "创建人不能为空")
-    private Long createUser;
 }
