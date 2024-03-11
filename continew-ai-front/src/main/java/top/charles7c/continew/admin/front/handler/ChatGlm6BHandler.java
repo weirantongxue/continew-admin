@@ -49,16 +49,16 @@ public class ChatGlm6BHandler implements ChatStrategy {
             TimeInterval timer = new TimeInterval();
             timer.start(TimerConstant.RESPONSE_TIME);
             String messageId = IdUtil.fastSimpleUUID();
+
             ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageCreateValidate, messageId);
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(sseEmitter, messageId, messageService, message, timer);
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
-            System.out.println(authToken);
+
             JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(messageCreateValidate));
             //jsonObject.put("prompt", jsonObject.remove("messages"));
-            System.out.println("json");
             StreamUtils
-                .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
-                    .toJSONString(jsonObject));
+                    .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
+                            .toJSONString(jsonObject));
         } catch (Exception e) {
             log.error("Glm6B请求失败");
         }

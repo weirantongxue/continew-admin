@@ -25,6 +25,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 
+import top.charles7c.continew.starter.data.core.annotation.Query;
+import top.charles7c.continew.starter.data.core.enums.QueryType;
 import top.charles7c.continew.starter.extension.crud.model.resp.BaseDetailResp;
 
 /**
@@ -54,6 +56,13 @@ public class ChatMessageDetailResp extends BaseDetailResp {
     @Schema(description = "消息id")
     @ExcelProperty(value = "消息id")
     private String messageId;
+
+    /**
+     * value
+     */
+    @Schema(description = "任务id")
+    @ExcelProperty(value = "任务id")
+    private String taskId;
 
     /**
      * 提问
@@ -95,21 +104,21 @@ public class ChatMessageDetailResp extends BaseDetailResp {
      */
     @Schema(description = "输入词块数")
     @ExcelProperty(value = "输入词块数")
-    private Integer inputTokens;
+    private Long promptTokens;
 
     /**
      * 输出词块数
      */
     @Schema(description = "输出词块数")
     @ExcelProperty(value = "输出词块数")
-    private Integer outputTokens;
+    private Long completionTokens;
 
     /**
      * 总词块数
      */
     @Schema(description = "总词块数")
     @ExcelProperty(value = "总词块数")
-    private Integer totalTokens;
+    private Long totalTokens;
 
     /**
      * 总请求耗时

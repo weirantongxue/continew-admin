@@ -48,6 +48,11 @@ public class ChatMessageDO extends BaseDO {
     private String messageId;
 
     /**
+     * 任务id
+     */
+    private String taskId;
+
+    /**
      * 提问
      */
     private String question;
@@ -75,17 +80,17 @@ public class ChatMessageDO extends BaseDO {
     /**
      * 输入词块数
      */
-    private Integer inputTokens;
+    private Long promptTokens;
 
     /**
      * 输出词块数
      */
-    private Integer outputTokens;
+    private Long completionTokens;
 
     /**
      * 总词块数
      */
-    private Integer totalTokens;
+    private Long totalTokens;
 
     /**
      * 总请求耗时

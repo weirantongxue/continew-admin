@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.service;
 
+import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
 import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
@@ -28,4 +29,6 @@ import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
  * @author weiran
  * @since 2024/03/10 23:15
  */
-public interface ChatMessageService extends BaseService<ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> {}
+public interface ChatMessageService extends BaseService<ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> {
+    int insertMessage(ChatMessageDO chatMessageDO);
+}

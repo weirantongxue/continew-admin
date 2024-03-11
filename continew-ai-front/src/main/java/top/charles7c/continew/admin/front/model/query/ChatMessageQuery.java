@@ -54,6 +54,13 @@ public class ChatMessageQuery implements Serializable {
     private String messageId;
 
     /**
+     * 任务id
+     */
+    @Schema(description = "任务id")
+    @Query(type = QueryType.EQ)
+    private String taskId;
+
+    /**
      * 提问
      */
     @Schema(description = "提问")

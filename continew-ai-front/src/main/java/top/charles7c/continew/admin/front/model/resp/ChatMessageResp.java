@@ -83,19 +83,19 @@ public class ChatMessageResp extends BaseResp {
      * 输入词块数
      */
     @Schema(description = "输入词块数")
-    private Integer inputTokens;
+    private Long promptTokens;
 
     /**
      * 输出词块数
      */
     @Schema(description = "输出词块数")
-    private Integer outputTokens;
+    private Integer completionTokens;
 
     /**
      * 总词块数
      */
     @Schema(description = "总词块数")
-    private Integer totalTokens;
+    private Long totalTokens;
 
     /**
      * 总请求耗时

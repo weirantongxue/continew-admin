@@ -26,12 +26,12 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-@Schema(description = "PC用户查询条件")
+@Schema(description = "对话参数")
 public class ChatMessageRequestValidate implements Serializable {
 
-    @NotBlank(message = "channel参数缺失")
-    @Schema(description = "请求渠道")
-    private Integer channel;
+//    @NotBlank(message = "channel参数缺失")
+//    @Schema(description = "请求渠道")
+//    private Integer channel;
 
     @NotBlank(message = "itemId参数缺失")
     @Schema(description = "回话id")

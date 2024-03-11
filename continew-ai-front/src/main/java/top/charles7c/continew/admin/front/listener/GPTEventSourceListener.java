@@ -30,6 +30,7 @@ import top.charles7c.continew.admin.front.constant.TimerConstant;
 import top.charles7c.continew.admin.front.enums.EventNameType;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
+import top.charles7c.continew.admin.front.util.ChatMessageUtils;
 
 import java.util.Objects;
 
@@ -87,7 +88,7 @@ public class GPTEventSourceListener extends EventSourceListener {
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         System.out.println("收到消息:" + data);
         if (data.equals("[DONE]")) {
-            // messageService.insertMessage(MessageUtils.setMessageDO(message,last, timer.intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
+            messageService.insertMessage(ChatMessageUtils.setMessageDO(message,last, timer.intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
             sseEmitter.send(SseEmitter.event()
                 .id(messageId)
                 .name(EventNameType.FINISH.getCode())
@@ -101,9 +102,10 @@ public class GPTEventSourceListener extends EventSourceListener {
         String content = completionResponse.getChoices().get(0).getDelta().getContent();
         if (content != null) {
             if (null != completionResponse.getUsage()) {
-                message.setTotalTokens((int)completionResponse.getUsage().getTotalTokens());
-                message.setInputTokens((int)completionResponse.getUsage().getPromptTokens());
-                message.setOutputTokens((int)completionResponse.getUsage().getCompletionTokens());
+                message.setTotalTokens(completionResponse.getUsage().getTotalTokens());
+                message.setPromptTokens(completionResponse.getUsage().getPromptTokens());
+                message.setCompletionTokens(completionResponse.getUsage().getCompletionTokens());
+                message.setTaskId(completionResponse.getId());
             }
 
             last = last + content;
