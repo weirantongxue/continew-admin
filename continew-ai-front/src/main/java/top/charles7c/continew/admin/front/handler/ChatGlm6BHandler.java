@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.charles7c.continew.admin.front.constant.TimerConstant;
-import top.charles7c.continew.admin.front.enums.EventNameType;
 import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
