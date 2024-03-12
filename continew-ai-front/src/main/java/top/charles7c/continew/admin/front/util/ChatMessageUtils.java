@@ -18,6 +18,7 @@ package top.charles7c.continew.admin.front.util;
 
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
 import top.charles7c.continew.starter.web.util.ServletUtils;
@@ -29,7 +30,8 @@ import java.time.LocalDateTime;
  */
 public class ChatMessageUtils {
 
-    public static ChatMessageDO ConvertMessageUtils(ChatMessageRequestValidate messageRequestValidate, String messageId) {
+    public static ChatMessageDO ConvertMessageUtils(ChatMessageRequestValidate messageRequestValidate,
+                                                    String messageId) {
         HttpServletRequest request = ServletUtils.getRequest();
         ChatMessageDO message = new ChatMessageDO();
         message.setMessageId(messageId);
@@ -39,10 +41,14 @@ public class ChatMessageUtils {
             .getContent());
         message.setModel(messageRequestValidate.getModel());
         message.setIp(JakartaServletUtil.getClientIP(request));
+        message.setCreateUser(LoginHelper.getUserId());
         return message;
     }
 
-    public static ChatMessageDO setMessageDO(ChatMessageDO message, String last, Long responseTime, Long chatResponseTime) {
+    public static ChatMessageDO setMessageDO(ChatMessageDO message,
+                                             String last,
+                                             Long responseTime,
+                                             Long chatResponseTime) {
         message.setAnswer(last);
         message.setResponseTime(responseTime);
         message.setChatResponseTime(chatResponseTime);

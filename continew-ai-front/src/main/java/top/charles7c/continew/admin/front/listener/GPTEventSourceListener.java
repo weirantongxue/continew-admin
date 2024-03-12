@@ -88,7 +88,8 @@ public class GPTEventSourceListener extends EventSourceListener {
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         System.out.println("收到消息:" + data);
         if (data.equals("[DONE]")) {
-            messageService.insertMessage(ChatMessageUtils.setMessageDO(message,last, timer.intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
+            messageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
+                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
             sseEmitter.send(SseEmitter.event()
                 .id(messageId)
                 .name(EventNameType.FINISH.getCode())

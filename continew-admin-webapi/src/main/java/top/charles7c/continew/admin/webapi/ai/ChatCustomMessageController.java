@@ -26,13 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
-import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
-import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
 import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
 import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
 import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
 import top.charles7c.continew.starter.web.model.R;
@@ -50,11 +46,11 @@ import top.charles7c.continew.starter.web.model.R;
 public class ChatCustomMessageController {
     private final ChatMessageService chatMessageService;
 
-
     @Operation(summary = "分页查询列表", description = "分页查询列表")
     @ResponseBody
     @GetMapping("/list")
-    public R<PageResp<ChatMessageResp>> page(@RequestParam(name = "itemId") String itemId, @Validated PageQuery pageQuery) {
+    public R<PageResp<ChatMessageResp>> page(@RequestParam(name = "itemId") String itemId,
+                                             @Validated PageQuery pageQuery) {
         ChatMessageQuery query = new ChatMessageQuery();
         query.setItemId(itemId);
         query.setCreateUser(LoginHelper.getUserId());

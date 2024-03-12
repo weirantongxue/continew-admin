@@ -36,7 +36,7 @@ import top.charles7c.continew.admin.front.util.StreamUtils;
 /**
  * Created by WeiRan on 2023.09.22 21:17
  */
-@Component("glm-4")
+@Component("zsx-ai")
 @RequiredArgsConstructor
 @Slf4j
 public class ChatGlm6BHandler implements ChatStrategy {
@@ -57,8 +57,8 @@ public class ChatGlm6BHandler implements ChatStrategy {
             JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(messageCreateValidate));
             //jsonObject.put("prompt", jsonObject.remove("messages"));
             StreamUtils
-                    .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
-                            .toJSONString(jsonObject));
+                .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
+                    .toJSONString(jsonObject));
         } catch (Exception e) {
             log.error("Glm6B请求失败");
         }

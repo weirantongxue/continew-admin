@@ -29,12 +29,12 @@ import java.util.List;
 @Schema(description = "对话参数")
 public class ChatMessageRequestValidate implements Serializable {
 
-//    @NotBlank(message = "channel参数缺失")
-//    @Schema(description = "请求渠道")
-//    private Integer channel;
+    //    @NotBlank(message = "channel参数缺失")
+    //    @Schema(description = "请求渠道")
+    //    private Integer channel;
 
     @NotBlank(message = "itemId参数缺失")
-    @Schema(description = "回话id")
+    @Schema(description = "会话id")
     private String itemId;
 
     @NotBlank(message = "model参数缺失")
