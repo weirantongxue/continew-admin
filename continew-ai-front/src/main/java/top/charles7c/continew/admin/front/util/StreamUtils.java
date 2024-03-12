@@ -31,10 +31,7 @@ import okhttp3.sse.EventSources;
 @Slf4j
 public class StreamUtils {
 
-    public static void streamCompletion(String url,
-                                        String authToken,
-                                        EventSourceListener eventSourceListener,
-                                        String requestBody) {
+    public static void streamCompletion(String url, String authToken, EventSourceListener eventSourceListener, String requestBody) {
         try {
             RequestBody formBody = RequestBody.create(requestBody, MediaType.parse("application/json; charset=utf-8"));
             Request.Builder requestBuilder = new Request.Builder();

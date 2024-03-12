@@ -41,7 +41,7 @@ public class ChatGptHandler implements ChatStrategy {
     private final OpenAiStreamClient openAiStreamClient;
 
     @Resource
-    private ChatMessageService messageService;
+    private ChatMessageService chatMessageService;
 
     public ChatGptHandler(OpenAiStreamClient openAiStreamClient) {
         this.openAiStreamClient = openAiStreamClient;
@@ -57,7 +57,7 @@ public class ChatGptHandler implements ChatStrategy {
 
             ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageRequestValidate, messageId);
 
-            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(sseEmitter, messageId, messageService, message, timer);
+            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(sseEmitter, messageId, chatMessageService, message, timer);
             ChatCompletion completion = ChatCompletion.builder()
                 .messages(messageRequestValidate.getMessages())
                 .model(messageRequestValidate.getModel())

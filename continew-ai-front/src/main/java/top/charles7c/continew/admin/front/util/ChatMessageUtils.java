@@ -18,7 +18,6 @@ package top.charles7c.continew.admin.front.util;
 
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
 import top.charles7c.continew.starter.web.util.ServletUtils;
@@ -41,7 +40,7 @@ public class ChatMessageUtils {
             .getContent());
         message.setModel(messageRequestValidate.getModel());
         message.setIp(JakartaServletUtil.getClientIP(request));
-        message.setCreateUser(LoginHelper.getUserId());
+        message.setCreateUser(1L);
         return message;
     }
 

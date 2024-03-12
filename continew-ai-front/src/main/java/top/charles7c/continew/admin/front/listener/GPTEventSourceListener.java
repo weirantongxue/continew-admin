@@ -1,19 +1,3 @@
-/*
- * Copyright (c) 2022-present Charles7c Authors. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package top.charles7c.continew.admin.front.listener;
 
 import cn.hutool.core.date.TimeInterval;
@@ -25,6 +9,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.charles7c.continew.admin.front.constant.TimerConstant;
 import top.charles7c.continew.admin.front.enums.EventNameType;
@@ -32,6 +17,7 @@ import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
 import top.charles7c.continew.admin.front.util.ChatMessageUtils;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -42,7 +28,7 @@ public class GPTEventSourceListener extends EventSourceListener {
 
     private final SseEmitter sseEmitter;
     private final String messageId;
-    private final ChatMessageService messageService;
+    private final ChatMessageService chatMessageService;
 
     private final ChatMessageDO message;
 
@@ -50,14 +36,10 @@ public class GPTEventSourceListener extends EventSourceListener {
 
     private String last = "";
 
-    public GPTEventSourceListener(SseEmitter sseEmitter,
-                                  String messageId,
-                                  ChatMessageService messageService,
-                                  ChatMessageDO message,
-                                  TimeInterval timer) {
+    public GPTEventSourceListener(SseEmitter sseEmitter, String messageId, ChatMessageService chatMessageService, ChatMessageDO message, TimeInterval timer) {
         this.sseEmitter = sseEmitter;
         this.messageId = messageId;
-        this.messageService = messageService;
+        this.chatMessageService = chatMessageService;
         this.message = message;
         this.timer = timer;
     }
@@ -86,10 +68,10 @@ public class GPTEventSourceListener extends EventSourceListener {
     @SneakyThrows
     @Override
     public void onEvent(EventSource eventSource, String id, String type, String data) {
-        System.out.println("收到消息:" + data);
+        log.info("收到消息:" + data);
         if (data.equals("[DONE]")) {
-            messageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
+//            chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
+//                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
             sseEmitter.send(SseEmitter.event()
                 .id(messageId)
                 .name(EventNameType.FINISH.getCode())
@@ -116,6 +98,7 @@ public class GPTEventSourceListener extends EventSourceListener {
                 .data(completionResponse.getChoices().get(0).getDelta())
                 .reconnectTime(3000));
         }
+        System.out.println("------开始发送消息到前端------");
     }
 
     /**
@@ -137,9 +120,9 @@ public class GPTEventSourceListener extends EventSourceListener {
         }
         ResponseBody body = response.body();
         if (Objects.nonNull(body)) {
-            log.error("OpenAI  sse连接异常data：{}，异常：{}", body.string(), t);
+            log.error("sse连接异常data：{}，异常：{}", body.string(), t);
         } else {
-            log.error("OpenAI  sse连接异常data：{}，异常：{}", response, t);
+            log.error("sse连接异常data：{}，异常：{}", response, t);
         }
         eventSource.cancel();
         sseEmitter.complete();

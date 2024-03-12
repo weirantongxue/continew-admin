@@ -39,11 +39,11 @@ import top.charles7c.continew.admin.front.service.ChatMessageService;
 @RequiredArgsConstructor
 public class ChatMessageServiceImpl extends BaseServiceImpl<ChatMessageMapper, ChatMessageDO, ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> implements ChatMessageService {
 
-    private final ChatMessageMapper messageMapper;
+    private final ChatMessageMapper chatMessageMapper;
 
     @Override
     public int insertMessage(ChatMessageDO message) {
-        return this.messageMapper.insert(message);
+        return this.chatMessageMapper.insert(message);
     }
 
 }

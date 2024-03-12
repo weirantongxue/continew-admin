@@ -70,10 +70,12 @@
 
     <!-- 开发环境：只打印到控制台 -->
     <springProfile name="dev">
-        <!-- 如果配置的日志等级，和 application.yml 中的日志等级配置重叠，application.yml 配置优先级高 -->
         <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="CONSOLE_PROD"/>
+            <appender-ref ref="ASYNC_FILE"/>
         </root>
+        <!-- 日志保留天数（根据国家法律，网络运行状态、网络安全事件、个人敏感信息操作等相关记录，留存的日志不少于六个月，并且进行网络多机备份。） -->
+        <property name="FILE_MAX_HISTORY" value="7"/>
     </springProfile>
 
     <!-- 生产环境：打印到控制台并输出到文件 -->
