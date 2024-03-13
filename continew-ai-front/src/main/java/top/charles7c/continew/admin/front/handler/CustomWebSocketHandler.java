@@ -65,7 +65,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         // 将新连接添加
         WEB_SOCKET_SESSION_MAP.put(sessionId, session);
         log.info("与【{}】建立了连接", sessionId);
-        //webSocketSendService.sendMessage(sessionId, "收到消息啦,收到消息啦");
         log.info("attributes:{}", session.getAttributes());
 
     }

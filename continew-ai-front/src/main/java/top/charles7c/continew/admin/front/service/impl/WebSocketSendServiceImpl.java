@@ -28,7 +28,7 @@ public class WebSocketSendServiceImpl implements WebSocketSendService {
      * @return sessionId
      */
     public String getSessionId(WebSocketSession session) {
-        return (String) session.getAttributes().get("username");
+        return (String) session.getAttributes().get("userId");
     }
 
     /**

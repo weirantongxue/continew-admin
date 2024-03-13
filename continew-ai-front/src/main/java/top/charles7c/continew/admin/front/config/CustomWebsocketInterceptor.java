@@ -6,6 +6,7 @@ package top.charles7c.continew.admin.front.config;
 
 import cn.dev33.satoken.stp.StpUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -13,6 +14,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
+import top.charles7c.continew.admin.common.model.dto.LoginUser;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 
 import java.util.Map;
@@ -41,8 +43,7 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
         ServletServerHttpRequest req = (ServletServerHttpRequest) request;
         ServletServerHttpResponse res = (ServletServerHttpResponse) response;
         String token = req.getServletRequest().getParameter("token");
-        String username = req.getServletRequest().getParameter("username");
-        log.info("建立连接....token:{} username:{}", token, username);
+        log.info("建立连接....token:{}", token);
         log.info("attributes:{}", attributes);
 
         /**
@@ -50,10 +51,15 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
          *  response.setStatusCode(HttpStatus.UNAUTHORIZED);
          *  return false;
          */
-        //LoginHelper.getLoginUser(token);
-        attributes.put("token", token);
-        attributes.put("username", username);
-
+        LoginUser loginUser= LoginHelper.getLoginUser(token);
+        if (loginUser == null) {
+            res.setStatusCode(HttpStatus.UNAUTHORIZED);
+            res.getServletResponse().setContentType("application/json");
+            String errorMessage = "{\"error\": \"Authentication failed. Please provide valid credentials.\"}";
+            res.getBody().write(errorMessage.getBytes());
+            return false;
+        }
+        attributes.put("userId", loginUser.getId());
         super.setCreateSession(true);
         return super.beforeHandshake(request, response, wsHandler, attributes);
     }

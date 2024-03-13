@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.mapper;
 
+import top.charles7c.continew.admin.common.config.mybatis.DataPermissionMapper;
 import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 
@@ -25,4 +26,4 @@ import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
  * @author weiran
  * @since 2024/03/10 23:15
  */
-public interface ChatMessageMapper extends BaseMapper<ChatMessageDO> {}
+public interface ChatMessageMapper extends DataPermissionMapper<ChatMessageDO> {}

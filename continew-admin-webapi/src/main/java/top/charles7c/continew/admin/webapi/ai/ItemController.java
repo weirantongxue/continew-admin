@@ -35,7 +35,7 @@ import top.charles7c.continew.starter.extension.crud.enums.Api;
  */
 @Tag(name = "AI会话管理 API")
 @RestController
-@CrudRequestMapping(value = "/front/item", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
+@CrudRequestMapping(value = "/ai/item", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
 public class ItemController extends BaseController<ItemService, ItemResp, ItemDetailResp, ItemQuery, ItemReq> {
 
 }
