@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.util;
+package top.charles7c.continew.admin.common.util;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +22,8 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
 import okhttp3.sse.EventSources;
-import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
 
 /**
  * Created by WeiRan on 2023.09.22 23:27
@@ -31,7 +31,10 @@ import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
 @Slf4j
 public class StreamUtils {
 
-    public static void streamCompletion(String url, String authToken, GPTEventSourceListener gptEventSourceListener, String requestBody) {
+    public static void streamCompletion(String url,
+                                        String authToken,
+                                        EventSourceListener eventSourceListener,
+                                        String requestBody) {
         try {
             RequestBody formBody = RequestBody.create(requestBody, MediaType.parse("application/json; charset=utf-8"));
             Request.Builder requestBuilder = new Request.Builder();
@@ -41,9 +44,7 @@ public class StreamUtils {
             Request request = requestBuilder.url(url).post(formBody).build();
             EventSource.Factory factory = EventSources.createFactory(OkHttpUtils.getInstance());
             //创建事件
-            factory.newEventSource(request, gptEventSourceListener);
-            //gptEventSourceListener.getCountDownLatch().await();
-            //eventSourceListener.onEvent();
+            factory.newEventSource(request, eventSourceListener);
         } catch (Exception e) {
             log.error("请求streamCompletion异常:", e);
 

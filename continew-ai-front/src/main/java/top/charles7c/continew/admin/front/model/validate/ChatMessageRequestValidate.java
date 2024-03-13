@@ -21,6 +21,7 @@ import com.unfbx.chatgpt.entity.chat.Message;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import top.charles7c.continew.admin.common.enums.DataScopeEnum;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,9 +30,18 @@ import java.util.List;
 @Schema(description = "对话参数")
 public class ChatMessageRequestValidate implements Serializable {
 
-    //    @NotBlank(message = "channel参数缺失")
-    //    @Schema(description = "请求渠道")
-    //    private Integer channel;
+    @NotBlank(message = "channel参数缺失")
+    @Schema(description = "请求渠道")
+    private Integer channel;
+
+    @NotBlank(message = "消息类型不能为空")
+    @Schema(description = "消息类型 0:文本消息, 1:图片消息 2:语音文件 3:视频文件")
+    private int msgType;
+
+
+    @NotBlank(message = "chatType参数缺失")
+    @Schema(description = "0:未知,1:公聊,2:私聊,3:系统消息,4:模型消息")
+    private int chatType;
 
     @NotBlank(message = "itemId参数缺失")
     @Schema(description = "会话id")

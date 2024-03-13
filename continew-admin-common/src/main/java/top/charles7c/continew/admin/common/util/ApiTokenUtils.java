@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.util;
+package top.charles7c.continew.admin.common.util;
 
 import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Jwts;

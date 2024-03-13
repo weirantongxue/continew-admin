@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.config;
+package top.charles7c.continew.admin.common.config;
 
 import com.unfbx.chatgpt.OpenAiStreamClient;
 import com.unfbx.chatgpt.function.KeyRandomStrategy;

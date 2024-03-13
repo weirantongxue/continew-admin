@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.util;
+package top.charles7c.continew.admin.common.util;
 
 import okhttp3.OkHttpClient;
+import top.charles7c.continew.admin.common.enums.DataScopeEnum;
 
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;

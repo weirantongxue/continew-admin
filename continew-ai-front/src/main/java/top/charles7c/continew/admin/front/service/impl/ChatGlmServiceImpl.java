@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.handler;
+package top.charles7c.continew.admin.front.service.impl;
 
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.IdUtil;
@@ -23,45 +23,51 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import top.charles7c.continew.admin.front.constant.TimerConstant;
+import top.charles7c.continew.admin.common.constant.TimerConstant;
+import top.charles7c.continew.admin.common.util.ApiTokenUtils;
+import top.charles7c.continew.admin.common.util.StreamUtils;
 import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
+import top.charles7c.continew.admin.front.model.ChatMessageUtils;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
+import top.charles7c.continew.admin.front.service.ChatGlmService;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
-import top.charles7c.continew.admin.front.strategy.ChatStrategy;
-import top.charles7c.continew.admin.front.util.ApiTokenUtils;
-import top.charles7c.continew.admin.front.util.ChatMessageUtils;
-import top.charles7c.continew.admin.front.util.StreamUtils;
+import top.charles7c.continew.admin.front.service.WebSocketSendService;
 
 /**
  * Created by WeiRan on 2023.09.22 21:17
  */
-@Component("zsx-ai")
+@Component()
 @RequiredArgsConstructor
 @Slf4j
-public class ChatGlm6BHandler implements ChatStrategy {
+public class ChatGlmServiceImpl implements ChatGlmService {
     private final ChatMessageService chatMessageService;
+    private final WebSocketSendService webSocketSendService;
+
 
     @Override
-    public SseEmitter aiApi(ChatMessageRequestValidate messageCreateValidate) {
-        SseEmitter sseEmitter = new SseEmitter(-1L);
+    public void aiApi(ChatMessageRequestValidate messageCreateValidate,String sessionId) {
         try {
             TimeInterval timer = new TimeInterval();
             timer.start(TimerConstant.RESPONSE_TIME);
             String messageId = IdUtil.fastSimpleUUID();
 
             ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageCreateValidate, messageId);
-            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(sseEmitter, messageId, chatMessageService, message, timer);
+
+
+
+            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService,sessionId,messageId, chatMessageService, message, timer);
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
 
             messageCreateValidate.setModel("glm-4");
             JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(messageCreateValidate));
-            //jsonObject.put("prompt", jsonObject.remove("messages"));
-            StreamUtils.streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject.toJSONString(jsonObject));
+            System.out.println("开始请求模型"+jsonObject);
+            StreamUtils
+                    .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
+                            .toJSONString(jsonObject));
         } catch (Exception e) {
             log.error("Glm6B请求失败");
         }
-        return sseEmitter;
     }
 
 }

@@ -1,7 +1,22 @@
+/*
+ * Copyright (c) 2022-present Charles7c Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package top.charles7c.continew.admin.front.listener;
 
 import cn.hutool.core.date.TimeInterval;
-import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
 import lombok.Data;
@@ -11,13 +26,14 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import top.charles7c.continew.admin.front.constant.TimerConstant;
-import top.charles7c.continew.admin.front.enums.EventNameType;
+import top.charles7c.continew.admin.common.constant.TimerConstant;
+import top.charles7c.continew.admin.common.enums.EventNameType;
+import top.charles7c.continew.admin.common.model.resp.ChatModelMsg;
+import top.charles7c.continew.admin.front.model.ChatMessageUtils;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
+import top.charles7c.continew.admin.front.service.WebSocketSendService;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -27,11 +43,12 @@ import java.util.Objects;
 @Data
 public class GPTEventSourceListener extends EventSourceListener {
 
-    //private CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    private final SseEmitter sseEmitter;
+    private final WebSocketSendService webSocketSendService;
     private final String messageId;
     private final ChatMessageService chatMessageService;
+
+    private final String sessionId;
 
     private final ChatMessageDO message;
 
@@ -39,8 +56,13 @@ public class GPTEventSourceListener extends EventSourceListener {
 
     private String last = "";
 
-    public GPTEventSourceListener(SseEmitter sseEmitter, String messageId, ChatMessageService chatMessageService, ChatMessageDO message, TimeInterval timer) {
-        this.sseEmitter = sseEmitter;
+    public GPTEventSourceListener(WebSocketSendService webSocketSendService,
+                                  String sessionId, String messageId,
+                                  ChatMessageService chatMessageService,
+                                  ChatMessageDO message,
+                                  TimeInterval timer) {
+        this.webSocketSendService = webSocketSendService;
+        this.sessionId = sessionId;
         this.messageId = messageId;
         this.chatMessageService = chatMessageService;
         this.message = message;
@@ -73,14 +95,9 @@ public class GPTEventSourceListener extends EventSourceListener {
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         log.info("收到消息:" + data);
         if (data.equals("[DONE]")) {
-//            chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-//                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
-            sseEmitter.send(SseEmitter.event()
-                    .id(messageId)
-                    .name(EventNameType.FINISH.getCode())
-                    .data(EventNameType.DONE.getCode())
-                    .reconnectTime(3000));
-            sseEmitter.complete();
+            webSocketSendService.sendMessage(sessionId, ChatMessageUtils.chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
+            //            chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
+            //                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
@@ -95,16 +112,8 @@ public class GPTEventSourceListener extends EventSourceListener {
             }
 
             last = last + content;
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("content", content);
-            sseEmitter.send(SseEmitter.event()
-                .id(messageId)
-                .name(EventNameType.ADD.getCode())
-                .data(jsonObject)
-                .reconnectTime(3000));
+            webSocketSendService.sendMessage(sessionId, ChatMessageUtils.chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
         }
-        System.out.println("------开始发送消息到前端------{}" + messageId);
-        System.out.println("------开始发送消息到前端------{}" + completionResponse.getChoices().get(0).getDelta());
     }
 
     /**
@@ -115,8 +124,6 @@ public class GPTEventSourceListener extends EventSourceListener {
     @Override
     public void onClosed(EventSource eventSource) {
         log.info("sse连接关闭messageId:{}", messageId);
-        //countDownLatch.countDown();
-        sseEmitter.complete();
     }
 
     @SneakyThrows
@@ -131,8 +138,7 @@ public class GPTEventSourceListener extends EventSourceListener {
         } else {
             log.error("sse连接异常data：{}，异常：{}", response, t);
         }
-        //countDownLatch.countDown();
+        webSocketSendService.sendMessage(sessionId, ChatMessageUtils.chatModelMsg(messageId, sessionId, "模型服务异常", EventNameType.ERROR.getCode()));
         eventSource.cancel();
-        sseEmitter.complete();
     }
 }

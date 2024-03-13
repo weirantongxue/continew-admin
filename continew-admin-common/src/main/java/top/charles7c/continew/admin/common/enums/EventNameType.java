@@ -14,15 +14,29 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.strategy;
+package top.charles7c.continew.admin.common.enums;
 
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.util.Arrays;
 
 /**
- * Created by WeiRan on 2021.12.10 15:11
+ * 用户状态
+ *
+ * @author wd
  */
-public interface ChatStrategy {
-    SseEmitter aiApi(ChatMessageRequestValidate messageCreateValidate);
+@Getter
+@AllArgsConstructor
+public enum EventNameType {
+    ADD("add", "发送消息"), FINISH("finish", "结束发送"), DONE("done", "完成"),
+    ERROR("error", "服务异常");
+
+    private final String code;
+    private final String name;
+
+    public static EventNameType getInstance(String code) {
+        return Arrays.stream(values()).filter(e -> e.code.equals(code)).findFirst().orElse(null);
+    }
 
 }

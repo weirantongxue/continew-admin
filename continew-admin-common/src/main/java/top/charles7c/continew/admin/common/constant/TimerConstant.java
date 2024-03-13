@@ -14,28 +14,13 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.enums;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import java.util.Arrays;
+package top.charles7c.continew.admin.common.constant;
 
 /**
- * 用户状态
- *
- * @author wd
+ * Created by WeiRan on 2023.09.15 17:51
  */
-@Getter
-@AllArgsConstructor
-public enum EventNameType {
-    ADD("add", "发送消息"), FINISH("finish", "结束发送"), DONE("done", "完成");
-
-    private final String code;
-    private final String name;
-
-    public static EventNameType getInstance(String code) {
-        return Arrays.stream(values()).filter(e -> e.code.equals(code)).findFirst().orElse(null);
-    }
+public class TimerConstant {
+    public static final String CHAT_RESPONSE_TIME = "chatResponseTime";
+    public static final String RESPONSE_TIME = "responseTime";
 
 }
