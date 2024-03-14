@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.webapi.ai;
+package top.charles7c.continew.admin.front.service;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import net.dreamlu.mica.core.result.R;
+import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
+import top.charles7c.continew.admin.front.model.req.DrawReq;
 
-@Tag(name = "用户AI会话管理 API")
-@RestController
-@RequiredArgsConstructor
-@RequestMapping(value = "//item")
-public class WebSocketController {
+/**
+ * Created by WeiRan on 2024.03.14 17:53
+ */
+public interface DrawService {
+    R<Object> draw(DrawReq drawReq);
 
+    void drawCallback(DrawCallbackReq drawCallbackReq);
 }
