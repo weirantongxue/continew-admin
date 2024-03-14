@@ -1,7 +1,23 @@
+/*
+ * Copyright (c) 2022-present Charles7c Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package top.charles7c.continew.admin.front.handler;
 
 /**
- * Created by WeiRan on  2024.03.13 16:41
+ * Created by WeiRan on 2024.03.13 16:41
  */
 
 import com.alibaba.fastjson.JSONObject;
@@ -20,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhong
- * webscoket 处理器
+ *         webscoket 处理器
  */
 @Component
 @Slf4j
@@ -45,7 +61,8 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         log.info("接受到消息【{}】的消息：{}", session.getId(), message.getPayload());
         String jsonPayload = message.getPayload();
-        ChatMessageRequestValidate chatMessageRequestValidate = JSONObject.parseObject(jsonPayload, ChatMessageRequestValidate.class);
+        ChatMessageRequestValidate chatMessageRequestValidate = JSONObject
+            .parseObject(jsonPayload, ChatMessageRequestValidate.class);
         chatGlmService.aiApi(chatMessageRequestValidate, webSocketSendService.getSessionId(session));
     }
 
@@ -102,4 +119,3 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         WEB_SOCKET_SESSION_MAP.remove(webSocketSendService.getSessionId(session));
     }
 }
-

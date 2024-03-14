@@ -38,11 +38,6 @@ public class ItemDO extends BaseDO {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 会话id
-     */
-    private String itemId;
-
-    /**
      * 会话名称
      */
     private String name;

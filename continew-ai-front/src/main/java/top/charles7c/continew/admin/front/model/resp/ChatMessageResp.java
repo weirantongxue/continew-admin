@@ -89,7 +89,7 @@ public class ChatMessageResp extends BaseResp {
      * 输出词块数
      */
     @Schema(description = "输出词块数")
-    private Integer completionTokens;
+    private Long completionTokens;
 
     /**
      * 总词块数

@@ -28,7 +28,6 @@ import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 import top.charles7c.continew.admin.common.constant.TimerConstant;
 import top.charles7c.continew.admin.common.enums.EventNameType;
-import top.charles7c.continew.admin.common.model.resp.ChatModelMsg;
 import top.charles7c.continew.admin.front.model.ChatMessageUtils;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
@@ -43,7 +42,6 @@ import java.util.Objects;
 @Data
 public class GPTEventSourceListener extends EventSourceListener {
 
-
     private final WebSocketSendService webSocketSendService;
     private final String messageId;
     private final ChatMessageService chatMessageService;
@@ -57,7 +55,8 @@ public class GPTEventSourceListener extends EventSourceListener {
     private String last = "";
 
     public GPTEventSourceListener(WebSocketSendService webSocketSendService,
-                                  String sessionId, String messageId,
+                                  String sessionId,
+                                  String messageId,
                                   ChatMessageService chatMessageService,
                                   ChatMessageDO message,
                                   TimeInterval timer) {
@@ -95,9 +94,10 @@ public class GPTEventSourceListener extends EventSourceListener {
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         log.info("收到消息:" + data);
         if (data.equals("[DONE]")) {
-            webSocketSendService.sendMessage(sessionId, ChatMessageUtils.chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
-            //            chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-            //                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
+            webSocketSendService.sendMessage(sessionId, ChatMessageUtils
+                .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
+            chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
+                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
@@ -112,7 +112,8 @@ public class GPTEventSourceListener extends EventSourceListener {
             }
 
             last = last + content;
-            webSocketSendService.sendMessage(sessionId, ChatMessageUtils.chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
+            webSocketSendService.sendMessage(sessionId, ChatMessageUtils
+                .chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
         }
     }
 
@@ -138,7 +139,8 @@ public class GPTEventSourceListener extends EventSourceListener {
         } else {
             log.error("sse连接异常data：{}，异常：{}", response, t);
         }
-        webSocketSendService.sendMessage(sessionId, ChatMessageUtils.chatModelMsg(messageId, sessionId, "模型服务异常", EventNameType.ERROR.getCode()));
+        webSocketSendService.sendMessage(sessionId, ChatMessageUtils
+            .chatModelMsg(messageId, sessionId, "模型服务异常", EventNameType.ERROR.getCode()));
         eventSource.cancel();
     }
 }

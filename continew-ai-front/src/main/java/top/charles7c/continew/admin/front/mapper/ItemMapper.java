@@ -16,7 +16,7 @@
 
 package top.charles7c.continew.admin.front.mapper;
 
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.charles7c.continew.admin.common.config.mybatis.DataPermissionMapper;
 import top.charles7c.continew.admin.front.model.entity.ItemDO;
 
 /**
@@ -25,4 +25,4 @@ import top.charles7c.continew.admin.front.model.entity.ItemDO;
  * @author weiran
  * @since 2024/03/11 18:36
  */
-public interface ItemMapper extends BaseMapper<ItemDO> {}
+public interface ItemMapper extends DataPermissionMapper<ItemDO> {}

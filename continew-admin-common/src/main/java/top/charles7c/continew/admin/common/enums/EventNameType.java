@@ -29,8 +29,7 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum EventNameType {
-    ADD("add", "发送消息"), FINISH("finish", "结束发送"), DONE("done", "完成"),
-    ERROR("error", "服务异常");
+    ADD("add", "发送消息"), FINISH("finish", "结束发送"), DONE("done", "完成"), ERROR("error", "服务异常");
 
     private final String code;
     private final String name;

@@ -22,18 +22,20 @@ import lombok.Getter;
 import java.util.Arrays;
 
 /**
- * Created by WeiRan on 2020/12/30 15:09
+ * 客户端枚举类
  */
 @Getter
 @AllArgsConstructor
-public enum MsgType {
-    TEXT("文本消息", 0), IMAGE("图片消息", 1), VOICE("语音文件", 2), VIDEO("视频文件", 3),;
+public enum ClientEnum {
+    MNP(1, "微信小程序"), OA(2, "微信公众号"), H5(3, "手机H5"), PC(4, "电脑PC"), IOS(5, "苹果APP"), APK(6, "安卓APP");
 
-    // 成员变量
-    private final String name;
+    /**
+     * 构造方法
+     */
     private final Integer code;
+    private final String name;
 
-    public static MsgType getInstance(Integer code) {
+    public static ClientEnum getInstance(Integer code) {
         return Arrays.stream(values()).filter(e -> e.code.equals(code)).findFirst().orElse(null);
     }
 

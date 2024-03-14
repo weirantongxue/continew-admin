@@ -22,7 +22,6 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.charles7c.continew.admin.common.constant.TimerConstant;
 import top.charles7c.continew.admin.common.util.ApiTokenUtils;
 import top.charles7c.continew.admin.common.util.StreamUtils;
@@ -44,27 +43,24 @@ public class ChatGlmServiceImpl implements ChatGlmService {
     private final ChatMessageService chatMessageService;
     private final WebSocketSendService webSocketSendService;
 
-
     @Override
-    public void aiApi(ChatMessageRequestValidate messageCreateValidate,String sessionId) {
+    public void aiApi(ChatMessageRequestValidate messageCreateValidate, String sessionId) {
         try {
             TimeInterval timer = new TimeInterval();
             timer.start(TimerConstant.RESPONSE_TIME);
             String messageId = IdUtil.fastSimpleUUID();
 
-            ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageCreateValidate, messageId);
+            ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageCreateValidate, messageId, sessionId);
 
-
-
-            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService,sessionId,messageId, chatMessageService, message, timer);
+            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer);
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
 
             messageCreateValidate.setModel("glm-4");
             JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(messageCreateValidate));
-            System.out.println("开始请求模型"+jsonObject);
+            System.out.println("开始请求模型" + jsonObject);
             StreamUtils
-                    .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
-                            .toJSONString(jsonObject));
+                .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
+                    .toJSONString(jsonObject));
         } catch (Exception e) {
             log.error("Glm6B请求失败");
         }

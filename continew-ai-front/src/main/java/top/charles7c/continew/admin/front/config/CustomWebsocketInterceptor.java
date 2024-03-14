@@ -1,10 +1,25 @@
+/*
+ * Copyright (c) 2022-present Charles7c Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package top.charles7c.continew.admin.front.config;
 
 /**
- * Created by WeiRan on  2024.03.13 16:43
+ * Created by WeiRan on 2024.03.13 16:43
  */
 
-import cn.dev33.satoken.stp.StpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
@@ -21,7 +36,7 @@ import java.util.Map;
 
 /**
  * @author zhong
- * 用来处理webscocket拦截器
+ *         用来处理webscocket拦截器
  */
 @Component
 @Slf4j
@@ -39,19 +54,22 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
      * @throws Exception
      */
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        ServletServerHttpRequest req = (ServletServerHttpRequest) request;
-        ServletServerHttpResponse res = (ServletServerHttpResponse) response;
+    public boolean beforeHandshake(ServerHttpRequest request,
+                                   ServerHttpResponse response,
+                                   WebSocketHandler wsHandler,
+                                   Map<String, Object> attributes) throws Exception {
+        ServletServerHttpRequest req = (ServletServerHttpRequest)request;
+        ServletServerHttpResponse res = (ServletServerHttpResponse)response;
         String token = req.getServletRequest().getParameter("token");
         log.info("建立连接....token:{}", token);
         log.info("attributes:{}", attributes);
 
         /**
          * 鉴权: return false 不通过
-         *  response.setStatusCode(HttpStatus.UNAUTHORIZED);
-         *  return false;
+         * response.setStatusCode(HttpStatus.UNAUTHORIZED);
+         * return false;
          */
-        LoginUser loginUser= LoginHelper.getLoginUser(token);
+        LoginUser loginUser = LoginHelper.getLoginUser(token);
         if (loginUser == null) {
             res.setStatusCode(HttpStatus.UNAUTHORIZED);
             res.getServletResponse().setContentType("application/json");
@@ -59,7 +77,7 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
             res.getBody().write(errorMessage.getBytes());
             return false;
         }
-        attributes.put("userId", loginUser.getId());
+        attributes.put("userId", String.valueOf(loginUser.getId()));
         super.setCreateSession(true);
         return super.beforeHandshake(request, response, wsHandler, attributes);
     }
@@ -73,10 +91,12 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
      * @param exception an exception raised during the handshake, or {@code null} if none
      */
     @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
+    public void afterHandshake(ServerHttpRequest request,
+                               ServerHttpResponse response,
+                               WebSocketHandler wsHandler,
+                               Exception exception) {
         log.info("连接成功....");
         //其他业务代码
         super.afterHandshake(request, response, wsHandler, exception);
     }
 }
-

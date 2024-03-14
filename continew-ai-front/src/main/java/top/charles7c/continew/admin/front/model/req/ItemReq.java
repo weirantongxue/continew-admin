@@ -43,13 +43,6 @@ public class ItemReq extends BaseReq {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 会话id
-     */
-    @Schema(description = "会话id")
-    @Length(max = 255, message = "会话id长度不能超过 {max} 个字符")
-    private String itemId;
-
-    /**
      * 会话名称
      */
     @Schema(description = "会话名称")

@@ -40,5 +40,4 @@ import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMappi
 @RestController
 @CrudRequestMapping(value = "/ai/message", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
 public class ChatMessageController extends BaseController<ChatMessageService, ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> {
-
 }

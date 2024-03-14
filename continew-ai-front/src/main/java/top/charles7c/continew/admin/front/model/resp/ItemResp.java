@@ -38,12 +38,6 @@ public class ItemResp extends BaseResp {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 会话id
-     */
-    @Schema(description = "会话id")
-    private String itemId;
-
-    /**
      * 会话名称
      */
     @Schema(description = "会话名称")
