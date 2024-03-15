@@ -63,8 +63,8 @@ public class DrawServiceImpl implements DrawService {
         jsonObject.put("callback", "http://101.201.33.35:8000/ai/draw/drawCallback");
         jsonObject.put("nonce", nonce);
         HttpRequest request = HttpRequest.post("https://ai.huashi6.com/aiapi/v1/draw")
-                .header("Auth-Token", "lHOYOgNDXKssyTQTAqu0DyXrdMpPwx6z")
-                .body(jsonObject.toJSONString());
+            .header("Auth-Token", "lHOYOgNDXKssyTQTAqu0DyXrdMpPwx6z")
+            .body(jsonObject.toJSONString());
         String result = request.execute().body();
         log.info("请求文生图返回结果:{}", JSONObject.toJSONString(result));
         JSONObject res = JSONObject.parseObject(result);
@@ -76,7 +76,7 @@ public class DrawServiceImpl implements DrawService {
                 drawTaskDO.setPrompt(drawReq.getPrompt());
                 drawTaskDO.setNonce(nonce);
                 drawTaskMapper.insert(drawTaskDO);
-                return R.success();
+                return R.success(paintingSign);
             }
             return R.fail("模型服务异常请联系管理员");
         }
@@ -135,9 +135,9 @@ public class DrawServiceImpl implements DrawService {
         });
         drawImgMapper.insertBatch(drawImgDOList);
         drawTaskMapper.lambdaUpdate()
-                .eq(DrawTaskDO::getTaskId, taskId)
-                .set(DrawTaskDO::getState, drawCallbackReq.getState())
-                .set(DrawTaskDO::getMosaicImg, drawCallbackReq.getImgUrl())
-                .update();
+            .eq(DrawTaskDO::getTaskId, taskId)
+            .set(DrawTaskDO::getState, drawCallbackReq.getState())
+            .set(DrawTaskDO::getMosaicImg, drawCallbackReq.getImgUrl())
+            .update();
     }
 }

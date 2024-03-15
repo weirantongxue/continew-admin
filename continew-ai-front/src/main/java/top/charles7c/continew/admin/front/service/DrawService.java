@@ -31,8 +31,6 @@ public interface DrawService {
 
     R<DrawResp> drawTask(String taskId);
 
-
     void drawCallback(DrawCallbackReq drawCallbackReq);
-
 
 }

@@ -47,18 +47,17 @@ public class DrawController {
         return drawService.createDrawTask(drawReq);
     }
 
-    @Operation(summary = "查询任务状态", description = "查询任务状态")
+    @Operation(summary = "通过任务id查询任务状态", description = "通过任务id查询任务状态")
     @GetMapping("/checkDrawTask")
     public R<Object> checkDrawTask(String taskId) {
         return drawService.checkDrawTask(taskId);
     }
 
-    @Operation(summary = "查询生成内容", description = "查询生成内容")
+    @Operation(summary = "通过任务id查询生成内容", description = "通过任务id查询生成内容")
     @GetMapping("/drawTask")
     public R<DrawResp> drawTask(String taskId) {
         return drawService.drawTask(taskId);
     }
-
 
     @SaIgnore
     @Log(ignore = true)

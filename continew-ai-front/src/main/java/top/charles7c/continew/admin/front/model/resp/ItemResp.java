@@ -17,6 +17,7 @@
 package top.charles7c.continew.admin.front.model.resp;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -54,5 +55,8 @@ public class ItemResp extends BaseResp {
      */
     @Schema(description = "消息数")
     private Integer number;
+
+    @Schema(description = "更新时间")
+    private LocalDateTime createTime;
 
 }
