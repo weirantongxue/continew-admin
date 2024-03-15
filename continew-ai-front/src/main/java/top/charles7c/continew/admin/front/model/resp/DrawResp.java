@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.service;
+package top.charles7c.continew.admin.front.model.resp;
 
-import net.dreamlu.mica.core.result.R;
-import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
-import top.charles7c.continew.admin.front.model.req.DrawReq;
-import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import top.charles7c.continew.admin.front.model.entity.DrawImgDO;
+import top.charles7c.continew.admin.front.model.entity.DrawTaskDO;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * Created by WeiRan on 2024.03.14 17:53
+ * Created by WeiRan on 2024.03.15 12:01
  */
-public interface DrawService {
-    R<Object> createDrawTask(DrawReq drawReq);
-
-    R<Object> checkDrawTask(String taskId);
-
-    R<DrawResp> drawTask(String taskId);
-
-
-    void drawCallback(DrawCallbackReq drawCallbackReq);
-
-
+@Schema(description = "绘图任务信息")
+@Data
+public class DrawResp implements Serializable {
+    @Schema(description = "绘图任务")
+    private DrawTaskDO drawTaskDO;
+    @Schema(description = "绘图内容")
+    private List<DrawImgDO> drawImgDOList;
 }

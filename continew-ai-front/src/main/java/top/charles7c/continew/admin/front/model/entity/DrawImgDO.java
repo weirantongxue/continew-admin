@@ -14,25 +14,36 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.service;
+package top.charles7c.continew.admin.front.model.entity;
 
-import net.dreamlu.mica.core.result.R;
-import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
-import top.charles7c.continew.admin.front.model.req.DrawReq;
-import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import java.io.Serial;
+
+import lombok.Data;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
 
 /**
- * Created by WeiRan on 2024.03.14 17:53
+ * 绘图素材实体
+ *
+ * @author weiran
+ * @since 2024/03/15 11:43
  */
-public interface DrawService {
-    R<Object> createDrawTask(DrawReq drawReq);
+@Data
+@TableName("lb_draw_img")
+public class DrawImgDO extends BaseDO {
 
-    R<Object> checkDrawTask(String taskId);
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    R<DrawResp> drawTask(String taskId);
+    /**
+     * 任务id
+     */
+    private String taskId;
 
-
-    void drawCallback(DrawCallbackReq drawCallbackReq);
-
-
+    /**
+     * 图片地址
+     */
+    private String imageUrl;
 }

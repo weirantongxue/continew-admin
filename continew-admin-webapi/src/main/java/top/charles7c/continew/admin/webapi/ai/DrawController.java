@@ -23,12 +23,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.core.result.R;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
 import top.charles7c.continew.admin.front.model.req.DrawReq;
+import top.charles7c.continew.admin.front.model.resp.DrawResp;
 import top.charles7c.continew.admin.front.service.DrawService;
 import top.charles7c.continew.starter.log.core.annotation.Log;
 
@@ -44,10 +42,23 @@ public class DrawController {
     private final DrawService drawService;
 
     @Operation(summary = "文生图", description = "文生图")
-    @PostMapping("/draw")
-    public R<Object> draw(@RequestBody DrawReq drawReq) {
-        return drawService.draw(drawReq);
+    @PostMapping("/createDrawTask")
+    public R<Object> createDrawTask(@RequestBody DrawReq drawReq) {
+        return drawService.createDrawTask(drawReq);
     }
+
+    @Operation(summary = "查询任务状态", description = "查询任务状态")
+    @GetMapping("/checkDrawTask")
+    public R<Object> checkDrawTask(String taskId) {
+        return drawService.checkDrawTask(taskId);
+    }
+
+    @Operation(summary = "查询生成内容", description = "查询生成内容")
+    @GetMapping("/drawTask")
+    public R<DrawResp> drawTask(String taskId) {
+        return drawService.drawTask(taskId);
+    }
+
 
     @SaIgnore
     @Log(ignore = true)

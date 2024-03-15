@@ -16,23 +16,16 @@
 
 package top.charles7c.continew.admin.front.service;
 
-import net.dreamlu.mica.core.result.R;
-import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
-import top.charles7c.continew.admin.front.model.req.DrawReq;
-import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import top.charles7c.continew.admin.front.model.query.DrawImgQuery;
+import top.charles7c.continew.admin.front.model.req.DrawImgReq;
+import top.charles7c.continew.admin.front.model.resp.DrawImgDetailResp;
+import top.charles7c.continew.admin.front.model.resp.DrawImgResp;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
 
 /**
- * Created by WeiRan on 2024.03.14 17:53
+ * 绘图素材业务接口
+ *
+ * @author weiran
+ * @since 2024/03/15 11:43
  */
-public interface DrawService {
-    R<Object> createDrawTask(DrawReq drawReq);
-
-    R<Object> checkDrawTask(String taskId);
-
-    R<DrawResp> drawTask(String taskId);
-
-
-    void drawCallback(DrawCallbackReq drawCallbackReq);
-
-
-}
+public interface DrawImgService extends BaseService<DrawImgResp, DrawImgDetailResp, DrawImgQuery, DrawImgReq> {}

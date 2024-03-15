@@ -63,7 +63,17 @@ public class FileRecorderImpl implements FileRecorder {
         StorageDO storage = storageMapper.lambdaQuery().eq(StorageDO::getCode, fileInfo.getPlatform()).one();
         file.setStorageId(storage.getId());
         file.setCreateTime(DateUtil.toLocalDateTime(fileInfo.getCreateTime()));
-        file.setUpdateUser(LoginHelper.getUserId());
+        Long userId = 0L;
+        try {
+            userId = LoginHelper.getUserId();
+        } catch (Exception e) {
+            log.info("上传文件未获取到用户id,使用默认id");
+        }
+        if (null == userId) {
+            userId = 0L;
+        }
+        file.setUpdateUser(userId);
+        file.setCreateUser(userId);
         file.setUpdateTime(file.getCreateTime());
         fileMapper.insert(file);
         return true;
@@ -87,8 +97,7 @@ public class FileRecorderImpl implements FileRecorder {
     /**
      * 根据 URL 查询文件
      *
-     * @param url
-     *            URL
+     * @param url URL
      * @return 文件信息
      */
     private FileDO getFileByUrl(String url) {
@@ -101,13 +110,16 @@ public class FileRecorderImpl implements FileRecorder {
 
     @Override
     public void update(FileInfo fileInfo) {
-        /* 不使用分片功能则无需重写 */ }
+        /* 不使用分片功能则无需重写 */
+    }
 
     @Override
     public void saveFilePart(FilePartInfo filePartInfo) {
-        /* 不使用分片功能则无需重写 */ }
+        /* 不使用分片功能则无需重写 */
+    }
 
     @Override
     public void deleteFilePartByUploadId(String s) {
-        /* 不使用分片功能则无需重写 */}
+        /* 不使用分片功能则无需重写 */
+    }
 }

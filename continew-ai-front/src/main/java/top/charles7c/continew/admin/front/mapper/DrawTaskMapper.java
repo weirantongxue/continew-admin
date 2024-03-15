@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.service;
+package top.charles7c.continew.admin.front.mapper;
 
-import net.dreamlu.mica.core.result.R;
-import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
-import top.charles7c.continew.admin.front.model.req.DrawReq;
-import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.charles7c.continew.admin.front.model.entity.DrawTaskDO;
 
 /**
- * Created by WeiRan on 2024.03.14 17:53
+ * 绘图任务 Mapper
+ *
+ * @author weiran
+ * @since 2024/03/15 11:49
  */
-public interface DrawService {
-    R<Object> createDrawTask(DrawReq drawReq);
-
-    R<Object> checkDrawTask(String taskId);
-
-    R<DrawResp> drawTask(String taskId);
-
-
-    void drawCallback(DrawCallbackReq drawCallbackReq);
-
-
-}
+public interface DrawTaskMapper extends BaseMapper<DrawTaskDO> {}

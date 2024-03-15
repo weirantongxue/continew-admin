@@ -14,24 +14,38 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.model.req;
+package top.charles7c.continew.admin.front.model.resp;
+
+import java.io.Serial;
 
 import lombok.Data;
 
-import java.io.Serializable;
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
 
 /**
- * Created by WeiRan on 2024.03.14 18:57
+ * 绘图素材信息
+ *
+ * @author weiran
+ * @since 2024/03/15 11:43
  */
-
 @Data
-public class DrawCallbackReq implements Serializable {
-    private Integer audit;
-    private Integer progress;
-    private String state;
-    private String nonce;
+@Schema(description = "绘图素材信息")
+public class DrawImgResp extends BaseResp {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 任务id
+     */
+    @Schema(description = "任务id")
     private String taskId;
-    private String imgUrl;
-    private List<DrawImg> images;
+
+    /**
+     * 图片地址
+     */
+    @Schema(description = "图片地址")
+    private String imageUrl;
 }

@@ -14,24 +14,51 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.model.req;
+package top.charles7c.continew.admin.front.model.entity;
+
+import java.io.Serial;
 
 import lombok.Data;
 
-import java.io.Serializable;
-import java.util.List;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
 
 /**
- * Created by WeiRan on 2024.03.14 18:57
+ * 绘图任务实体
+ *
+ * @author weiran
+ * @since 2024/03/15 11:49
  */
-
 @Data
-public class DrawCallbackReq implements Serializable {
-    private Integer audit;
-    private Integer progress;
-    private String state;
-    private String nonce;
+@TableName("lb_draw_task")
+public class DrawTaskDO extends BaseDO {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 任务id
+     */
     private String taskId;
-    private String imgUrl;
-    private List<DrawImg> images;
+
+    /**
+     * 问题
+     */
+    private String prompt;
+
+    /**
+     * 拼接图
+     */
+    private String mosaicImg;
+
+    /**
+     * 传递id
+     */
+    private String nonce;
+
+    /**
+     * 任务状态success
+     */
+    private String state;
 }

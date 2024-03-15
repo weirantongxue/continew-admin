@@ -1,54 +1,37 @@
+/*
+ * Copyright (c) 2022-present Charles7c Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package top.charles7c.continew.admin.webapi.ai;
 
-
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.utils.IOUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
+import top.charles7c.continew.admin.common.converter.FileToMultipartFileConverter;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
 
 @Slf4j
 public class FileDownloader {
-    /**
-     * 根据地址获得数据的输入流
-     *
-     * @param strUrl 网络连接地址
-     * @return url的输入流
-     */
-//    public static InputStream getInputStreamByUrl(String strUrl) {
-//        HttpURLConnection conn = null;
-//        try {
-//            URL url = new URL(strUrl);
-//            conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("GET");
-//            conn.setConnectTimeout(20 * 1000);
-//            final ByteArrayOutputStream output = new ByteArrayOutputStream();
-//            IOUtils.copy(conn.getInputStream(), output);
-//            return new ByteArrayInputStream(output.toByteArray());
-//        } catch (Exception e) {
-//            log.error("根据地址获得数据的输入流异常 Exception，", e);
-//        } finally {
-//            try {
-//                if (conn != null) {
-//                    conn.disconnect();
-//                }
-//            } catch (Exception e) {
-//                log.error("断开输入流异常 Exception，", e);
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public static void main(String[] args) {
-//        InputStream stream =getInputStreamByUrl("");
-//        if (!ObjectUtils.isEmpty(stream)) {
-//            MultipartFile file = new MockMultipartFile(req.getFileName(), req.getFileName(),"", stream);
-//        }
-//    }
-}
 
+    public static void main(String[] args) throws IOException {
+        String fileUrl = "https://inews.gtimg.com/om_bt/OMvPDmiuH_X5Vq1YLNgbFEzD2h_-2dCfWQ7xZFcKFSEsAAA/641";
+        MultipartFile multipartFile = FileToMultipartFileConverter.convert(fileUrl);
+
+        System.out.println("File Name: " + multipartFile.getOriginalFilename());
+        System.out.println("Content Type: " + multipartFile.getContentType());
+        System.out.println("File Size: " + multipartFile.getSize());
+    }
+
+}
