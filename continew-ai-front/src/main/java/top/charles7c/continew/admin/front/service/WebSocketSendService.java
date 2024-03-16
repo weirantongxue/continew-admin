@@ -33,4 +33,6 @@ public interface WebSocketSendService {
 
     List<String> getSessionIds();
 
+    void close(String sessionId, String message) throws IOException;
+
 }

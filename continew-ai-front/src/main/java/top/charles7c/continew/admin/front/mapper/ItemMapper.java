@@ -16,6 +16,8 @@
 
 package top.charles7c.continew.admin.front.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import top.charles7c.continew.admin.common.config.mybatis.DataPermissionMapper;
 import top.charles7c.continew.admin.front.model.entity.ItemDO;
 
@@ -25,4 +27,8 @@ import top.charles7c.continew.admin.front.model.entity.ItemDO;
  * @author weiran
  * @since 2024/03/11 18:36
  */
-public interface ItemMapper extends DataPermissionMapper<ItemDO> {}
+public interface ItemMapper extends DataPermissionMapper<ItemDO> {
+
+    @Select("UPDATE lb_item set number=number+1,update_time = CURRENT_TIMESTAMP,update_user = #{userId} WHERE id=#{id}")
+    void numberAdd(@Param("id") String id, @Param("userId") long userId);
+}

@@ -20,6 +20,7 @@ package top.charles7c.continew.admin.front.handler;
  * Created by WeiRan on 2024.03.13 16:41
  */
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,17 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import top.charles7c.continew.admin.common.enums.ErrorEnum;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
 import top.charles7c.continew.admin.front.service.ChatGlmService;
 import top.charles7c.continew.admin.front.service.WebSocketSendService;
 
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhong
- *         webscoket 处理器
+ * webscoket 处理器
  */
 @Component
 @Slf4j
@@ -58,13 +61,24 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
      * @param message 消息体
      */
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
-        log.info("接受到消息【{}】的消息：{}", session.getId(), message.getPayload());
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
+        log.info("接受到会话【{}】的消息：{}", session.getId(), message.getPayload());
         String jsonPayload = message.getPayload();
-        ChatMessageRequestValidate chatMessageRequestValidate = JSONObject
-            .parseObject(jsonPayload, ChatMessageRequestValidate.class);
-        chatGlmService.aiApi(chatMessageRequestValidate, webSocketSendService.getSessionId(session));
+        // Check for empty message
+        if (StrUtil.isBlank(jsonPayload)) {
+            log.error("接收到空消息");
+            webSocketSendService.close(session.getId(), "接收到空消息");
+            return;
+        }
+        try {
+            ChatMessageRequestValidate chatMessageRequestValidate = JSONObject.parseObject(jsonPayload, ChatMessageRequestValidate.class);
+            chatGlmService.aiApi(chatMessageRequestValidate, webSocketSendService.getSessionId(session));
+        } catch (Exception e) {
+            log.error("WebSocket消息解析失败：{}", e.getMessage(), e);
+            webSocketSendService.close(session.getId(), "消息解析失败：" + e.getMessage());
+        }
     }
+
 
     /**
      * 建立连接后触发的回调
@@ -81,7 +95,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         }
         // 将新连接添加
         WEB_SOCKET_SESSION_MAP.put(sessionId, session);
-        log.info("与【{}】建立了连接", sessionId);
+        log.info("与用户【{}】建立了连接", sessionId);
         log.info("attributes:{}", session.getAttributes());
 
     }
@@ -95,7 +109,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        log.info("连接对象【{}】断开连接,status:{}", webSocketSendService.getSessionId(session), status.getCode());
+        log.info("用户【{}】断开连接,status:{}", webSocketSendService.getSessionId(session), status.getCode());
         // 关闭连接
         session.close(CloseStatus.SERVER_ERROR);
         // 删除对象
@@ -111,7 +125,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
      */
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        log.info("连接对象【{}】发生错误,exception:{}", session.getId(), exception.getMessage());
+        log.info("用户【{}】发生错误,exception:{}", session.getId(), exception.getMessage());
         // 如果发送异常，则断开连接
         if (session.isOpen()) {
             session.close();

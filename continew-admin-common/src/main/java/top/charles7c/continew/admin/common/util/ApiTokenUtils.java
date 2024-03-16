@@ -50,4 +50,9 @@ public class ApiTokenUtils {
         return token;
     }
 
+    public static void main(String[] args) {
+        String token = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
+        System.out.println(token);
+    }
+
 }

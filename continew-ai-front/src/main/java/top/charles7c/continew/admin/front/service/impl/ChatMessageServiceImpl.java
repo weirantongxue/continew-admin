@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import top.charles7c.continew.admin.front.mapper.ItemMapper;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.ChatMessageMapper;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
@@ -40,9 +41,11 @@ import top.charles7c.continew.admin.front.service.ChatMessageService;
 public class ChatMessageServiceImpl extends BaseServiceImpl<ChatMessageMapper, ChatMessageDO, ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> implements ChatMessageService {
 
     private final ChatMessageMapper chatMessageMapper;
+    private final ItemMapper itemMapper;
 
     @Override
     public int insertMessage(ChatMessageDO message) {
+        itemMapper.numberAdd(message.getItemId(), message.getCreateUser());
         return this.chatMessageMapper.insert(message);
     }
 

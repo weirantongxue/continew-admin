@@ -76,6 +76,23 @@ public class WebSocketSendServiceImpl implements WebSocketSendService {
     }
 
     /**
+     * 主动关闭连接
+     * @param sessionId
+     * @param msg
+     * @throws IOException
+     */
+    public void close(String sessionId,String msg) throws IOException{
+        WebSocketSession webSocketSession = WEB_SOCKET_SESSION_MAP.get(sessionId);
+        if (webSocketSession == null || !webSocketSession.isOpen()) {
+            log.warn("连接对象【{}】已关闭：{}", sessionId, msg);
+        } else {
+            webSocketSession.close();
+            WEB_SOCKET_SESSION_MAP.remove(sessionId);
+            log.info("服务端主动关闭连接：用户{}错误信息：{}", sessionId, msg);
+        }
+    }
+
+    /**
      * 获取所有的连接对象ID
      *
      * @return ids
