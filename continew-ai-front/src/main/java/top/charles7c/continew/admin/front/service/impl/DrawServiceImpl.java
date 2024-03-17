@@ -60,7 +60,7 @@ public class DrawServiceImpl implements DrawService {
     public R<Object> createDrawTask(DrawReq drawReq) {
         String nonce = IdUtil.fastSimpleUUID();
         JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(drawReq));
-        jsonObject.put("callback", "http://101.201.33.35:8000/ai/draw/drawCallback");
+        jsonObject.put("callback", "http://101.201.33.35:8000/api/ai/draw/drawCallback");
         jsonObject.put("nonce", nonce);
         HttpRequest request = HttpRequest.post("https://ai.huashi6.com/aiapi/v1/draw")
             .header("Auth-Token", "lHOYOgNDXKssyTQTAqu0DyXrdMpPwx6z")

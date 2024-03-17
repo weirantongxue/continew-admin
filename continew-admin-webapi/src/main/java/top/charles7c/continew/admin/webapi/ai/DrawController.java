@@ -53,6 +53,7 @@ public class DrawController {
         return drawService.checkDrawTask(taskId);
     }
 
+    @Log(ignore = true)
     @Operation(summary = "通过任务id查询生成内容", description = "通过任务id查询生成内容")
     @GetMapping("/drawTask")
     public R<DrawResp> drawTask(String taskId) {

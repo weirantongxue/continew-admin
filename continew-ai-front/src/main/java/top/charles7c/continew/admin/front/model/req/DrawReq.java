@@ -35,17 +35,17 @@ public class DrawReq implements Serializable {
 
     @Schema(description = "批次大小")
     @Max(value = 4, message = "批次大小最大值为 {value}")
-    private Integer batchSize;
+    private Integer batchSize = 4;
 
     @Schema(description = "图片宽度")
     @NotBlank(message = "图片宽度不能为空")
     @Max(value = 800, message = "图片宽度大小最大值为 {value}")
-    private Integer width;
+    private Integer width = 512;
 
     @Schema(description = "图片高度")
     @NotBlank(message = "图片高度不能为空")
     @Max(value = 800, message = "图片高度大小最大值为 {value}")
-    private Integer height;
+    private Integer height = 512;
 
     @Schema(description = "模型风格ID")
     private Integer modelStyleId = 919;

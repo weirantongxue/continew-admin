@@ -29,7 +29,6 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import top.charles7c.continew.admin.common.enums.ErrorEnum;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
 import top.charles7c.continew.admin.front.service.ChatGlmService;
 import top.charles7c.continew.admin.front.service.WebSocketSendService;
@@ -39,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhong
- * webscoket 处理器
+ *         webscoket 处理器
  */
 @Component
 @Slf4j
@@ -71,14 +70,14 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
             return;
         }
         try {
-            ChatMessageRequestValidate chatMessageRequestValidate = JSONObject.parseObject(jsonPayload, ChatMessageRequestValidate.class);
+            ChatMessageRequestValidate chatMessageRequestValidate = JSONObject
+                .parseObject(jsonPayload, ChatMessageRequestValidate.class);
             chatGlmService.aiApi(chatMessageRequestValidate, webSocketSendService.getSessionId(session));
         } catch (Exception e) {
             log.error("WebSocket消息解析失败：{}", e.getMessage(), e);
             webSocketSendService.close(session.getId(), "消息解析失败：" + e.getMessage());
         }
     }
-
 
     /**
      * 建立连接后触发的回调
