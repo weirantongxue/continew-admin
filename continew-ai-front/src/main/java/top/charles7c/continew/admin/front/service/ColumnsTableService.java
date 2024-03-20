@@ -20,4 +20,9 @@ package top.charles7c.continew.admin.front.service;
  * Created by WeiRan on 2024.03.20 19:16
  */
 public interface ColumnsTableService {
+    Object selectTable(long projectId);
+
+    Object addRows(long projectId);
+
+    Object addColumn(long projectId);
 }

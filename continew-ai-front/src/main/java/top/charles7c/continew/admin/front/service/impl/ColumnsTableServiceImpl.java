@@ -18,6 +18,10 @@ package top.charles7c.continew.admin.front.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import top.charles7c.continew.admin.front.mapper.ColumnContentMapper;
+import top.charles7c.continew.admin.front.mapper.ColumnRowMapper;
+import top.charles7c.continew.admin.front.mapper.ColumnsMapper;
+import top.charles7c.continew.admin.front.mapper.ColumnsProjectMapper;
 import top.charles7c.continew.admin.front.service.ColumnsTableService;
 
 /**
@@ -26,4 +30,24 @@ import top.charles7c.continew.admin.front.service.ColumnsTableService;
 @Service
 @RequiredArgsConstructor
 public class ColumnsTableServiceImpl implements ColumnsTableService {
+    private final ColumnsProjectMapper columnsProjectMapper;
+    private final ColumnsMapper columnsMapper;
+    private final ColumnRowMapper columnRowMapper;
+    private final ColumnContentMapper columnContentMapper;
+
+
+    @Override
+    public Object selectTable(long projectId) {
+        return null;
+    }
+
+    @Override
+    public Object addRows(long projectId) {
+        return null;
+    }
+
+    @Override
+    public Object addColumn(long projectId) {
+        return null;
+    }
 }
