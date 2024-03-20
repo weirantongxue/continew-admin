@@ -16,13 +16,18 @@
 
 package top.charles7c.continew.admin.front.service;
 
+import top.charles7c.continew.admin.front.model.entity.ColumnContentDO;
+import top.charles7c.continew.admin.front.model.resp.ColumnsTableResp;
+
 /**
  * Created by WeiRan on 2024.03.20 19:16
  */
 public interface ColumnsTableService {
-    Object selectTable(long projectId);
+    ColumnsTableResp selectTable(long projectId);
 
-    Object addRows(long projectId);
+    boolean addRows(long projectId,int rows);
 
-    Object addColumn(long projectId);
+    int addColumn(long projectId,String title,int dataType);
+
+    int addContent(ColumnContentDO columnContentDO);
 }

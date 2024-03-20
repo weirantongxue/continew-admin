@@ -16,13 +16,27 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.front.mapper.ColumnContentMapper;
 import top.charles7c.continew.admin.front.mapper.ColumnRowMapper;
 import top.charles7c.continew.admin.front.mapper.ColumnsMapper;
 import top.charles7c.continew.admin.front.mapper.ColumnsProjectMapper;
+import top.charles7c.continew.admin.front.model.entity.ColumnContentDO;
+import top.charles7c.continew.admin.front.model.entity.ColumnRowDO;
+import top.charles7c.continew.admin.front.model.entity.ColumnsDO;
+import top.charles7c.continew.admin.front.model.resp.ColumnsRowResp;
+import top.charles7c.continew.admin.front.model.resp.ColumnsTableResp;
 import top.charles7c.continew.admin.front.service.ColumnsTableService;
+import top.charles7c.continew.admin.system.model.query.DictItemQuery;
+import top.charles7c.continew.admin.system.model.resp.DictItemResp;
+import top.charles7c.continew.admin.system.service.DictItemService;
+import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by WeiRan on 2024.03.20 19:16
@@ -30,24 +44,93 @@ import top.charles7c.continew.admin.front.service.ColumnsTableService;
 @Service
 @RequiredArgsConstructor
 public class ColumnsTableServiceImpl implements ColumnsTableService {
-    private final ColumnsProjectMapper columnsProjectMapper;
     private final ColumnsMapper columnsMapper;
     private final ColumnRowMapper columnRowMapper;
     private final ColumnContentMapper columnContentMapper;
+    private final DictItemService dictItemService;
 
 
     @Override
-    public Object selectTable(long projectId) {
-        return null;
+    public ColumnsTableResp selectTable(long projectId) {
+        ColumnsTableResp columnsTableResp = new ColumnsTableResp();
+        List<ColumnsRowResp> columnsRowRespList=new ArrayList<>();
+        List<ColumnsDO> columnsDOList = columnsMapper.lambdaQuery().eq(ColumnsDO::getProjectId, projectId).orderByAsc(ColumnsDO::getSort).list();
+        columnsTableResp.setColumnsList(columnsDOList);
+        List<ColumnRowDO> columnRowDOList=columnRowMapper.lambdaQuery().eq(ColumnRowDO::getProjectId,projectId).list();
+        //for (ColumnsDO columnsDO : columnsDOList) {
+            for (ColumnRowDO columnRowDO :columnRowDOList){
+                ColumnsRowResp columnsRowResp=new ColumnsRowResp();
+                List<ColumnContentDO> columnContentDOList= columnContentMapper.lambdaQuery().eq(ColumnContentDO::getRowId,columnRowDO.getRowId()).list();
+                columnsRowResp.setColumnRow(columnRowDO);
+                columnsRowResp.setColumnContentList(columnContentDOList);
+                columnsRowRespList.add(columnsRowResp);
+            //}
+            // 在此处添加代码来处理 columnsDO
+        }
+        columnsTableResp.setColumnsRowRespList(columnsRowRespList);
+        return columnsTableResp;
     }
 
     @Override
-    public Object addRows(long projectId) {
-        return null;
+    public boolean addRows(long projectId, int rows) {
+        if (columnsMapper.lambdaQuery().count() <= 0) {
+            List<ColumnsDO> columnsDOList = columnsDOList(projectId);
+            //初始化添加内容
+            columnsMapper.insertBatch(columnsDOList);
+        }
+        List<ColumnRowDO> columnRowDOList = new ArrayList<>();
+        int sort = columnRowMapper.sortMax(projectId);
+        for (int i = 0; i < rows; i++) {
+            ColumnRowDO columnRowDO = new ColumnRowDO();
+            columnRowDO.setRowId(IdUtil.fastSimpleUUID());
+            columnRowDO.setSort(sort + i + 1);
+            columnRowDO.setProjectId(projectId);
+            columnRowDOList.add(columnRowDO);
+        }
+        return columnRowMapper.insertBatch(columnRowDOList);
     }
 
     @Override
-    public Object addColumn(long projectId) {
-        return null;
+    public int addColumn(long projectId, String title, int dataType) {
+        ColumnsDO columnsDO = new ColumnsDO();
+        columnsDO.setProjectId(projectId);
+        columnsDO.setTitle(title);
+        columnsDO.setDataType(dataType);
+        columnsDO.setSort(columnsMapper.sortMax(projectId) + 1);
+        return columnsMapper.insert(columnsDO);
     }
+
+    @Override
+    public int addContent(ColumnContentDO columnContentDO) {
+        if (columnContentMapper.exists(new LambdaQueryWrapper<ColumnContentDO>()
+                .eq(ColumnContentDO::getRowId, columnContentDO.getRowId()).eq(ColumnContentDO::getColumnsId, columnContentDO.getColumnsId()))) {
+            columnContentMapper.lambdaUpdate()
+                    .eq(ColumnContentDO::getRowId, columnContentDO.getRowId())
+                    .eq(ColumnContentDO::getColumnsId, columnContentDO.getColumnsId())
+                    .set(ColumnContentDO::getContent, columnContentDO.getContent()).update();
+            return 1;
+        }
+        return columnContentMapper.insert(columnContentDO);
+    }
+
+    private List<ColumnsDO> columnsDOList(long projectId) {
+        List<ColumnsDO> columnsDOList = new ArrayList<>();
+        String[] sort = {"sort", "asc"};
+        SortQuery sortQuery = new SortQuery();
+        sortQuery.setSort(sort);
+        DictItemQuery dictItemQuery = new DictItemQuery();
+        dictItemQuery.setDictId(560936357447446910L);
+        List<DictItemResp> dictItemRespList = dictItemService.list(dictItemQuery, sortQuery);
+        for (DictItemResp dictItemResp : dictItemRespList) {
+            ColumnsDO columnsDO = new ColumnsDO();
+            columnsDO.setProjectId(projectId);
+            columnsDO.setTitle(dictItemResp.getLabel());
+            columnsDO.setSort(dictItemResp.getSort());
+            columnsDO.setDataType(Integer.valueOf(dictItemResp.getDescription()));
+            columnsDOList.add(columnsDO);
+        }
+        return columnsDOList;
+    }
+
+
 }

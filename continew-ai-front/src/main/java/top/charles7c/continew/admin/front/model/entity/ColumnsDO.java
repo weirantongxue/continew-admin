@@ -18,6 +18,7 @@ package top.charles7c.continew.admin.front.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
@@ -36,26 +37,31 @@ public class ColumnsDO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "主键id")
     @TableId
     private Long id;
 
     /**
      * 项目id
      */
+    @Schema(description = "项目id")
     private Long projectId;
 
     /**
      * 标题
      */
+    @Schema(description = "标题")
     private String title;
 
     /**
      * 排序字段
      */
+    @Schema(description = "排序字段")
     private Integer sort;
 
     /**
      * 1:文本,2:数字,3:图片
      */
+    @Schema(description = "标题类型,1:文本,2:数字,3:图片")
     private Integer dataType;
 }

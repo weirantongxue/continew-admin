@@ -29,4 +29,6 @@ public interface ColumnsProjectService {
     boolean update(Long id, String name);
 
     int delete(List<Long> ids);
+
+    int add(String name);
 }

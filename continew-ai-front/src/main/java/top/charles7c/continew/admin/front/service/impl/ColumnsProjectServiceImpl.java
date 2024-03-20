@@ -42,6 +42,15 @@ public class ColumnsProjectServiceImpl implements ColumnsProjectService {
     }
 
     @Override
+    public int add(String name) {
+        ColumnsProjectDO columnsProjectDO = new ColumnsProjectDO();
+        columnsProjectDO.setName(name);
+        return columnsProjectMapper.insert(columnsProjectDO);
+    }
+
+
+
+    @Override
     public boolean update(Long id, String name) {
         return columnsProjectMapper.lambdaUpdate()
             .eq(ColumnsProjectDO::getId, id)
@@ -53,5 +62,7 @@ public class ColumnsProjectServiceImpl implements ColumnsProjectService {
     public int delete(List<Long> ids) {
         return columnsProjectMapper.deleteBatchIds(ids);
     }
+
+
 
 }

@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.mapper;
 
+import org.apache.ibatis.annotations.Select;
 import top.charles7c.continew.admin.front.model.entity.ColumnRowDO;
 import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 
@@ -25,4 +26,7 @@ import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
  * @author weiran
  * @since 2024/03/20 18:23
  */
-public interface ColumnRowMapper extends BaseMapper<ColumnRowDO> {}
+public interface ColumnRowMapper extends BaseMapper<ColumnRowDO> {
+    @Select("SELECT COALESCE(MAX(sort), 0) FROM lb_column_row WHERE project_id = #{projectId}")
+    Integer sortMax(long projectId);
+}

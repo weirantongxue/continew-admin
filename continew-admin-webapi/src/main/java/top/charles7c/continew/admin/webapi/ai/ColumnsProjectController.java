@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
+import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,17 @@ public class ColumnsProjectController {
     public R<Object> list() {
         return R.success(columnsProjectService.list());
     }
+
+    @Operation(summary = "新增项目", description = "新增项目")
+    @GetMapping("/add")
+    public R<Object> add(String name) {
+        if (StrUtil.isBlank(name)) {
+            return R.fail("参数错误");
+        }
+        return R.success(columnsProjectService.add(name));
+    }
+
+
 
     @Operation(summary = "修改名称", description = "修改名称")
     @GetMapping("/update")
