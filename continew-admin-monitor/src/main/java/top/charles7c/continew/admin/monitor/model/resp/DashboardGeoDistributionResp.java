@@ -16,14 +16,13 @@
 
 package top.charles7c.continew.admin.monitor.model.resp;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
-import lombok.Data;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * 仪表盘-访客地域分布信息

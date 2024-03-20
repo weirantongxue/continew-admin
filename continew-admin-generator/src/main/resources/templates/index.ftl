@@ -1,16 +1,7 @@
 <script lang="ts" setup>
-  import {
-    DataRecord,
-    ListParam,
-    list,
-    get,
-    add,
-    update,
-    del,
-  } from '@/api/${apiModuleName}/${apiName}';
-  import checkPermission from '@/utils/permission';
+    import {add, DataRecord, del, get, list, ListParam, update,} from '@/api/';
 
-  const { proxy } = getCurrentInstance() as any;
+    const { proxy } = getCurrentInstance() as any;
   // const { dis_enable_status_enum } = proxy.useDict('dis_enable_status_enum');
 
   const queryFormRef = ref();

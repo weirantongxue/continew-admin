@@ -16,19 +16,16 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
-import top.charles7c.continew.starter.extension.crud.enums.Api;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.web.bind.annotation.*;
-
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
+import org.springframework.web.bind.annotation.RestController;
 import top.charles7c.continew.admin.front.model.query.DrawImgQuery;
 import top.charles7c.continew.admin.front.model.req.DrawImgReq;
 import top.charles7c.continew.admin.front.model.resp.DrawImgDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DrawImgResp;
 import top.charles7c.continew.admin.front.service.DrawImgService;
+import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.charles7c.continew.starter.extension.crud.controller.BaseController;
+import top.charles7c.continew.starter.extension.crud.enums.Api;
 
 /**
  * 绘图素材管理 API

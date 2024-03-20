@@ -16,13 +16,12 @@
 
 package top.charles7c.continew.admin.system.model.entity;
 
-import java.io.Serial;
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 角色和部门实体

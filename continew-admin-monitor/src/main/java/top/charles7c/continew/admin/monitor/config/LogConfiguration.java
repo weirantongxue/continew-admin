@@ -18,7 +18,6 @@ package top.charles7c.continew.admin.monitor.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import top.charles7c.continew.admin.monitor.mapper.LogMapper;
 import top.charles7c.continew.admin.system.service.UserService;
 import top.charles7c.continew.starter.log.core.dao.LogDao;

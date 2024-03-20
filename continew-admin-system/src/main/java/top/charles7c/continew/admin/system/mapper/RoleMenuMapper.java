@@ -16,10 +16,10 @@
 
 package top.charles7c.continew.admin.system.mapper;
 
-import java.util.List;
-
 import top.charles7c.continew.admin.system.model.entity.RoleMenuDO;
 import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
+
+import java.util.List;
 
 /**
  * 角色和菜单 Mapper

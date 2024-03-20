@@ -16,14 +16,13 @@
 
 package top.charles7c.continew.admin.common.config.jackson;
 
-import lombok.extern.slf4j.Slf4j;
-
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.type.ClassKey;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 反序列化器包装类（重写 Jackson 反序列化枚举方法，参阅：FasterXML/jackson-databind#2842）

@@ -18,7 +18,6 @@ package top.charles7c.continew.admin.system.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 import top.charles7c.continew.admin.common.constant.UiConstants;
 import top.charles7c.continew.starter.data.mybatis.plus.base.IBaseEnum;
 

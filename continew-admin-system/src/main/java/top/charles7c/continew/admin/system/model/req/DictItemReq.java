@@ -16,17 +16,15 @@
 
 package top.charles7c.continew.admin.system.model.req;
 
-import java.io.Serial;
-
-import jakarta.validation.constraints.*;
-
-import lombok.Data;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-
 import top.charles7c.continew.starter.extension.crud.model.req.BaseReq;
+
+import java.io.Serial;
 
 /**
  * 创建或修改字典项信息

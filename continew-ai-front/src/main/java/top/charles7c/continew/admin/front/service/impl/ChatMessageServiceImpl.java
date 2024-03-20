@@ -17,18 +17,16 @@
 package top.charles7c.continew.admin.front.service.impl;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
-
-import top.charles7c.continew.admin.front.mapper.ItemMapper;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.ChatMessageMapper;
+import top.charles7c.continew.admin.front.mapper.ItemMapper;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
 import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
+import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 /**
  * 对话消息业务实现

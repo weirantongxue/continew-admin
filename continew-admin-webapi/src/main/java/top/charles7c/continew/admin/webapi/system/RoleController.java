@@ -17,9 +17,7 @@
 package top.charles7c.continew.admin.webapi.system;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import org.springframework.web.bind.annotation.RestController;
-
 import top.charles7c.continew.admin.system.model.query.RoleQuery;
 import top.charles7c.continew.admin.system.model.req.RoleReq;
 import top.charles7c.continew.admin.system.model.resp.RoleDetailResp;

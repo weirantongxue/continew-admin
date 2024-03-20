@@ -16,13 +16,11 @@
 
 package top.charles7c.continew.admin.monitor.model.resp;
 
-import java.io.Serial;
-
-import lombok.Data;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import lombok.Data;
 import top.charles7c.continew.admin.monitor.enums.LogStatusEnum;
+
+import java.io.Serial;
 
 /**
  * 登录日志信息

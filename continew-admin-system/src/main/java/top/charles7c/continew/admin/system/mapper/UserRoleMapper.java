@@ -16,13 +16,12 @@
 
 package top.charles7c.continew.admin.system.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-
 import top.charles7c.continew.admin.system.model.entity.UserRoleDO;
 import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
+
+import java.util.List;
 
 /**
  * 用户和角色 Mapper

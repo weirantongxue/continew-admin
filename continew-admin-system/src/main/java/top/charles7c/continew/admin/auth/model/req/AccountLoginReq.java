@@ -16,14 +16,12 @@
 
 package top.charles7c.continew.admin.auth.model.req;
 
-import java.io.Serial;
-import java.io.Serializable;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-
 import lombok.Data;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 账号登录信息

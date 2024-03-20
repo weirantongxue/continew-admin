@@ -16,18 +16,15 @@
 
 package top.charles7c.continew.admin.auth.model.query;
 
+import cn.hutool.core.date.DatePattern;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import lombok.Data;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import cn.hutool.core.date.DatePattern;
 
 /**
  * 在线用户查询条件

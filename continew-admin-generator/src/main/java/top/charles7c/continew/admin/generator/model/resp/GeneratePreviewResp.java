@@ -16,14 +16,12 @@
 
 package top.charles7c.continew.admin.generator.model.resp;
 
-import java.io.Serial;
-import java.io.Serializable;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 生成预览信息

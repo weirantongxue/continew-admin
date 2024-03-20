@@ -16,14 +16,12 @@
 
 package top.charles7c.continew.admin.front.model.resp;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
+
 import java.io.Serial;
 import java.time.LocalDateTime;
-
-import lombok.Data;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
 
 /**
  * AI会话信息

@@ -17,9 +17,7 @@
 package top.charles7c.continew.admin.webapi.system;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RestController;
 import top.charles7c.continew.admin.system.model.query.DictQuery;
 import top.charles7c.continew.admin.system.model.req.DictReq;
 import top.charles7c.continew.admin.system.model.resp.DictDetailResp;

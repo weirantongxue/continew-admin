@@ -21,8 +21,8 @@ import top.charles7c.continew.admin.system.model.query.DictQuery;
 import top.charles7c.continew.admin.system.model.req.DictReq;
 import top.charles7c.continew.admin.system.model.resp.DictDetailResp;
 import top.charles7c.continew.admin.system.model.resp.DictResp;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.starter.data.mybatis.plus.service.IService;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 字典业务接口

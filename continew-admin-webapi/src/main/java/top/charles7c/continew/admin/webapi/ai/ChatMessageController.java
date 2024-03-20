@@ -16,19 +16,16 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.RestController;
 import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
 import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
+import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
 import top.charles7c.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.starter.extension.crud.enums.Api;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.web.bind.annotation.*;
-
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
 
 /**
  * 对话消息管理 API

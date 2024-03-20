@@ -16,12 +16,11 @@
 
 package top.charles7c.continew.admin.common.model.dto;
 
+import lombok.Data;
+import top.charles7c.continew.admin.common.enums.DataScopeEnum;
+
 import java.io.Serial;
 import java.io.Serializable;
-
-import lombok.Data;
-
-import top.charles7c.continew.admin.common.enums.DataScopeEnum;
 
 /**
  * 角色信息

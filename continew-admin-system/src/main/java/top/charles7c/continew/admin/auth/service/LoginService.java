@@ -16,11 +16,10 @@
 
 package top.charles7c.continew.admin.auth.service;
 
-import java.util.List;
-
+import me.zhyd.oauth.model.AuthUser;
 import top.charles7c.continew.admin.auth.model.resp.RouteResp;
 
-import me.zhyd.oauth.model.AuthUser;
+import java.util.List;
 
 /**
  * 登录业务接口

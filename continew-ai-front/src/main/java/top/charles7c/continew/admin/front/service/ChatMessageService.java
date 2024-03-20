@@ -17,11 +17,11 @@
 package top.charles7c.continew.admin.front.service;
 
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
 import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 对话消息业务接口

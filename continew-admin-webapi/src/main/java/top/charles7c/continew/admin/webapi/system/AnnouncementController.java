@@ -16,15 +16,12 @@
 
 package top.charles7c.continew.admin.webapi.system;
 
-import java.time.LocalDateTime;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
 import cn.dev33.satoken.annotation.SaCheckPermission;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import top.charles7c.continew.admin.system.model.query.AnnouncementQuery;
 import top.charles7c.continew.admin.system.model.req.AnnouncementReq;
 import top.charles7c.continew.admin.system.model.resp.AnnouncementDetailResp;
@@ -35,6 +32,8 @@ import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMappi
 import top.charles7c.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.starter.extension.crud.util.ValidateGroup;
 import top.charles7c.continew.starter.web.model.R;
+
+import java.time.LocalDateTime;
 
 /**
  * 公告管理 API

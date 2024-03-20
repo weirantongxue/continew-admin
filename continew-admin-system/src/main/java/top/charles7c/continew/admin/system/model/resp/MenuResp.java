@@ -16,20 +16,17 @@
 
 package top.charles7c.continew.admin.system.model.resp;
 
-import java.io.Serial;
-
-import lombok.Data;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-
-import top.charles7c.continew.starter.extension.crud.converter.ExcelBaseEnumConverter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
 import top.charles7c.continew.admin.common.enums.MenuTypeEnum;
 import top.charles7c.continew.starter.extension.crud.annotation.TreeField;
+import top.charles7c.continew.starter.extension.crud.converter.ExcelBaseEnumConverter;
 import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
+
+import java.io.Serial;
 
 /**
  * 菜单信息

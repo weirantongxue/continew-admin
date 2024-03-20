@@ -16,11 +16,11 @@
 
 package top.charles7c.continew.admin.front.service;
 
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.ItemQuery;
 import top.charles7c.continew.admin.front.model.req.ItemReq;
 import top.charles7c.continew.admin.front.model.resp.ItemDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ItemResp;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
 
 /**
  * AI会话业务接口

@@ -16,14 +16,13 @@
 
 package top.charles7c.continew.admin.common.config.jackson;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
-
 import top.charles7c.continew.starter.data.mybatis.plus.base.IBaseEnum;
+
+import java.io.IOException;
 
 /**
  * 通用枚举接口 IBaseEnum 序列化器

@@ -21,8 +21,8 @@ import top.charles7c.continew.admin.system.model.query.StorageQuery;
 import top.charles7c.continew.admin.system.model.req.StorageReq;
 import top.charles7c.continew.admin.system.model.resp.StorageDetailResp;
 import top.charles7c.continew.admin.system.model.resp.StorageResp;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.starter.data.mybatis.plus.service.IService;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 存储库业务接口

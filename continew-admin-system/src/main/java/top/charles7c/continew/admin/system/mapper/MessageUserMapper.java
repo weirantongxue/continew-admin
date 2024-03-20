@@ -17,7 +17,6 @@
 package top.charles7c.continew.admin.system.mapper;
 
 import org.apache.ibatis.annotations.Param;
-
 import top.charles7c.continew.admin.system.model.entity.MessageUserDO;
 import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 

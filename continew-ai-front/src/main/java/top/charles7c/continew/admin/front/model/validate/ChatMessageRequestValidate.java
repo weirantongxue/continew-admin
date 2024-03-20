@@ -17,7 +17,6 @@
 package top.charles7c.continew.admin.front.model.validate;
 
 import com.unfbx.chatgpt.entity.chat.Message;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

@@ -16,13 +16,6 @@
 
 package top.charles7c.continew.admin.auth.service.impl;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
@@ -30,7 +23,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-
+import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.auth.model.query.OnlineUserQuery;
 import top.charles7c.continew.admin.auth.model.resp.OnlineUserResp;
 import top.charles7c.continew.admin.auth.service.OnlineUserService;
@@ -39,6 +32,11 @@ import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.starter.core.constant.StringConstants;
 import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
 import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 在线用户业务实现

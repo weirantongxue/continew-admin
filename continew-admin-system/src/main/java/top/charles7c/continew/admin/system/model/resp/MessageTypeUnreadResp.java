@@ -16,14 +16,12 @@
 
 package top.charles7c.continew.admin.system.model.resp;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import top.charles7c.continew.admin.common.enums.MessageTypeEnum;
+
 import java.io.Serial;
 import java.io.Serializable;
-
-import lombok.Data;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import top.charles7c.continew.admin.common.enums.MessageTypeEnum;
 
 /**
  * 各类型未读消息信息

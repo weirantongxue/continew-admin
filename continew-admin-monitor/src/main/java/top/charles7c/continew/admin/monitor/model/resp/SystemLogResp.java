@@ -16,11 +16,10 @@
 
 package top.charles7c.continew.admin.monitor.model.resp;
 
-import java.io.Serial;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serial;
 
 /**
  * 系统日志信息

@@ -16,16 +16,14 @@
 
 package top.charles7c.continew.admin.common.model.dto;
 
+import cn.hutool.core.collection.CollUtil;
+import lombok.Data;
+import top.charles7c.continew.admin.common.constant.SysConstants;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
-
-import lombok.Data;
-
-import cn.hutool.core.collection.CollUtil;
-
-import top.charles7c.continew.admin.common.constant.SysConstants;
 
 /**
  * 登录用户信息

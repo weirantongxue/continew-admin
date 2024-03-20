@@ -16,20 +16,18 @@
 
 package top.charles7c.continew.admin.system.model.entity;
 
-import java.io.Serial;
-
-import lombok.Data;
-
-import org.dromara.x.file.storage.core.FileInfo;
-
-import com.baomidou.mybatisplus.annotation.*;
-
 import cn.hutool.core.util.StrUtil;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import org.dromara.x.file.storage.core.FileInfo;
 import top.charles7c.continew.admin.system.enums.FileTypeEnum;
 import top.charles7c.continew.starter.core.constant.StringConstants;
 import top.charles7c.continew.starter.core.util.URLUtils;
 import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+
+import java.io.Serial;
 
 /**
  * 文件实体

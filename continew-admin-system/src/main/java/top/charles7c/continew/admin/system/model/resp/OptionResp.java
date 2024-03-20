@@ -16,16 +16,13 @@
 
 package top.charles7c.continew.admin.system.model.resp;
 
-import java.io.Serial;
-import java.io.Serializable;
-
+import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import cn.hutool.core.util.StrUtil;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 参数信息

@@ -16,11 +16,11 @@
 
 package top.charles7c.continew.admin.front.service;
 
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.DrawTaskQuery;
 import top.charles7c.continew.admin.front.model.req.DrawTaskReq;
 import top.charles7c.continew.admin.front.model.resp.DrawTaskDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DrawTaskResp;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 绘图任务业务接口
