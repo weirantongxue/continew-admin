@@ -41,7 +41,6 @@ public class ColumnsTableController {
         return R.success(columnsTableService.selectTable(projectId));
     }
 
-
     @Operation(summary = "添加行", description = "添加行")
     @GetMapping("/addRows")
     public R<Boolean> addRows(long projectId, int rows) {
@@ -54,12 +53,10 @@ public class ColumnsTableController {
         return R.success(columnsTableService.addColumn(projectId, title, dataType));
     }
 
-
     @Operation(summary = "添加列数据", description = "添加列数据")
     @PostMapping("/addContent")
     public R<Integer> addContent(@RequestBody ColumnContentDO columnContentDO) {
         return R.success(columnsTableService.addContent(columnContentDO));
     }
-
 
 }

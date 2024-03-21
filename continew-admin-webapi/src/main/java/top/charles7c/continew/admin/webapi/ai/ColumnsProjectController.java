@@ -53,8 +53,6 @@ public class ColumnsProjectController {
         return R.success(columnsProjectService.add(name));
     }
 
-
-
     @Operation(summary = "修改名称", description = "修改名称")
     @GetMapping("/update")
     public R<Object> update(Long id, String name) {

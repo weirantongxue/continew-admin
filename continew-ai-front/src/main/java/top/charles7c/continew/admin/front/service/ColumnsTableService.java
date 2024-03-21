@@ -25,9 +25,9 @@ import top.charles7c.continew.admin.front.model.resp.ColumnsTableResp;
 public interface ColumnsTableService {
     ColumnsTableResp selectTable(long projectId);
 
-    boolean addRows(long projectId,int rows);
+    boolean addRows(long projectId, int rows);
 
-    int addColumn(long projectId,String title,int dataType);
+    int addColumn(long projectId, String title, int dataType);
 
     int addContent(ColumnContentDO columnContentDO);
 }

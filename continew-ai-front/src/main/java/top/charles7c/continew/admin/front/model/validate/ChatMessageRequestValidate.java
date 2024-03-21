@@ -50,7 +50,11 @@ public class ChatMessageRequestValidate implements Serializable {
 
     @NotBlank(message = "model参数缺失")
     @Schema(description = "模型")
-    private String model;
+    private Long modelId;
+
+    @NotBlank(message = "脚本id")
+    @Schema(description = "脚本id")
+    private Long ModelScriptId;
 
     @NotBlank(message = "对话信息")
     @Schema(description = "对话信息")

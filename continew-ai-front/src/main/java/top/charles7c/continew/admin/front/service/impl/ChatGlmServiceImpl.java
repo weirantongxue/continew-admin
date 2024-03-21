@@ -28,10 +28,11 @@ import top.charles7c.continew.admin.common.util.StreamUtils;
 import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
 import top.charles7c.continew.admin.front.model.ChatMessageUtils;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
+import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
+import top.charles7c.continew.admin.front.model.resp.ModelResp;
+import top.charles7c.continew.admin.front.model.resp.ModelScriptDetailResp;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
-import top.charles7c.continew.admin.front.service.ChatGlmService;
-import top.charles7c.continew.admin.front.service.ChatMessageService;
-import top.charles7c.continew.admin.front.service.WebSocketSendService;
+import top.charles7c.continew.admin.front.service.*;
 
 /**
  * Created by WeiRan on 2023.09.22 21:17
@@ -42,6 +43,9 @@ import top.charles7c.continew.admin.front.service.WebSocketSendService;
 public class ChatGlmServiceImpl implements ChatGlmService {
     private final ChatMessageService chatMessageService;
     private final WebSocketSendService webSocketSendService;
+    private final ModelService modelService;
+    private final ModelScriptService modelScriptService;
+
 
     @Override
     public void aiApi(ChatMessageRequestValidate messageCreateValidate, String sessionId) {
@@ -50,20 +54,28 @@ public class ChatGlmServiceImpl implements ChatGlmService {
             timer.start(TimerConstant.RESPONSE_TIME);
             String messageId = IdUtil.fastSimpleUUID();
 
-            ChatMessageDO message = ChatMessageUtils.ConvertMessageUtils(messageCreateValidate, messageId, sessionId);
+            ModelDetailResp modelDetailResp= getModel(messageCreateValidate.getModelId());
+            ModelScriptDetailResp modelScriptDetailResp = getModelScript(messageCreateValidate.getModelScriptId());
+            ChatMessageDO message = ChatMessageUtils.convertMessageUtils(messageCreateValidate,modelDetailResp,modelScriptDetailResp, messageId, sessionId);
 
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer);
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
 
-            messageCreateValidate.setModel("glm-4");
-            JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(messageCreateValidate));
-            System.out.println("开始请求模型" + jsonObject);
             StreamUtils
-                .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, JSONObject
-                    .toJSONString(jsonObject));
+                    .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener,ChatMessageUtils.convertModelRequest(messageCreateValidate,modelDetailResp,modelScriptDetailResp));
         } catch (Exception e) {
             log.error("Glm6B请求失败");
         }
+    }
+
+    private ModelDetailResp getModel(Long modelId) {
+        ModelDetailResp model = modelService.get(modelId);
+        return model;
+    }
+
+    private ModelScriptDetailResp getModelScript(Long modelId) {
+        ModelScriptDetailResp modelScript = modelScriptService.get(modelId);
+        return modelScript;
     }
 
 }

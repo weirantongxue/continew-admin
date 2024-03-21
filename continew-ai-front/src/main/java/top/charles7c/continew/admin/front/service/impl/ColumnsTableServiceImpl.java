@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.front.mapper.ColumnContentMapper;
 import top.charles7c.continew.admin.front.mapper.ColumnRowMapper;
 import top.charles7c.continew.admin.front.mapper.ColumnsMapper;
-import top.charles7c.continew.admin.front.mapper.ColumnsProjectMapper;
 import top.charles7c.continew.admin.front.model.entity.ColumnContentDO;
 import top.charles7c.continew.admin.front.model.entity.ColumnRowDO;
 import top.charles7c.continew.admin.front.model.entity.ColumnsDO;
@@ -49,21 +48,27 @@ public class ColumnsTableServiceImpl implements ColumnsTableService {
     private final ColumnContentMapper columnContentMapper;
     private final DictItemService dictItemService;
 
-
     @Override
     public ColumnsTableResp selectTable(long projectId) {
         ColumnsTableResp columnsTableResp = new ColumnsTableResp();
-        List<ColumnsRowResp> columnsRowRespList=new ArrayList<>();
-        List<ColumnsDO> columnsDOList = columnsMapper.lambdaQuery().eq(ColumnsDO::getProjectId, projectId).orderByAsc(ColumnsDO::getSort).list();
+        List<ColumnsRowResp> columnsRowRespList = new ArrayList<>();
+        List<ColumnsDO> columnsDOList = columnsMapper.lambdaQuery()
+            .eq(ColumnsDO::getProjectId, projectId)
+            .orderByAsc(ColumnsDO::getSort)
+            .list();
         columnsTableResp.setColumnsList(columnsDOList);
-        List<ColumnRowDO> columnRowDOList=columnRowMapper.lambdaQuery().eq(ColumnRowDO::getProjectId,projectId).list();
+        List<ColumnRowDO> columnRowDOList = columnRowMapper.lambdaQuery()
+            .eq(ColumnRowDO::getProjectId, projectId)
+            .list();
         //for (ColumnsDO columnsDO : columnsDOList) {
-            for (ColumnRowDO columnRowDO :columnRowDOList){
-                ColumnsRowResp columnsRowResp=new ColumnsRowResp();
-                List<ColumnContentDO> columnContentDOList= columnContentMapper.lambdaQuery().eq(ColumnContentDO::getRowId,columnRowDO.getRowId()).list();
-                columnsRowResp.setColumnRow(columnRowDO);
-                columnsRowResp.setColumnContentList(columnContentDOList);
-                columnsRowRespList.add(columnsRowResp);
+        for (ColumnRowDO columnRowDO : columnRowDOList) {
+            ColumnsRowResp columnsRowResp = new ColumnsRowResp();
+            List<ColumnContentDO> columnContentDOList = columnContentMapper.lambdaQuery()
+                .eq(ColumnContentDO::getRowId, columnRowDO.getRowId())
+                .list();
+            columnsRowResp.setColumnRow(columnRowDO);
+            columnsRowResp.setColumnContentList(columnContentDOList);
+            columnsRowRespList.add(columnsRowResp);
             //}
             // 在此处添加代码来处理 columnsDO
         }
@@ -103,11 +108,13 @@ public class ColumnsTableServiceImpl implements ColumnsTableService {
     @Override
     public int addContent(ColumnContentDO columnContentDO) {
         if (columnContentMapper.exists(new LambdaQueryWrapper<ColumnContentDO>()
-                .eq(ColumnContentDO::getRowId, columnContentDO.getRowId()).eq(ColumnContentDO::getColumnsId, columnContentDO.getColumnsId()))) {
+            .eq(ColumnContentDO::getRowId, columnContentDO.getRowId())
+            .eq(ColumnContentDO::getColumnsId, columnContentDO.getColumnsId()))) {
             columnContentMapper.lambdaUpdate()
-                    .eq(ColumnContentDO::getRowId, columnContentDO.getRowId())
-                    .eq(ColumnContentDO::getColumnsId, columnContentDO.getColumnsId())
-                    .set(ColumnContentDO::getContent, columnContentDO.getContent()).update();
+                .eq(ColumnContentDO::getRowId, columnContentDO.getRowId())
+                .eq(ColumnContentDO::getColumnsId, columnContentDO.getColumnsId())
+                .set(ColumnContentDO::getContent, columnContentDO.getContent())
+                .update();
             return 1;
         }
         return columnContentMapper.insert(columnContentDO);
@@ -131,6 +138,5 @@ public class ColumnsTableServiceImpl implements ColumnsTableService {
         }
         return columnsDOList;
     }
-
 
 }
