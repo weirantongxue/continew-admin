@@ -7,15 +7,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import net.dreamlu.mica.core.result.R;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.charles7c.continew.admin.front.model.entity.ModelScriptDO;
 import top.charles7c.continew.admin.front.model.query.ModelScriptQuery;
 import top.charles7c.continew.admin.front.model.req.ModelScriptReq;
 import top.charles7c.continew.admin.front.model.resp.ColumnsTableResp;
 import top.charles7c.continew.admin.front.model.resp.ModelScriptDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ModelScriptResp;
+import top.charles7c.continew.admin.front.model.vo.ModelScriptVo;
 import top.charles7c.continew.admin.front.service.ModelScriptService;
 import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
 import top.charles7c.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.starter.extension.crud.enums.Api;
+
+import java.util.List;
 
 /**
  * 模型预设脚本管理 API
@@ -32,8 +36,8 @@ public class ModelScriptController extends BaseController<ModelScriptService, Mo
     @Operation(summary = "查询脚本列表", description = "查询脚本列表")
     @GetMapping("/selectModelScript")
     public R<Object> selectTable() {
-         this.baseService.selectModelScript();
-        return R.success();
+        List<ModelScriptVo> modelScriptVoList= this.baseService.selectModelScript();
+        return R.success(modelScriptVoList);
     }
 
 }

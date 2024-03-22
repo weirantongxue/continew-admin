@@ -37,7 +37,7 @@ public class ModelScriptQuery implements Serializable {
      */
     @Schema(description = "模型名称")
     @Query(type = QueryType.EQ)
-    private Integer modelId;
+    private Long modelId;
 
     /**
      * 预设内容

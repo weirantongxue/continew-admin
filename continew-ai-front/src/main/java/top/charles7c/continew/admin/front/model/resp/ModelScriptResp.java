@@ -32,7 +32,7 @@ public class ModelScriptResp extends BaseResp {
      * 模型名称
      */
     @Schema(description = "模型名称")
-    private Integer modelId;
+    private Long modelId;
 
     /**
      * 预设内容
@@ -45,6 +45,18 @@ public class ModelScriptResp extends BaseResp {
      */
     @Schema(description = "封面")
     private String coverUrl;
+
+    /**
+     * 简介
+     */
+    @Schema(description = ",简介")
+    private String description;
+
+    /**
+     * 排序值
+     */
+    @Schema(description = "排序值")
+    private Integer sort;
 
     /**
      * 状态（1：启用；2：禁用）

@@ -39,7 +39,7 @@ public class ModelScriptReq extends BaseReq {
      */
     @Schema(description = "模型名称")
     @NotNull(message = "模型名称不能为空")
-    private Integer modelId;
+    private Long modelId;
 
     /**
      * 预设内容
@@ -55,6 +55,20 @@ public class ModelScriptReq extends BaseReq {
     @Schema(description = "封面")
     @Length(max = 255, message = "封面长度不能超过 {max} 个字符")
     private String coverUrl;
+
+    /**
+     * 简介
+     */
+    @Schema(description = "简介")
+    @Length(max = 255, message = "描述长度不能超过 {max} 个字符")
+    private String description;
+
+    /**
+     * 排序值
+     */
+    @Schema(description = "排序值")
+    @NotNull(message = "排序值不能为空")
+    private Integer sort;
 
     /**
      * 状态（1：启用；2：禁用）

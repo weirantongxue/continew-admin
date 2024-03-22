@@ -1,9 +1,12 @@
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import top.charles7c.continew.admin.front.model.vo.ModelScriptVo;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.ModelScriptMapper;
 import top.charles7c.continew.admin.front.model.entity.ModelScriptDO;
@@ -25,8 +28,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ModelScriptServiceImpl extends BaseServiceImpl<ModelScriptMapper, ModelScriptDO, ModelScriptResp, ModelScriptDetailResp, ModelScriptQuery, ModelScriptReq> implements ModelScriptService {
     @Override
-    public void selectModelScript() {
-        List<ModelScriptDO> modelScriptRespList= this.baseMapper.selectList(null);
-        System.out.println("121121212121121");
+    public List<ModelScriptVo> selectModelScript() {
+        List <ModelScriptDO> modelScriptDO= this.baseMapper.selectList(new LambdaQueryWrapper<ModelScriptDO>().eq(ModelScriptDO::getStatus, 1));
+        List<ModelScriptVo> modelScriptVoList= BeanUtil.copyToList(modelScriptDO, ModelScriptVo.class);
+        return modelScriptVoList;
     }
 }
