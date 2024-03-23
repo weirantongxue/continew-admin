@@ -50,4 +50,8 @@ public class DrawReq implements Serializable {
     @Schema(description = "模型风格ID")
     private Integer modelStyleId = 919;
 
+    @Schema(description = "模型id")
+    @NotBlank(message = "模型id不能为空")
+    private Long modelId;
+
 }

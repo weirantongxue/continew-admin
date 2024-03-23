@@ -183,7 +183,7 @@ cosid:
       friendly: true
     provider:
       safe-js:
-        machine-bit: 5
+        machine-bit: 6
         sequence-bit: 9
 
 --- ### 服务器配置

@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.core.result.R;
 import org.springframework.web.bind.annotation.*;
 import top.charles7c.continew.admin.front.model.entity.ColumnContentDO;
+import top.charles7c.continew.admin.front.model.req.ColumnsSortReq;
 import top.charles7c.continew.admin.front.model.resp.ColumnsTableResp;
 import top.charles7c.continew.admin.front.service.ColumnsTableService;
 
@@ -57,6 +58,20 @@ public class ColumnsTableController {
     @PostMapping("/addContent")
     public R<Integer> addContent(@RequestBody ColumnContentDO columnContentDO) {
         return R.success(columnsTableService.addContent(columnContentDO));
+    }
+
+    @Operation(summary = "标题排序", description = "标题排序")
+    @PostMapping("/columnsSort")
+    public R<Object> columnsSort(@RequestBody ColumnsSortReq columnsSortReq) {
+        columnsTableService.columnsSort(columnsSortReq);
+        return R.success();
+    }
+
+    @Operation(summary = "行排序", description = "标题排序")
+    @PostMapping("/rowSort")
+    public R<Object> rowSort(@RequestBody ColumnsSortReq columnsSortReq) {
+        columnsTableService.rowSort(columnsSortReq);
+        return R.success();
     }
 
 }

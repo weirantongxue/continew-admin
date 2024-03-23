@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.mapper;
+package top.charles7c.continew.admin.front.model.vo;
 
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
-import top.charles7c.continew.admin.front.model.entity.ModelDO;
+import lombok.Data;
 
-/**
- * AI模型 Mapper
- *
- * @author weiran
- * @since 2024/03/21 14:48
- */
-public interface ModelMapper extends BaseMapper<ModelDO> {}
+import java.io.Serializable;
+
+@Data
+public class DrawTaskVo implements Serializable {
+    //任务id
+    private String taskId;
+    //url
+    private String url;
+    //stream:流式,sync:同步,async:异步
+    private String resType;
+}

@@ -16,16 +16,21 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
-import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
-import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
+import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
+import top.charles7c.continew.starter.web.model.R;
 
 /**
  * 对话消息管理 API
@@ -35,7 +40,17 @@ import top.charles7c.continew.starter.extension.crud.enums.Api;
  */
 @Tag(name = "对话消息管理 API")
 @RestController
-@CrudRequestMapping(value = "/ai/message", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
-public class ChatMessageController extends BaseController<ChatMessageService, ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> {
+@RequiredArgsConstructor
+@RequestMapping(value = "/ai/message/consumer")
+public class ChatMessageConsumerController {
+    private final ChatMessageService baseService;
+
+    @Operation(summary = "用户消息查询", description = "用户消息查询")
+    @ResponseBody
+    @GetMapping(value = "/userMessage")
+    public R<PageResp<ChatMessageResp>> page(ChatMessageQuery query, @Validated PageQuery pageQuery) {
+        query.setCreateUser(LoginHelper.getUserId());
+        return R.ok(this.baseService.page(query, pageQuery));
+    }
 
 }

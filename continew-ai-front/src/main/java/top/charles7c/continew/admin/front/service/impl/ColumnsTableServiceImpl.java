@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import top.charles7c.continew.admin.front.mapper.ColumnsMapper;
 import top.charles7c.continew.admin.front.model.entity.ColumnContentDO;
 import top.charles7c.continew.admin.front.model.entity.ColumnRowDO;
 import top.charles7c.continew.admin.front.model.entity.ColumnsDO;
+import top.charles7c.continew.admin.front.model.req.ColumnsSortReq;
 import top.charles7c.continew.admin.front.model.resp.ColumnsRowResp;
 import top.charles7c.continew.admin.front.model.resp.ColumnsTableResp;
 import top.charles7c.continew.admin.front.service.ColumnsTableService;
@@ -60,7 +62,6 @@ public class ColumnsTableServiceImpl implements ColumnsTableService {
         List<ColumnRowDO> columnRowDOList = columnRowMapper.lambdaQuery()
             .eq(ColumnRowDO::getProjectId, projectId)
             .list();
-        //for (ColumnsDO columnsDO : columnsDOList) {
         for (ColumnRowDO columnRowDO : columnRowDOList) {
             ColumnsRowResp columnsRowResp = new ColumnsRowResp();
             List<ColumnContentDO> columnContentDOList = columnContentMapper.lambdaQuery()
@@ -69,8 +70,6 @@ public class ColumnsTableServiceImpl implements ColumnsTableService {
             columnsRowResp.setColumnRow(columnRowDO);
             columnsRowResp.setColumnContentList(columnContentDOList);
             columnsRowRespList.add(columnsRowResp);
-            //}
-            // 在此处添加代码来处理 columnsDO
         }
         columnsTableResp.setColumnsRowRespList(columnsRowRespList);
         return columnsTableResp;
@@ -118,6 +117,18 @@ public class ColumnsTableServiceImpl implements ColumnsTableService {
             return 1;
         }
         return columnContentMapper.insert(columnContentDO);
+    }
+
+    @Override
+    public void columnsSort(ColumnsSortReq columnsSortReq) {
+        List<ColumnsDO> columnsDOList = BeanUtil.copyToList(columnsSortReq.getSortReqList(), ColumnsDO.class);
+        columnsMapper.updateBatchById(columnsDOList);
+    }
+
+    @Override
+    public void rowSort(ColumnsSortReq columnsSortReq) {
+        List<ColumnRowDO> columnRowDOList = BeanUtil.copyToList(columnsSortReq.getSortReqList(), ColumnRowDO.class);
+        columnRowMapper.updateBatchById(columnRowDOList);
     }
 
     private List<ColumnsDO> columnsDOList(long projectId) {

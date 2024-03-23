@@ -16,7 +16,6 @@
 
 package top.charles7c.continew.admin.front.model;
 
-import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.unfbx.chatgpt.entity.chat.Message;
 import top.charles7c.continew.admin.common.model.resp.ChatModelMsg;
@@ -35,7 +34,8 @@ import java.util.Objects;
 public class ChatMessageUtils {
 
     public static ChatMessageDO convertMessageUtils(ChatMessageRequestValidate messageRequestValidate,
-                                                    ModelDetailResp modelDetailResp, ModelScriptDetailResp modelScriptDetailResp,
+                                                    ModelDetailResp modelDetailResp,
+                                                    ModelScriptDetailResp modelScriptDetailResp,
                                                     String messageId,
                                                     String sessionId) {
 
@@ -43,8 +43,8 @@ public class ChatMessageUtils {
         message.setMessageId(messageId);
         message.setItemId(messageRequestValidate.getItemId());
         message.setQuestion(messageRequestValidate.getMessages()
-                .get(messageRequestValidate.getMessages().size() - 1)
-                .getContent());
+            .get(messageRequestValidate.getMessages().size() - 1)
+            .getContent());
         message.setModel(modelDetailResp.getName());
         message.setIp("0");
         message.setCreateUser(Long.valueOf(sessionId));
@@ -62,7 +62,9 @@ public class ChatMessageUtils {
         return message;
     }
 
-    public static String convertModelRequest(ChatMessageRequestValidate messageCreateValidate, ModelDetailResp modelDetailResp, ModelScriptDetailResp modelScriptDetailResp) {
+    public static String convertModelRequest(ChatMessageRequestValidate messageCreateValidate,
+                                             ModelDetailResp modelDetailResp,
+                                             ModelScriptDetailResp modelScriptDetailResp) {
         JSONObject jsonObject = new JSONObject();
         List<Message> messageList = messageCreateValidate.getMessages();
         //添加预设prompt
@@ -72,12 +74,15 @@ public class ChatMessageUtils {
             message.setContent(modelScriptDetailResp.getPrompt());
             messageList.add(0, message);
         }
-        jsonObject.put("model", modelDetailResp.getName());
+        if (Objects.nonNull(modelScriptDetailResp)) {
+            jsonObject.put("model", modelDetailResp.getName());
+        } else {
+            jsonObject.put("model", "glm-4");
+        }
         jsonObject.put("messages", messageList);
         jsonObject.put("stream", true);
         return jsonObject.toJSONString();
     }
-
 
     public static ChatModelMsg chatModelMsg(String msgId, String itemId, String content, String eventType) {
         ChatModelMsg chatModelMsg = new ChatModelMsg();

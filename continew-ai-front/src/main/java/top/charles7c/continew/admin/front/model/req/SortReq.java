@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.mapper;
+package top.charles7c.continew.admin.front.model.req;
 
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
-import top.charles7c.continew.admin.front.model.entity.ModelDO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
-/**
- * AI模型 Mapper
- *
- * @author weiran
- * @since 2024/03/21 14:48
- */
-public interface ModelMapper extends BaseMapper<ModelDO> {}
+import java.io.Serializable;
+
+@Data
+public class SortReq implements Serializable {
+    @Schema(description = "主键id")
+    @NotNull(message = "主键id不能为空")
+    private Long id;
+    @Schema(description = "排序字段")
+    @NotNull(message = "排序值不能为空")
+    private Integer sort;
+}

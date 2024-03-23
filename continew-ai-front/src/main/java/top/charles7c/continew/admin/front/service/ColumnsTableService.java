@@ -17,6 +17,7 @@
 package top.charles7c.continew.admin.front.service;
 
 import top.charles7c.continew.admin.front.model.entity.ColumnContentDO;
+import top.charles7c.continew.admin.front.model.req.ColumnsSortReq;
 import top.charles7c.continew.admin.front.model.resp.ColumnsTableResp;
 
 /**
@@ -30,4 +31,8 @@ public interface ColumnsTableService {
     int addColumn(long projectId, String title, int dataType);
 
     int addContent(ColumnContentDO columnContentDO);
+
+    void columnsSort(ColumnsSortReq columnsSortReq);
+
+    void rowSort(ColumnsSortReq columnsSortReq);
 }

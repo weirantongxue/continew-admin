@@ -43,4 +43,11 @@ public class ItemQuery implements Serializable {
     @Schema(description = "会话名称")
     @Query(type = QueryType.LIKE)
     private String name;
+
+    /**
+     * 创建人
+     */
+    @Schema(description = "创建人")
+    @Query(type = QueryType.EQ)
+    private Long createUser;
 }

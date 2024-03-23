@@ -20,12 +20,13 @@ import net.dreamlu.mica.core.result.R;
 import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
 import top.charles7c.continew.admin.front.model.req.DrawReq;
 import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import top.charles7c.continew.admin.front.model.vo.DrawTaskVo;
 
 /**
  * Created by WeiRan on 2024.03.14 17:53
  */
 public interface DrawService {
-    R<Object> createDrawTask(DrawReq drawReq);
+    R<DrawTaskVo> createDrawTask(DrawReq drawReq);
 
     R<Object> checkDrawTask(String taskId);
 

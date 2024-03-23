@@ -19,6 +19,7 @@ package top.charles7c.continew.admin.front.service.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,8 @@ import org.dromara.x.file.storage.core.FileInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.charles7c.continew.admin.common.converter.FileToMultipartFileConverter;
+import top.charles7c.continew.admin.common.util.ApiTokenUtils;
+import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.mapper.DrawImgMapper;
 import top.charles7c.continew.admin.front.mapper.DrawTaskMapper;
 import top.charles7c.continew.admin.front.model.entity.DrawImgDO;
@@ -34,7 +37,10 @@ import top.charles7c.continew.admin.front.model.entity.DrawTaskDO;
 import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
 import top.charles7c.continew.admin.front.model.req.DrawReq;
 import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
+import top.charles7c.continew.admin.front.model.vo.DrawTaskVo;
 import top.charles7c.continew.admin.front.service.DrawService;
+import top.charles7c.continew.admin.front.service.ModelService;
 import top.charles7c.continew.admin.system.service.FileService;
 import top.charles7c.continew.starter.core.exception.BadRequestException;
 
@@ -54,10 +60,87 @@ public class DrawServiceImpl implements DrawService {
 
     private final DrawImgMapper drawImgMapper;
 
+    private final ModelService modelService;
+
     private final FileService fileService;
 
     @Override
-    public R<Object> createDrawTask(DrawReq drawReq) {
+    public R<DrawTaskVo> createDrawTask(DrawReq drawReq) {
+        ModelDetailResp modelResp = modelService.get(drawReq.getModelId());
+        if (modelResp == null) {
+            throw new BadRequestException("模型不存在");
+        }
+
+        if ("chuzhanAi".equals(modelResp.getName())) {
+            return chuzhanAi(drawReq, modelResp);
+        }
+        if ("cogview".equals(modelResp.getName())) {
+            return cogview(drawReq, modelResp);
+        }
+        return R.fail("未匹配到对应模型,请联系管理员.");
+    }
+
+    private R<DrawTaskVo> cogview(DrawReq drawReq, ModelDetailResp modelResp) {
+        DrawTaskVo drawTaskVo = new DrawTaskVo();
+        String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("model", modelResp.getName());
+        jsonObject.put("prompt", drawReq.getPrompt());
+
+        HttpRequest request = HttpRequest.post("https://open.bigmodel.cn/api/paas/v4/images/generations")
+            .header("Authorization", authToken)
+            .body(JSONObject.toJSONString(jsonObject));
+        String result = request.execute().body();
+        log.info("请求文生图返回结果:{}", JSONObject.toJSONString(result));
+        JSONObject res = JSONObject.parseObject(result);
+        if (res.containsKey("error")) {
+            JSONObject error = res.getJSONObject("error");
+            return R.fail(error.getString("message"));
+        }
+        JSONArray jsonArray = res.getJSONArray("data");
+        String imgUrl = JSONObject.parseObject(jsonArray.get(0).toString()).getString("url");
+        String taskId = IdUtil.fastSimpleUUID();
+        if (StrUtil.isNotBlank(imgUrl)) {
+            FileInfo fileInfo = new FileInfo();
+            MultipartFile multipartFile = null;
+            try {
+                //下载图片转换成MultipartFile
+                multipartFile = FileToMultipartFileConverter.convert(imgUrl);
+                //上传到sso
+                fileInfo = fileService.upload(multipartFile);
+
+            } catch (IOException e) {
+                log.error("MultipartFile 转换失败");
+                throw new BadRequestException("MultipartFile 转换失败");
+            }
+
+            //创建任务
+            DrawTaskDO drawTaskDO = new DrawTaskDO();
+            drawTaskDO.setTaskId(taskId);
+            drawTaskDO.setPrompt(drawReq.getPrompt());
+            drawTaskDO.setNonce(taskId);
+            drawTaskDO.setState("success");
+            drawTaskMapper.insert(drawTaskDO);
+
+            DrawImgDO drawImgDO = new DrawImgDO();
+            drawImgDO.setTaskId(taskId);
+            drawImgDO.setImageUrl(fileInfo.getUrl());
+            drawImgDO.setCreateUser(LoginHelper.getUserId());
+            drawImgDO.setUpdateUser(LoginHelper.getUserId());
+            drawImgDO.setCreateTime(LocalDateTime.now());
+            drawImgDO.setUpdateTime(LocalDateTime.now());
+
+            drawTaskVo.setTaskId(taskId);
+            drawTaskVo.setUrl(fileInfo.getUrl());
+            drawTaskVo.setResType("sync");
+            return R.success(drawTaskVo);
+        }
+
+        return R.success(drawTaskVo);
+    }
+
+    private R<DrawTaskVo> chuzhanAi(DrawReq drawReq, ModelDetailResp modelResp) {
+        DrawTaskVo drawTaskVo = new DrawTaskVo();
         String nonce = IdUtil.fastSimpleUUID();
         JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(drawReq));
         jsonObject.put("callback", "http://101.201.33.35:8000/api/ai/draw/drawCallback");
@@ -76,7 +159,9 @@ public class DrawServiceImpl implements DrawService {
                 drawTaskDO.setPrompt(drawReq.getPrompt());
                 drawTaskDO.setNonce(nonce);
                 drawTaskMapper.insert(drawTaskDO);
-                return R.success(paintingSign);
+                drawTaskVo.setTaskId(paintingSign);
+                drawTaskVo.setResType("async");
+                return R.success(drawTaskVo);
             }
             return R.fail("模型服务异常请联系管理员");
         }
@@ -140,4 +225,5 @@ public class DrawServiceImpl implements DrawService {
             .set(DrawTaskDO::getMosaicImg, drawCallbackReq.getImgUrl())
             .update();
     }
+
 }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
 import top.charles7c.continew.admin.front.model.req.DrawReq;
 import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import top.charles7c.continew.admin.front.model.vo.DrawTaskVo;
 import top.charles7c.continew.admin.front.service.DrawService;
 import top.charles7c.continew.starter.log.core.annotation.Log;
 
@@ -43,7 +44,7 @@ public class DrawController {
 
     @Operation(summary = "文生图", description = "文生图")
     @PostMapping("/createDrawTask")
-    public R<Object> createDrawTask(@RequestBody DrawReq drawReq) {
+    public R<DrawTaskVo> createDrawTask(@RequestBody DrawReq drawReq) {
         return drawService.createDrawTask(drawReq);
     }
 

@@ -17,7 +17,7 @@
 package top.charles7c.continew.admin.webapi.ai;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.charles7c.continew.admin.front.model.query.ItemQuery;
 import top.charles7c.continew.admin.front.model.req.ItemReq;
 import top.charles7c.continew.admin.front.model.resp.ItemDetailResp;
@@ -37,5 +37,4 @@ import top.charles7c.continew.starter.extension.crud.enums.Api;
 @RestController
 @CrudRequestMapping(value = "/ai/item", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
 public class ItemController extends BaseController<ItemService, ItemResp, ItemDetailResp, ItemQuery, ItemReq> {
-
 }

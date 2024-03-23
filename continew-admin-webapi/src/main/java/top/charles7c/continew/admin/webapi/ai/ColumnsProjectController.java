@@ -21,9 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.core.result.R;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.charles7c.continew.admin.front.service.ColumnsProjectService;
 
 import java.util.List;
@@ -64,13 +62,13 @@ public class ColumnsProjectController {
     }
 
     @Operation(summary = "删除", description = "删除")
-    @GetMapping("/delete")
-    public R<Object> delete(List<Long> ids) {
+    @ResponseBody
+    @GetMapping("/delete/{ids}")
+    public R<Object> delete(@PathVariable List<Long> ids) {
         if (null == ids) {
             return R.fail("ids不能为空");
         }
         columnsProjectService.delete(ids);
         return R.success();
     }
-
 }
