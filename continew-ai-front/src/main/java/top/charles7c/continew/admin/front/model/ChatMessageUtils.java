@@ -74,11 +74,7 @@ public class ChatMessageUtils {
             message.setContent(modelScriptDetailResp.getPrompt());
             messageList.add(0, message);
         }
-        if (Objects.nonNull(modelScriptDetailResp)) {
-            jsonObject.put("model", modelDetailResp.getName());
-        } else {
-            jsonObject.put("model", "glm-4");
-        }
+        jsonObject.put("model", modelDetailResp.getName());
         jsonObject.put("messages", messageList);
         jsonObject.put("stream", true);
         return jsonObject.toJSONString();

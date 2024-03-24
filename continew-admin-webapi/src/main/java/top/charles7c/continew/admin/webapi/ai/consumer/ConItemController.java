@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.webapi.ai;
+package top.charles7c.continew.admin.webapi.ai.consumer;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,7 +45,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ai/item/consumer")
-public class ItemConsumerController {
+public class ConItemController {
 
     private final ItemService itemService;
 
@@ -54,6 +54,7 @@ public class ItemConsumerController {
     @GetMapping("/itemList")
     public R<PageResp<ItemResp>> page(ItemQuery query, @Validated PageQuery pageQuery) {
         query.setCreateUser(LoginHelper.getUserId());
+        pageQuery.setSort(new String[]{"create_time", "desc"});
         return R.ok(this.itemService.page(query, pageQuery));
     }
 

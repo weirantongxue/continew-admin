@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.webapi.ai;
+package top.charles7c.continew.admin.webapi.ai.consumer;
 
 import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/ai/columns")
 @RequiredArgsConstructor
-public class ColumnsProjectController {
+public class ConProjectController {
     private final ColumnsProjectService columnsProjectService;
 
     @Operation(summary = "查询列表", description = "查询列表")

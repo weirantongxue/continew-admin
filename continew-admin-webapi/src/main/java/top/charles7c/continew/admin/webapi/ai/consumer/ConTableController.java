@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.webapi.ai;
+package top.charles7c.continew.admin.webapi.ai.consumer;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +33,7 @@ import top.charles7c.continew.admin.front.service.ColumnsTableService;
 @RestController
 @RequestMapping("/ai/columns/table")
 @RequiredArgsConstructor
-public class ColumnsTableController {
+public class ConTableController {
     private final ColumnsTableService columnsTableService;
 
     @Operation(summary = "通过项目id查询表格", description = "通过项目id查询表格")

@@ -59,6 +59,11 @@ public class ModelScriptVo implements Serializable {
     private String description;
 
     /**
+     * 模型类型,1:大语言模型,2:文生图
+     */
+    private Integer modelType;
+
+    /**
      * 排序值
      */
     @Schema(description = "排序值")

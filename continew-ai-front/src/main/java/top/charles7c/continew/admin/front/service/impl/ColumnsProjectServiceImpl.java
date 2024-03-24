@@ -37,7 +37,7 @@ public class ColumnsProjectServiceImpl implements ColumnsProjectService {
     @Override
     public List<ColumnsProjectDO> list() {
         List<ColumnsProjectDO> list = columnsProjectMapper.selectList(new LambdaQueryWrapper<ColumnsProjectDO>()
-            .eq(ColumnsProjectDO::getCreateUser, LoginHelper.getUserId()));
+            .eq(ColumnsProjectDO::getCreateUser, LoginHelper.getUserId()).orderByDesc(ColumnsProjectDO::getCreateTime));
         return list;
     }
 

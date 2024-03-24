@@ -77,7 +77,7 @@ public class ColumnsTableServiceImpl implements ColumnsTableService {
 
     @Override
     public boolean addRows(long projectId, int rows) {
-        if (columnsMapper.lambdaQuery().count() <= 0) {
+        if (columnsMapper.lambdaQuery().eq(ColumnsDO::getProjectId, projectId).count() <= 0) {
             List<ColumnsDO> columnsDOList = columnsDOList(projectId);
             //初始化添加内容
             columnsMapper.insertBatch(columnsDOList);

@@ -140,7 +140,8 @@ public class GPTEventSourceListener extends EventSourceListener {
             log.error("sse连接异常data：{}，异常：{}", response, t);
         }
         webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-            .chatModelMsg(messageId, sessionId, "模型服务异常", EventNameType.ERROR.getCode()));
+            .chatModelMsg(messageId, sessionId, "模型服务异常请联系管理员", EventNameType.ERROR.getCode()));
+        webSocketSendService.close(sessionId, "sse连接异常");
         eventSource.cancel();
     }
 }

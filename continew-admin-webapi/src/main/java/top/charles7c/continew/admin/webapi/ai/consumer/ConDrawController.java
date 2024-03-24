@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.webapi.ai;
+package top.charles7c.continew.admin.webapi.ai.consumer;
 
 import cn.dev33.satoken.annotation.SaIgnore;
 import com.alibaba.fastjson.JSONObject;
@@ -39,7 +39,7 @@ import top.charles7c.continew.starter.log.core.annotation.Log;
 @RequiredArgsConstructor
 @RequestMapping("/ai/draw")
 @Slf4j
-public class DrawController {
+public class ConDrawController {
     private final DrawService drawService;
 
     @Operation(summary = "文生图", description = "文生图")

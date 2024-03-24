@@ -22,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
 import top.charles7c.continew.admin.front.model.vo.ModelScriptVo;
+import top.charles7c.continew.admin.front.service.ModelService;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.ModelScriptMapper;
 import top.charles7c.continew.admin.front.model.entity.ModelScriptDO;
@@ -43,11 +45,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ModelScriptServiceImpl extends BaseServiceImpl<ModelScriptMapper, ModelScriptDO, ModelScriptResp, ModelScriptDetailResp, ModelScriptQuery, ModelScriptReq> implements ModelScriptService {
+    private final ModelService modelService;
+
     @Override
     public List<ModelScriptVo> selectModelScript() {
         List<ModelScriptDO> modelScriptDO = this.baseMapper.selectList(new LambdaQueryWrapper<ModelScriptDO>()
             .eq(ModelScriptDO::getStatus, 1));
         List<ModelScriptVo> modelScriptVoList = BeanUtil.copyToList(modelScriptDO, ModelScriptVo.class);
+        modelScriptVoList.forEach(modelScript -> {
+            ModelDetailResp modelDetailResp = modelService.get(modelScript.getModelId());
+            modelScript.setModelType(modelDetailResp.getModelType());
+        });
         return modelScriptVoList;
     }
 }
