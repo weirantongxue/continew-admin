@@ -276,3 +276,14 @@ avatar:
 openai:
   apiKey: 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
   apiHost: https://api.openai.com/
+
+alipay:
+  app-id: 2021000120603279
+  seller-id: 2088621959241092
+  gateway-url: https://openapi.alipaydev.com/gateway.do
+  merchant-private-key: 123213
+  alipay-public-key: 1231231
+  content-key: D8entyfafkkFwtMbUqj3Mw==
+  return-url: http://localhost:8080/#/success
+  notify-url: https://2b4a-202-192-72-1.jp.ngrok.io/api/ali-pay/trade/notify
+
