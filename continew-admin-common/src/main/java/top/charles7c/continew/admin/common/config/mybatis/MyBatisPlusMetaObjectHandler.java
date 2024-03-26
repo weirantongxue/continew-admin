@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
-import top.charles7c.continew.starter.core.exception.BusinessException;
 import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
 
 import java.time.LocalDateTime;

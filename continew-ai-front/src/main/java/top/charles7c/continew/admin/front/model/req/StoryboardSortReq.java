@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.service;
+package top.charles7c.continew.admin.front.model.req;
 
-import top.charles7c.continew.admin.front.model.entity.StoryboardFieDO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
-import java.util.List;
+import java.io.Serializable;
 
-/**
- * Created by WeiRan on 2024.03.26 20:10
- */
-public interface StoryboardFieService {
-    boolean insertBatch(List<StoryboardFieDO> storyboardFieDOList);
+@Data
+public class StoryboardSortReq implements Serializable {
+    @Schema(description = "主键id")
+    @NotNull(message = "主键id不能为空")
+    private Long id;
+    @Schema(description = "镜号")
+    @NotNull(message = "镜号")
+    private Long shot;
 }

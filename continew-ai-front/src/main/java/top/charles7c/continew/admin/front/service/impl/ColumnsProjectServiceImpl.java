@@ -22,8 +22,15 @@ import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.mapper.ColumnsProjectMapper;
 import top.charles7c.continew.admin.front.model.entity.ColumnsProjectDO;
+import top.charles7c.continew.admin.front.model.entity.StoryboardFieDO;
 import top.charles7c.continew.admin.front.service.ColumnsProjectService;
+import top.charles7c.continew.admin.front.service.StoryboardFieService;
+import top.charles7c.continew.admin.system.model.query.DictItemQuery;
+import top.charles7c.continew.admin.system.model.resp.DictItemResp;
+import top.charles7c.continew.admin.system.service.DictItemService;
+import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,12 +40,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ColumnsProjectServiceImpl implements ColumnsProjectService {
     private final ColumnsProjectMapper columnsProjectMapper;
+    private final StoryboardFieService storyboardFieService;
+    private final DictItemService dictItemService;
 
     @Override
     public List<ColumnsProjectDO> list() {
         List<ColumnsProjectDO> list = columnsProjectMapper.selectList(new LambdaQueryWrapper<ColumnsProjectDO>()
-                .eq(ColumnsProjectDO::getCreateUser, LoginHelper.getUserId())
-                .orderByDesc(ColumnsProjectDO::getCreateTime));
+            .eq(ColumnsProjectDO::getCreateUser, LoginHelper.getUserId())
+            .orderByDesc(ColumnsProjectDO::getCreateTime));
         return list;
     }
 
@@ -47,20 +56,41 @@ public class ColumnsProjectServiceImpl implements ColumnsProjectService {
         ColumnsProjectDO columnsProjectDO = new ColumnsProjectDO();
         columnsProjectDO.setName(name);
         int id = columnsProjectMapper.insert(columnsProjectDO);
-        return id ;
+        //初始化标题
+        List<StoryboardFieDO> storyboardFieDOList = columnsDOList(columnsProjectDO.getId());
+        storyboardFieService.insertBatch(storyboardFieDOList);
+        return id;
     }
 
     @Override
     public boolean update(Long id, String name) {
         return columnsProjectMapper.lambdaUpdate()
-                .eq(ColumnsProjectDO::getId, id)
-                .set(ColumnsProjectDO::getName, name)
-                .update();
+            .eq(ColumnsProjectDO::getId, id)
+            .set(ColumnsProjectDO::getName, name)
+            .update();
     }
 
     @Override
     public int delete(List<Long> ids) {
         return columnsProjectMapper.deleteBatchIds(ids);
+    }
+
+    private List<StoryboardFieDO> columnsDOList(long projectId) {
+        List<StoryboardFieDO> storyboardFieDOList = new ArrayList<>();
+        String[] sort = {"sort", "asc"};
+        SortQuery sortQuery = new SortQuery();
+        sortQuery.setSort(sort);
+        DictItemQuery dictItemQuery = new DictItemQuery();
+        dictItemQuery.setDictId(560936357447446910L);
+        List<DictItemResp> dictItemRespList = dictItemService.list(dictItemQuery, sortQuery);
+        for (DictItemResp dictItemResp : dictItemRespList) {
+            StoryboardFieDO storyboardFieDO = new StoryboardFieDO();
+            storyboardFieDO.setProjectId(projectId);
+            storyboardFieDO.setFieId(dictItemResp.getValue());
+            storyboardFieDO.setName(dictItemResp.getLabel());
+            storyboardFieDOList.add(storyboardFieDO);
+        }
+        return storyboardFieDOList;
     }
 
 }
