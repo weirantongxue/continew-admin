@@ -43,6 +43,7 @@ public class StoryboardController {
     @Operation(summary = "列表查询", description = "列表查询")
     @GetMapping("/list")
     public R<StoryboardVo> list(Long projectId) {
+
         return R.ok(storyboardSortService.list(projectId));
     }
 
