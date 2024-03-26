@@ -97,7 +97,7 @@ public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
                 this.fillFieldValue(metaObject, UPDATE_TIME, updateTime, true);
             }
         } catch (Exception e) {
-            throw new BusinessException("修改数据时自动填充异常：" + e.getMessage());
+            //throw new BusinessException("修改数据时自动填充异常：" + e.getMessage());
         }
     }
 

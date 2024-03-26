@@ -54,7 +54,7 @@ public class ConItemController {
     @GetMapping("/itemList")
     public R<PageResp<ItemResp>> page(ItemQuery query, @Validated PageQuery pageQuery) {
         query.setCreateUser(LoginHelper.getUserId());
-        pageQuery.setSort(new String[]{"create_time", "desc"});
+        pageQuery.setSort(new String[] {"create_time", "desc"});
         return R.ok(this.itemService.page(query, pageQuery));
     }
 

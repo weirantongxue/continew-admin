@@ -37,7 +37,8 @@ public class ColumnsProjectServiceImpl implements ColumnsProjectService {
     @Override
     public List<ColumnsProjectDO> list() {
         List<ColumnsProjectDO> list = columnsProjectMapper.selectList(new LambdaQueryWrapper<ColumnsProjectDO>()
-            .eq(ColumnsProjectDO::getCreateUser, LoginHelper.getUserId()).orderByDesc(ColumnsProjectDO::getCreateTime));
+                .eq(ColumnsProjectDO::getCreateUser, LoginHelper.getUserId())
+                .orderByDesc(ColumnsProjectDO::getCreateTime));
         return list;
     }
 
@@ -45,15 +46,16 @@ public class ColumnsProjectServiceImpl implements ColumnsProjectService {
     public int add(String name) {
         ColumnsProjectDO columnsProjectDO = new ColumnsProjectDO();
         columnsProjectDO.setName(name);
-        return columnsProjectMapper.insert(columnsProjectDO);
+        int id = columnsProjectMapper.insert(columnsProjectDO);
+        return id ;
     }
 
     @Override
     public boolean update(Long id, String name) {
         return columnsProjectMapper.lambdaUpdate()
-            .eq(ColumnsProjectDO::getId, id)
-            .set(ColumnsProjectDO::getName, name)
-            .update();
+                .eq(ColumnsProjectDO::getId, id)
+                .set(ColumnsProjectDO::getName, name)
+                .update();
     }
 
     @Override

@@ -50,7 +50,7 @@ public class ConChatMessageController {
     @GetMapping(value = "/userMessage")
     public R<PageResp<ChatMessageResp>> page(ChatMessageQuery query, @Validated PageQuery pageQuery) {
         query.setCreateUser(LoginHelper.getUserId());
-        pageQuery.setSort(new String[]{"create_time", "desc"});
+        pageQuery.setSort(new String[] {"create_time", "desc"});
         return R.ok(this.baseService.page(query, pageQuery));
     }
 
