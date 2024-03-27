@@ -97,4 +97,12 @@ public class StoryboardServiceImpl implements StoryboardService {
         List<StoryboardDO> storyboardDOList = BeanUtil.copyToList(columnsSortReq, StoryboardDO.class);
         storyboardMapper.updateBatchById(storyboardDOList);
     }
+
+    @Override
+    public boolean disabled(Long id, int status) {
+        return storyboardFieMapper.lambdaUpdate()
+            .eq(StoryboardFieDO::getId, id)
+            .set(StoryboardFieDO::getStatus, status)
+            .update();
+    }
 }

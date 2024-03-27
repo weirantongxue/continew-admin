@@ -23,13 +23,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.core.result.R;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
 import top.charles7c.continew.admin.front.model.req.DrawReq;
 import top.charles7c.continew.admin.front.model.resp.DrawResp;
 import top.charles7c.continew.admin.front.model.vo.DrawTaskVo;
+import top.charles7c.continew.admin.front.model.vo.HistoricalImagesVo;
 import top.charles7c.continew.admin.front.service.DrawService;
+import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
+import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
 import top.charles7c.continew.starter.log.core.annotation.Log;
+
+import java.util.List;
 
 /**
  * Created by WeiRan on 2024.03.14 17:37
@@ -68,6 +74,12 @@ public class ConDrawController {
     public void drawCallback(@RequestBody DrawCallbackReq drawCallbackReq) {
         log.info("文生图回调参数:{}", JSONObject.toJSONString(drawCallbackReq));
         drawService.drawCallback(drawCallbackReq);
+    }
+
+    @Operation(summary = "用户历史图片列表", description = "用户历史图片列表")
+    @GetMapping("/historicalImages")
+    public R<PageResp<List<HistoricalImagesVo>>> historicalImages(@Validated PageQuery pageQuery) {
+        return drawService.historicalImages(pageQuery);
     }
 
 }

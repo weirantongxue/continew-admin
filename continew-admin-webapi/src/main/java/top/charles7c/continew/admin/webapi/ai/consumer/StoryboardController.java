@@ -72,4 +72,10 @@ public class StoryboardController {
         return R.ok();
     }
 
+    @Operation(summary = "启用禁用", description = "启用禁用")
+    @GetMapping("/disabled")
+    public R<Object> disabled(Long id, int status) {
+        return R.ok(storyboardSortService.disabled(id, status));
+    }
+
 }

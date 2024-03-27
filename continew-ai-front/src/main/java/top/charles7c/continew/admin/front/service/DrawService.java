@@ -21,6 +21,11 @@ import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
 import top.charles7c.continew.admin.front.model.req.DrawReq;
 import top.charles7c.continew.admin.front.model.resp.DrawResp;
 import top.charles7c.continew.admin.front.model.vo.DrawTaskVo;
+import top.charles7c.continew.admin.front.model.vo.HistoricalImagesVo;
+import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
+import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
+
+import java.util.List;
 
 /**
  * Created by WeiRan on 2024.03.14 17:53
@@ -34,4 +39,5 @@ public interface DrawService {
 
     void drawCallback(DrawCallbackReq drawCallbackReq);
 
+    R<PageResp<List<HistoricalImagesVo>>> historicalImages(PageQuery pageQuery);
 }

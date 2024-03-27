@@ -21,6 +21,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.core.result.R;
@@ -39,10 +41,13 @@ import top.charles7c.continew.admin.front.model.req.DrawReq;
 import top.charles7c.continew.admin.front.model.resp.DrawResp;
 import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
 import top.charles7c.continew.admin.front.model.vo.DrawTaskVo;
+import top.charles7c.continew.admin.front.model.vo.HistoricalImagesVo;
 import top.charles7c.continew.admin.front.service.DrawService;
 import top.charles7c.continew.admin.front.service.ModelService;
 import top.charles7c.continew.admin.system.service.FileService;
 import top.charles7c.continew.starter.core.exception.BadRequestException;
+import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
+import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -224,6 +229,27 @@ public class DrawServiceImpl implements DrawService {
             .set(DrawTaskDO::getState, drawCallbackReq.getState())
             .set(DrawTaskDO::getMosaicImg, drawCallbackReq.getImgUrl())
             .update();
+    }
+
+    @Override
+    public R<PageResp<List<HistoricalImagesVo>>> historicalImages(PageQuery pageQuery) {
+        List<HistoricalImagesVo> historicalImagesVoList = new ArrayList<>();
+        LambdaQueryWrapper<DrawTaskDO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DrawTaskDO::getState, "success");
+
+        IPage<DrawTaskDO> page = drawTaskMapper.selectPage(pageQuery.toPage(), queryWrapper);
+        List<DrawTaskDO> recordList = page.getRecords();
+        recordList.forEach(drawTaskDO -> {
+            HistoricalImagesVo historicalImagesVo = new HistoricalImagesVo();
+            historicalImagesVo.setDrawTaskDO(drawTaskDO);
+            List<DrawImgDO> drawImgDOList = drawImgMapper.lambdaQuery()
+                .eq(DrawImgDO::getTaskId, drawTaskDO.getTaskId())
+                .list();
+            historicalImagesVo.setHistoricalImages(drawImgDOList);
+            historicalImagesVoList.add(historicalImagesVo);
+        });
+        // TODO: page
+        return null;
     }
 
 }

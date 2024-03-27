@@ -14,27 +14,17 @@
  * limitations under the License.
  */
 
-package top.charles7c.continew.admin.front.service;
+package top.charles7c.continew.admin.front.model.vo;
 
-import top.charles7c.continew.admin.front.model.req.StoryboardSortReq;
-import top.charles7c.continew.admin.front.model.resp.StoryboardResp;
-import top.charles7c.continew.admin.front.model.vo.StoryboardVo;
+import lombok.Data;
+import top.charles7c.continew.admin.front.model.entity.DrawImgDO;
+import top.charles7c.continew.admin.front.model.entity.DrawTaskDO;
 
+import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by WeiRan on 2024.03.26 20:12
- */
-public interface StoryboardService {
-    StoryboardVo list(Long projectId);
-
-    boolean add(Long projectId, int rows);
-
-    int updateTable(StoryboardResp storyboardResp);
-
-    int deleteTable(Long id);
-
-    void storyboardSort(List<StoryboardSortReq> columnsSortReq);
-
-    boolean disabled(Long id, int status);
+@Data
+public class HistoricalImagesVo implements Serializable {
+    private DrawTaskDO drawTaskDO;
+    private List<DrawImgDO> historicalImages;
 }
