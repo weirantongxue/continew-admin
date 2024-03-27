@@ -58,6 +58,11 @@ public class ModelScriptDO extends BaseDO {
     private String coverUrl;
 
     /**
+     * 组件路径
+     */
+    private String component;
+
+    /**
      * 描述
      */
     private String description;

@@ -17,7 +17,6 @@
 package top.charles7c.continew.admin.front.model.resp;
 
 import java.io.Serial;
-
 import lombok.Data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -60,6 +59,12 @@ public class ModelScriptResp extends BaseResp {
      */
     @Schema(description = "封面")
     private String coverUrl;
+
+    /**
+     * 组件路径
+     */
+    @Schema(description = "组件路径")
+    private String component;
 
     /**
      * 简介

@@ -53,6 +53,12 @@ public class ModelScriptVo implements Serializable {
     private String coverUrl;
 
     /**
+     * 组件路径
+     */
+    @Schema(description = "组件路径")
+    private String component;
+
+    /**
      * 简介
      */
     @Schema(description = "简介")

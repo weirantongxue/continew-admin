@@ -17,6 +17,7 @@
 package top.charles7c.continew.admin.front.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 
@@ -50,11 +51,16 @@ public class ModelScriptServiceImpl extends BaseServiceImpl<ModelScriptMapper, M
     @Override
     public List<ModelScriptVo> selectModelScript() {
         List<ModelScriptDO> modelScriptDO = this.baseMapper.selectList(new LambdaQueryWrapper<ModelScriptDO>()
-            .eq(ModelScriptDO::getStatus, 1));
+            .eq(ModelScriptDO::getStatus, 1)
+            .orderByAsc(ModelScriptDO::getSort));
         List<ModelScriptVo> modelScriptVoList = BeanUtil.copyToList(modelScriptDO, ModelScriptVo.class);
         modelScriptVoList.forEach(modelScript -> {
             ModelDetailResp modelDetailResp = modelService.get(modelScript.getModelId());
-            modelScript.setModelType(modelDetailResp.getModelType());
+            if (ObjectUtil.isNotNull(modelDetailResp)) {
+                modelScript.setModelType(modelDetailResp.getModelType());
+            } else {
+                modelScript.setModelType(0);
+            }
         });
         return modelScriptVoList;
     }

@@ -69,6 +69,10 @@ public class ModelScriptDetailResp extends BaseDetailResp {
     @ExcelProperty(value = "封面")
     private String coverUrl;
 
+    @Schema(description = "组件路径")
+    @ExcelProperty(value = "组件路径")
+    private String component;
+
     /**
      * 简介
      */
