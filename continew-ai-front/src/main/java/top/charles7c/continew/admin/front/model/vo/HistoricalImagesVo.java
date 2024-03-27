@@ -19,12 +19,14 @@ package top.charles7c.continew.admin.front.model.vo;
 import lombok.Data;
 import top.charles7c.continew.admin.front.model.entity.DrawImgDO;
 import top.charles7c.continew.admin.front.model.entity.DrawTaskDO;
+import top.charles7c.continew.admin.front.model.resp.DrawImgDetailResp;
+import top.charles7c.continew.admin.front.model.resp.DrawTaskResp;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
 public class HistoricalImagesVo implements Serializable {
-    private DrawTaskDO drawTask;
-    private List<DrawImgDO> historicalImages;
+    private DrawTaskResp drawTaskResp;
+    private List<DrawImgDetailResp> historicalImages;
 }

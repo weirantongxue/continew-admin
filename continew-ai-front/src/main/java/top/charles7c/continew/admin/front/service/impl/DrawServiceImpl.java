@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.PageUtil;
 import cn.hutool.core.util.StrUtil;
@@ -40,7 +41,9 @@ import top.charles7c.continew.admin.front.model.entity.DrawImgDO;
 import top.charles7c.continew.admin.front.model.entity.DrawTaskDO;
 import top.charles7c.continew.admin.front.model.req.DrawCallbackReq;
 import top.charles7c.continew.admin.front.model.req.DrawReq;
+import top.charles7c.continew.admin.front.model.resp.DrawImgDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DrawResp;
+import top.charles7c.continew.admin.front.model.resp.DrawTaskResp;
 import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
 import top.charles7c.continew.admin.front.model.vo.DrawTaskVo;
 import top.charles7c.continew.admin.front.model.vo.HistoricalImagesVo;
@@ -235,23 +238,27 @@ public class DrawServiceImpl implements DrawService {
 
     @Override
     public R<PageResp<HistoricalImagesVo>> historicalImages(PageQuery pageQuery) {
-        List<HistoricalImagesVo> historicalImagesVo = new ArrayList<>();
+        List<HistoricalImagesVo> historicalImagesVoList = new ArrayList<>();
         LambdaQueryWrapper<DrawTaskDO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(DrawTaskDO::getState, "success");
+        queryWrapper.eq(DrawTaskDO::getCreateUser, LoginHelper.getUserId());
 
         IPage<DrawTaskDO> page = drawTaskMapper.selectPage(pageQuery.toPage(), queryWrapper);
         List<DrawTaskDO> recordList = page.getRecords();
         recordList.forEach(drawTaskDO -> {
-            HistoricalImagesVo historicalImages = new HistoricalImagesVo();
+            HistoricalImagesVo historicalImagesVo = new HistoricalImagesVo();
             List<DrawImgDO> drawImgDOList = drawImgMapper.lambdaQuery()
                 .eq(DrawImgDO::getTaskId, drawTaskDO.getTaskId())
                 .list();
-            historicalImages.setDrawTask(drawTaskDO);
-            historicalImages.setHistoricalImages(drawImgDOList);
-            historicalImagesVo.add(historicalImages);
+            DrawTaskResp drawTaskResp = BeanUtil.copyProperties(drawTaskDO, DrawTaskResp.class);
+            List<DrawImgDetailResp> drawImgDetailRespList=BeanUtil.copyToList(drawImgDOList, DrawImgDetailResp.class);
+
+            historicalImagesVo.setDrawTaskResp(drawTaskResp);
+            historicalImagesVo.setHistoricalImages(drawImgDetailRespList);
+            historicalImagesVoList.add(historicalImagesVo);
         });
         Page<HistoricalImagesVo> page1 = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        page1.setRecords(historicalImagesVo);
+        page1.setRecords(historicalImagesVoList);
         PageResp<HistoricalImagesVo> pageResp = PageResp.build(page1);
         return R.success(pageResp);
     }
