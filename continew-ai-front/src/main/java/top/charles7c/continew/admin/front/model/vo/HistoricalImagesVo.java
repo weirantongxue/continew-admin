@@ -25,6 +25,6 @@ import java.util.List;
 
 @Data
 public class HistoricalImagesVo implements Serializable {
-    private DrawTaskDO drawTaskDO;
+    private DrawTaskDO drawTask;
     private List<DrawImgDO> historicalImages;
 }

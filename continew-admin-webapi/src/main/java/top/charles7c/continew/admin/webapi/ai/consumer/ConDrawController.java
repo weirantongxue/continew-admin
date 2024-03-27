@@ -78,7 +78,7 @@ public class ConDrawController {
 
     @Operation(summary = "用户历史图片列表", description = "用户历史图片列表")
     @GetMapping("/historicalImages")
-    public R<PageResp<List<HistoricalImagesVo>>> historicalImages(@Validated PageQuery pageQuery) {
+    public R<PageResp<HistoricalImagesVo>> historicalImages(@Validated PageQuery pageQuery) {
         return drawService.historicalImages(pageQuery);
     }
 

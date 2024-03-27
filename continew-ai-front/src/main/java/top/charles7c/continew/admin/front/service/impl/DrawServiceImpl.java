@@ -17,12 +17,14 @@
 package top.charles7c.continew.admin.front.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.PageUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.core.result.R;
@@ -232,24 +234,26 @@ public class DrawServiceImpl implements DrawService {
     }
 
     @Override
-    public R<PageResp<List<HistoricalImagesVo>>> historicalImages(PageQuery pageQuery) {
-        List<HistoricalImagesVo> historicalImagesVoList = new ArrayList<>();
+    public R<PageResp<HistoricalImagesVo>> historicalImages(PageQuery pageQuery) {
+        List<HistoricalImagesVo> historicalImagesVo = new ArrayList<>();
         LambdaQueryWrapper<DrawTaskDO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(DrawTaskDO::getState, "success");
 
         IPage<DrawTaskDO> page = drawTaskMapper.selectPage(pageQuery.toPage(), queryWrapper);
         List<DrawTaskDO> recordList = page.getRecords();
         recordList.forEach(drawTaskDO -> {
-            HistoricalImagesVo historicalImagesVo = new HistoricalImagesVo();
-            historicalImagesVo.setDrawTaskDO(drawTaskDO);
+            HistoricalImagesVo historicalImages = new HistoricalImagesVo();
             List<DrawImgDO> drawImgDOList = drawImgMapper.lambdaQuery()
                 .eq(DrawImgDO::getTaskId, drawTaskDO.getTaskId())
                 .list();
-            historicalImagesVo.setHistoricalImages(drawImgDOList);
-            historicalImagesVoList.add(historicalImagesVo);
+            historicalImages.setDrawTask(drawTaskDO);
+            historicalImages.setHistoricalImages(drawImgDOList);
+            historicalImagesVo.add(historicalImages);
         });
-        // TODO: page
-        return null;
+        Page<HistoricalImagesVo> page1 = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        page1.setRecords(historicalImagesVo);
+        PageResp<HistoricalImagesVo> pageResp = PageResp.build(page1);
+        return R.success(pageResp);
     }
 
 }

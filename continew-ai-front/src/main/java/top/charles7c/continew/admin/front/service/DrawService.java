@@ -39,5 +39,5 @@ public interface DrawService {
 
     void drawCallback(DrawCallbackReq drawCallbackReq);
 
-    R<PageResp<List<HistoricalImagesVo>>> historicalImages(PageQuery pageQuery);
+    R<PageResp<HistoricalImagesVo>> historicalImages(PageQuery pageQuery);
 }
