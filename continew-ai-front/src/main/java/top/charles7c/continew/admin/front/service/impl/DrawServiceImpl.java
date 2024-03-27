@@ -18,7 +18,6 @@ package top.charles7c.continew.admin.front.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.PageUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONArray;
@@ -251,7 +250,7 @@ public class DrawServiceImpl implements DrawService {
                 .eq(DrawImgDO::getTaskId, drawTaskDO.getTaskId())
                 .list();
             DrawTaskResp drawTaskResp = BeanUtil.copyProperties(drawTaskDO, DrawTaskResp.class);
-            List<DrawImgDetailResp> drawImgDetailRespList=BeanUtil.copyToList(drawImgDOList, DrawImgDetailResp.class);
+            List<DrawImgDetailResp> drawImgDetailRespList = BeanUtil.copyToList(drawImgDOList, DrawImgDetailResp.class);
 
             historicalImagesVo.setDrawTaskResp(drawTaskResp);
             historicalImagesVo.setHistoricalImages(drawImgDetailRespList);

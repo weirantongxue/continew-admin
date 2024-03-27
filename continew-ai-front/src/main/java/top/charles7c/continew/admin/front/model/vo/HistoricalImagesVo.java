@@ -17,8 +17,6 @@
 package top.charles7c.continew.admin.front.model.vo;
 
 import lombok.Data;
-import top.charles7c.continew.admin.front.model.entity.DrawImgDO;
-import top.charles7c.continew.admin.front.model.entity.DrawTaskDO;
 import top.charles7c.continew.admin.front.model.resp.DrawImgDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DrawTaskResp;
 

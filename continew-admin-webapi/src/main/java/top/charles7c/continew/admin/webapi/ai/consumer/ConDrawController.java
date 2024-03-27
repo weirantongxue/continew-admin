@@ -35,8 +35,6 @@ import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
 import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
 import top.charles7c.continew.starter.log.core.annotation.Log;
 
-import java.util.List;
-
 /**
  * Created by WeiRan on 2024.03.14 17:37
  */

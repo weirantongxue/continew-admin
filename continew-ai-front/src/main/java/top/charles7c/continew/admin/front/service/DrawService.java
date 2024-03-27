@@ -25,8 +25,6 @@ import top.charles7c.continew.admin.front.model.vo.HistoricalImagesVo;
 import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
 import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
 
-import java.util.List;
-
 /**
  * Created by WeiRan on 2024.03.14 17:53
  */
