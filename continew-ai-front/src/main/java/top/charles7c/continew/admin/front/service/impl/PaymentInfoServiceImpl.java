@@ -28,13 +28,9 @@ import top.charles7c.continew.admin.common.enums.PayType;
 import top.charles7c.continew.admin.front.mapper.PaymentInfoMapper;
 import top.charles7c.continew.admin.front.model.entity.PaymentInfoDO;
 import top.charles7c.continew.admin.front.model.query.PaymentInfoQuery;
-import top.charles7c.continew.admin.front.model.req.PaymentInfoReq;
 import top.charles7c.continew.admin.front.model.resp.PaymentInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.PaymentInfoResp;
 import top.charles7c.continew.admin.front.service.PaymentInfoService;
-import top.charles7c.continew.admin.system.model.query.DictQuery;
-import top.charles7c.continew.admin.system.model.resp.DictItemDetailResp;
-import top.charles7c.continew.admin.system.model.resp.DictResp;
 import top.charles7c.continew.starter.data.mybatis.plus.query.QueryWrapperHelper;
 import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
 import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
@@ -42,7 +38,6 @@ import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
 import top.charles7c.continew.starter.file.excel.util.ExcelUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +114,8 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
     @Override
     public void export(PaymentInfoQuery query, SortQuery sortQuery, HttpServletResponse response) {
         List<PaymentInfoResp> paymentInfoRespList = list(query, sortQuery);
-        List<PaymentInfoDetailResp> paymentInfoDetailRespList = BeanUtil.copyToList(paymentInfoRespList, PaymentInfoDetailResp.class);
+        List<PaymentInfoDetailResp> paymentInfoDetailRespList = BeanUtil
+            .copyToList(paymentInfoRespList, PaymentInfoDetailResp.class);
         ExcelUtils.export(paymentInfoDetailRespList, "导出数据", PaymentInfoDetailResp.class, response);
     }
 

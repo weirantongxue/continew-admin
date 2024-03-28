@@ -16,7 +16,6 @@
 
 package top.charles7c.continew.admin.front.model.resp;
 
-import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;

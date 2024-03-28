@@ -50,5 +50,4 @@ public class ProductDO extends BaseDO {
      */
     private Integer tokenPrice;
 
-
 }

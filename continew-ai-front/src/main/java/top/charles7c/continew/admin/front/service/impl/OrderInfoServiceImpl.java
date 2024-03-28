@@ -149,7 +149,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfoMapper, Order
         orderInfoQueryWrapper.eq("order_status", OrderStatus.NOTPAY.getType());
         //如果当前时间减去超时时间的时间值比创建时间晚，则说明已经超时了
         orderInfoQueryWrapper.le("create_time", minus);
-//        orderInfoQueryWrapper.eq("payment_type", paymentType);
+        //        orderInfoQueryWrapper.eq("payment_type", paymentType);
         //最后将查询的结果返回
         return orderInfoMapper.selectList(orderInfoQueryWrapper);
     }
