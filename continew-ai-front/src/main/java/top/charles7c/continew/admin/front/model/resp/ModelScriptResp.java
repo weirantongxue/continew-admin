@@ -16,12 +16,11 @@
 
 package top.charles7c.continew.admin.front.model.resp;
 
-import java.io.Serial;
-import lombok.Data;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import lombok.Data;
 import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
+
+import java.io.Serial;
 
 /**
  * 模型预设脚本信息

@@ -41,6 +41,11 @@ public class ItemDO extends BaseDO {
     private String name;
 
     /**
+     * 脚本id
+     */
+    private String modelScriptId;
+
+    /**
      * 最后一条消息
      */
     private String lastMessage;

@@ -27,7 +27,12 @@ import top.charles7c.continew.admin.front.mapper.OrderInfoMapper;
 import top.charles7c.continew.admin.front.mapper.ProductMapper;
 import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
 import top.charles7c.continew.admin.front.model.entity.ProductDO;
+import top.charles7c.continew.admin.front.model.query.OrderInfoQuery;
+import top.charles7c.continew.admin.front.model.req.OrderInfoReq;
+import top.charles7c.continew.admin.front.model.resp.OrderInfoDetailResp;
+import top.charles7c.continew.admin.front.model.resp.OrderInfoResp;
 import top.charles7c.continew.admin.front.service.OrderInfoService;
+import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -42,7 +47,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OrderInfoServiceImpl implements OrderInfoService {
+public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfoMapper, OrderInfoDO, OrderInfoResp, OrderInfoDetailResp, OrderInfoQuery, OrderInfoReq> implements OrderInfoService {
     private final OrderInfoMapper orderInfoMapper;
     private final ProductMapper productMapper;
     private final AlipayClient alipayClient;
@@ -144,7 +149,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         orderInfoQueryWrapper.eq("order_status", OrderStatus.NOTPAY.getType());
         //如果当前时间减去超时时间的时间值比创建时间晚，则说明已经超时了
         orderInfoQueryWrapper.le("create_time", minus);
-        orderInfoQueryWrapper.eq("payment_type", paymentType);
+//        orderInfoQueryWrapper.eq("payment_type", paymentType);
         //最后将查询的结果返回
         return orderInfoMapper.selectList(orderInfoQueryWrapper);
     }

@@ -47,11 +47,11 @@ public class ItemReq extends BaseReq {
     private String name;
 
     /**
-     * 最后一条消息
+     * 脚本id
      */
-    @Schema(description = "最后一条消息")
-    @Length(max = 255, message = "最后一条消息长度不能超过 {max} 个字符")
-    private String lastMessage;
+    @Schema(description = "脚本id")
+    @NotBlank(message = "脚本id不能为空")
+    private String modelScriptId;
 
     /**
      * 消息数

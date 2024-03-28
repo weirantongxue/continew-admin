@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.model.resp;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
@@ -41,6 +42,12 @@ public class ItemResp extends BaseResp {
      */
     @Schema(description = "会话名称")
     private String name;
+
+    /**
+     * 脚本id
+     */
+    @Schema(description = "脚本id")
+    private String modelScriptId;
 
     /**
      * 最后一条消息

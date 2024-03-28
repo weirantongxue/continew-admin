@@ -16,17 +16,15 @@
 
 package top.charles7c.continew.admin.front.model.query;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import top.charles7c.continew.starter.data.core.annotation.Query;
+import top.charles7c.continew.starter.data.core.enums.QueryType;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import lombok.Data;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import top.charles7c.continew.starter.data.core.annotation.Query;
-import top.charles7c.continew.starter.data.core.enums.QueryType;
 
 /**
  * AI模型查询条件

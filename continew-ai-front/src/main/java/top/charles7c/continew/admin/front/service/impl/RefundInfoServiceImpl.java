@@ -21,11 +21,16 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.common.util.OrderNoUtils;
+import top.charles7c.continew.admin.front.mapper.RefundInfoMapper;
 import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
 import top.charles7c.continew.admin.front.model.entity.RefundInfoDO;
+import top.charles7c.continew.admin.front.model.query.RefundInfoQuery;
+import top.charles7c.continew.admin.front.model.req.RefundInfoReq;
+import top.charles7c.continew.admin.front.model.resp.RefundInfoDetailResp;
+import top.charles7c.continew.admin.front.model.resp.RefundInfoResp;
 import top.charles7c.continew.admin.front.service.OrderInfoService;
 import top.charles7c.continew.admin.front.service.RefundInfoService;
-import top.charles7c.continew.admin.front.mapper.RefundInfoMapper;
+import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +43,7 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
-public class RefundInfoServiceImpl implements RefundInfoService {
-
+public class RefundInfoServiceImpl extends BaseServiceImpl<RefundInfoMapper, RefundInfoDO, RefundInfoResp, RefundInfoDetailResp, RefundInfoQuery, RefundInfoReq> implements RefundInfoService {
     private final OrderInfoService orderInfoService;
     private final RefundInfoMapper refundInfoMapper;
 

@@ -17,6 +17,11 @@
 package top.charles7c.continew.admin.front.service;
 
 import top.charles7c.continew.admin.front.model.entity.RefundInfoDO;
+import top.charles7c.continew.admin.front.model.query.RefundInfoQuery;
+import top.charles7c.continew.admin.front.model.req.RefundInfoReq;
+import top.charles7c.continew.admin.front.model.resp.RefundInfoDetailResp;
+import top.charles7c.continew.admin.front.model.resp.RefundInfoResp;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 退款信息业务接口
@@ -24,7 +29,7 @@ import top.charles7c.continew.admin.front.model.entity.RefundInfoDO;
  * @author weiran
  * @since 2024/03/25 23:34
  */
-public interface RefundInfoService {
+public interface RefundInfoService extends BaseService<RefundInfoResp, RefundInfoDetailResp, RefundInfoQuery, RefundInfoReq> {
     /**
      * Create refund by order no refund info.
      * 根据订单号创建退款订单

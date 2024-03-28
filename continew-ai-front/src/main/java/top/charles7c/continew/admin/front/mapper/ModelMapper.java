@@ -16,8 +16,8 @@
 
 package top.charles7c.continew.admin.front.mapper;
 
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 import top.charles7c.continew.admin.front.model.entity.ModelDO;
+import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 
 /**
  * AI模型 Mapper

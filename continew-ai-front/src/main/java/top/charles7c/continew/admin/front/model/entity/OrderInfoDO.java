@@ -16,13 +16,11 @@
 
 package top.charles7c.continew.admin.front.model.entity;
 
-import java.io.Serial;
-
-import lombok.Data;
-
 import com.baomidou.mybatisplus.annotation.TableName;
-
+import lombok.Data;
 import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+
+import java.io.Serial;
 
 /**
  * 订单信息实体
@@ -53,7 +51,7 @@ public class OrderInfoDO extends BaseDO {
     private Long productId;
 
     /**
-     * 订单金额(分)
+     * 订单金额(元)
      */
     private Integer totalFee;
 

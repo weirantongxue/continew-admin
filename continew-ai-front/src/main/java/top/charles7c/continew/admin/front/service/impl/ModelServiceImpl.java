@@ -17,10 +17,7 @@
 package top.charles7c.continew.admin.front.service.impl;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
-
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.ModelMapper;
 import top.charles7c.continew.admin.front.model.entity.ModelDO;
 import top.charles7c.continew.admin.front.model.query.ModelQuery;
@@ -28,6 +25,7 @@ import top.charles7c.continew.admin.front.model.req.ModelReq;
 import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ModelResp;
 import top.charles7c.continew.admin.front.service.ModelService;
+import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 /**
  * AI模型业务实现

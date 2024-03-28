@@ -16,11 +16,16 @@
 
 package top.charles7c.continew.admin.front.service;
 
+import top.charles7c.continew.admin.front.model.query.ProductQuery;
+import top.charles7c.continew.admin.front.model.req.ProductReq;
+import top.charles7c.continew.admin.front.model.resp.ProductDetailResp;
+import top.charles7c.continew.admin.front.model.resp.ProductResp;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
+
 /**
  * 产品业务接口
  *
  * @author weiran
  * @since 2024/03/25 23:36
  */
-public interface ProductService {
-}
+public interface ProductService extends BaseService<ProductResp, ProductDetailResp, ProductQuery, ProductReq> {}

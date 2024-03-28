@@ -16,17 +16,35 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.gson.Gson;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.common.enums.PayType;
 import top.charles7c.continew.admin.front.mapper.PaymentInfoMapper;
 import top.charles7c.continew.admin.front.model.entity.PaymentInfoDO;
+import top.charles7c.continew.admin.front.model.query.PaymentInfoQuery;
+import top.charles7c.continew.admin.front.model.req.PaymentInfoReq;
+import top.charles7c.continew.admin.front.model.resp.PaymentInfoDetailResp;
+import top.charles7c.continew.admin.front.model.resp.PaymentInfoResp;
 import top.charles7c.continew.admin.front.service.PaymentInfoService;
+import top.charles7c.continew.admin.system.model.query.DictQuery;
+import top.charles7c.continew.admin.system.model.resp.DictItemDetailResp;
+import top.charles7c.continew.admin.system.model.resp.DictResp;
+import top.charles7c.continew.starter.data.mybatis.plus.query.QueryWrapperHelper;
+import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
+import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
+import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
+import top.charles7c.continew.starter.file.excel.util.ExcelUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,7 +61,7 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
     /**
      * 记录支付宝的支付日志
-     * 
+     *
      * @param params the params 支付通知参数
      */
     @Override
@@ -72,4 +90,37 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
         paymentInfoMapper.insert(paymentInfo);
 
     }
+
+    @Override
+    public PageResp<PaymentInfoResp> page(PaymentInfoQuery query, PageQuery pageQuery) {
+        QueryWrapper<PaymentInfoDO> queryWrapper = QueryWrapperHelper.build(query);
+        IPage<PaymentInfoDO> page = paymentInfoMapper.selectPage(pageQuery.toPage(), queryWrapper);
+        return PageResp.build(page, PaymentInfoResp.class);
+    }
+
+    @Override
+    public List<PaymentInfoResp> list(PaymentInfoQuery query, SortQuery sortQuery) {
+        QueryWrapper<PaymentInfoDO> queryWrapper = QueryWrapperHelper.build(query);
+        List<PaymentInfoDO> list = paymentInfoMapper.selectList(queryWrapper);
+        return BeanUtil.copyToList(list, PaymentInfoResp.class);
+    }
+
+    @Override
+    public PaymentInfoDetailResp get(Long id) {
+        PaymentInfoDO paymentInfoDO = paymentInfoMapper.selectById(id);
+        return BeanUtil.copyProperties(paymentInfoDO, PaymentInfoDetailResp.class);
+    }
+
+    @Override
+    public void delete(List<Long> ids) {
+        paymentInfoMapper.deleteBatchIds(ids);
+    }
+
+    @Override
+    public void export(PaymentInfoQuery query, SortQuery sortQuery, HttpServletResponse response) {
+        List<PaymentInfoResp> paymentInfoRespList = list(query, sortQuery);
+        List<PaymentInfoDetailResp> paymentInfoDetailRespList = BeanUtil.copyToList(paymentInfoRespList, PaymentInfoDetailResp.class);
+        ExcelUtils.export(paymentInfoDetailRespList, "导出数据", PaymentInfoDetailResp.class, response);
+    }
+
 }

@@ -16,6 +16,17 @@
 
 package top.charles7c.continew.admin.front.service;
 
+import jakarta.servlet.http.HttpServletResponse;
+import top.charles7c.continew.admin.front.model.query.PaymentInfoQuery;
+import top.charles7c.continew.admin.front.model.req.PaymentInfoReq;
+import top.charles7c.continew.admin.front.model.resp.PaymentInfoDetailResp;
+import top.charles7c.continew.admin.front.model.resp.PaymentInfoResp;
+import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
+import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
+import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
+import top.charles7c.continew.starter.extension.crud.service.BaseService;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,4 +43,14 @@ public interface PaymentInfoService {
      * @param params the params
      */
     void createPaymentInfoForAliPay(Map<String, String> params);
+
+    PageResp<PaymentInfoResp> page(PaymentInfoQuery query, PageQuery pageQuery);
+
+    List<PaymentInfoResp> list(PaymentInfoQuery query, SortQuery sortQuery);
+
+    PaymentInfoDetailResp get(Long id);
+
+    void delete(List<Long> ids);
+
+    void export(PaymentInfoQuery query, SortQuery sortQuery, HttpServletResponse response);
 }

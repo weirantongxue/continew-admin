@@ -16,13 +16,11 @@
 
 package top.charles7c.continew.admin.front.model.entity;
 
-import java.io.Serial;
-
-import lombok.Data;
-
 import com.baomidou.mybatisplus.annotation.TableName;
-
+import lombok.Data;
 import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+
+import java.io.Serial;
 
 /**
  * 分镜名实体

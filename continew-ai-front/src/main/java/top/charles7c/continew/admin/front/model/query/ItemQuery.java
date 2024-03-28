@@ -17,6 +17,7 @@
 package top.charles7c.continew.admin.front.model.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import top.charles7c.continew.starter.data.core.annotation.Query;
 import top.charles7c.continew.starter.data.core.enums.QueryType;
@@ -43,6 +44,13 @@ public class ItemQuery implements Serializable {
     @Schema(description = "会话名称")
     @Query(type = QueryType.LIKE)
     private String name;
+
+    /**
+     * 脚本id
+     */
+    @Schema(description = "脚本id")
+    @NotBlank(message = "脚本id不能为空")
+    private String modelScriptId;
 
     /**
      * 创建人

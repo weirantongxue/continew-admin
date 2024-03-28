@@ -47,6 +47,13 @@ public class ItemDetailResp extends BaseDetailResp {
     private String name;
 
     /**
+     * 脚本id
+     */
+    @Schema(description = "脚本id")
+    @ExcelProperty(value = "脚本id")
+    private String modelScriptId;
+
+    /**
      * 最后一条消息
      */
     @Schema(description = "最后一条消息")

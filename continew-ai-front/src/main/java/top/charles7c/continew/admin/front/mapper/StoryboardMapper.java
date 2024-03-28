@@ -17,8 +17,8 @@
 package top.charles7c.continew.admin.front.mapper;
 
 import org.apache.ibatis.annotations.Select;
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 import top.charles7c.continew.admin.front.model.entity.StoryboardDO;
+import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 
 /**
  * 分镜列 Mapper

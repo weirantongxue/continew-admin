@@ -16,13 +16,14 @@
 
 package top.charles7c.continew.admin.front.model.entity;
 
-import java.io.Serial;
-
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-
-import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 支付信息实体
@@ -32,10 +33,11 @@ import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
  */
 @Data
 @TableName("lb_payment_info")
-public class PaymentInfoDO extends BaseDO {
-
-    @Serial
+public class PaymentInfoDO implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    @TableId
+    private Long id;
 
     /**
      * 商户订单编号
@@ -71,4 +73,17 @@ public class PaymentInfoDO extends BaseDO {
      * 通知参数
      */
     private String content;
+
+    /**
+     * 创建日期
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 修改日期
+     */
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
+
 }

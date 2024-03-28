@@ -79,7 +79,7 @@ public class AliPayServiceImpl implements AliPayService {
             //设置商户订单号
             bizContent.put("out_trade_no", orderInfo.getOrderNo());
             //设置订单总金额，由于订单金额单位为分，而参数中需要的是元，因此需要bigDecimal进行转换
-            BigDecimal total = new BigDecimal(orderInfo.getTotalFee().toString()).divide(new BigDecimal("100"));
+            BigDecimal total = new BigDecimal(orderInfo.getTotalFee().toString());
             bizContent.put("total_amount", total);
             //设置订单标题
             bizContent.put("subject", orderInfo.getTitle());
