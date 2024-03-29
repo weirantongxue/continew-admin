@@ -27,6 +27,6 @@ import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
  * @since 2024/03/26 20:11
  */
 public interface StoryboardMapper extends BaseMapper<StoryboardDO> {
-    @Select("SELECT COALESCE(MAX(shot), 0) from lb_storyboard where project_id = #{projectId}")
+    @Select("SELECT COALESCE(MAX(shot), 0) from lb_storyboard where project_id = #{projectId} and is_deleted=0")
     Integer sortMax(Long projectId);
 }
