@@ -34,6 +34,8 @@ public class ModelScriptVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private String id;
+
     /**
      * 脚本名称
      */

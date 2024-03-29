@@ -54,15 +54,15 @@ public class StoryboardController {
     }
 
     @Operation(summary = "修改内容", description = "修改内容")
-    @GetMapping("/updateTable")
-    public R<Object> add(StoryboardResp storyboardResp) {
+    @PostMapping("/updateTable")
+    public R<Object> add(@RequestBody StoryboardResp storyboardResp) {
         return R.ok(storyboardSortService.updateTable(storyboardResp));
     }
 
     @Operation(summary = "删除行", description = "删除行")
     @GetMapping("/deleteTable")
-    public R<Object> deleteTable(Long id) {
-        return R.ok(storyboardSortService.deleteTable(id));
+    public R<Object> deleteTable(@RequestParam("id") Long id, @RequestParam("projectId") Long projectId) {
+        return R.ok(storyboardSortService.deleteTable(id, projectId));
     }
 
     @Operation(summary = "上下排序", description = "上下排序")

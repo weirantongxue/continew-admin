@@ -43,7 +43,7 @@ public class StoryboardDO extends BaseDO {
     /**
      * 场号
      */
-    private Integer sceneNumber;
+    private String sceneNumber;
 
     /**
      * 画面
@@ -63,7 +63,7 @@ public class StoryboardDO extends BaseDO {
     /**
      * 时长（秒）
      */
-    private Integer duration;
+    private String duration;
 
     /**
      * 内容

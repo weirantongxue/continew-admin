@@ -32,7 +32,7 @@ public interface StoryboardService {
 
     int updateTable(StoryboardResp storyboardResp);
 
-    int deleteTable(Long id);
+    int deleteTable(Long id, Long projectId);
 
     void storyboardSort(List<StoryboardSortReq> columnsSortReq);
 

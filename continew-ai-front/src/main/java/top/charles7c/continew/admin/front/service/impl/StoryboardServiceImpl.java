@@ -17,6 +17,8 @@
 package top.charles7c.continew.admin.front.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.front.mapper.StoryboardFieMapper;
@@ -88,8 +90,22 @@ public class StoryboardServiceImpl implements StoryboardService {
     }
 
     @Override
-    public int deleteTable(Long id) {
-        return storyboardMapper.deleteById(id);
+    public int deleteTable(Long id, Long projectId) {
+        storyboardMapper.deleteById(id);
+        List<StoryboardDO> storyboardDOList = storyboardMapper.selectList(new QueryWrapper<StoryboardDO>()
+            .select("id", "shot")
+            .eq("project_id", projectId)
+            .orderByAsc("shot"));
+        if (CollUtil.isNotEmpty(storyboardDOList)) {
+            List<StoryboardDO> shotList = new ArrayList<>();
+            for (int i = 0; i < storyboardDOList.size(); i++) {
+                StoryboardDO storyboardDO = storyboardDOList.get(i);
+                storyboardDO.setShot(i + 1);
+                shotList.add(storyboardDO);
+            }
+            storyboardMapper.updateBatchById(shotList);
+        }
+        return 1;
     }
 
     @Override

@@ -45,7 +45,7 @@ public class StoryboardResp extends BaseResp {
      * 场号
      */
     @Schema(description = "场号")
-    private Integer sceneNumber;
+    private String sceneNumber;
 
     /**
      * 画面
@@ -69,7 +69,7 @@ public class StoryboardResp extends BaseResp {
      * 时长（秒）
      */
     @Schema(description = "时长（秒）")
-    private Integer duration;
+    private String duration;
 
     /**
      * 内容

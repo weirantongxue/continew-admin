@@ -20,6 +20,7 @@ import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.alicp.jetcache.anno.CachePenetrationProtect;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.Cached;
@@ -83,6 +84,19 @@ public class CommonController {
         ValidationUtils.throwIf(file::isEmpty, "文件不能为空");
         FileInfo fileInfo = fileService.upload(file);
         return R.ok(FileUploadResp.builder().url(fileInfo.getUrl()).build());
+    }
+
+    @Operation(summary = "上传文件Table", description = "上传文件Table")
+    @PostMapping("/fileTable")
+    public R<Object> fileTable(@NotNull(message = "文件不能为空") MultipartFile file, String name, Long id) {
+        ValidationUtils.throwIf(projectProperties.isProduction(), "演示环境不支持上传文件");
+        ValidationUtils.throwIf(file::isEmpty, "文件不能为空");
+        FileInfo fileInfo = fileService.upload(file);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("url", fileInfo.getUrl());
+        jsonObject.put("name", name);
+        jsonObject.put("id", id);
+        return R.ok(jsonObject);
     }
 
     @Operation(summary = "查询部门树", description = "查询树结构的部门列表")

@@ -41,7 +41,7 @@ public class AliPayTask {
     /**
      * 每30秒查询一次订单信息，查询创建1分钟并且未支付的订单
      */
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void orderConfirm() {
         log.info("定时查询订单任务启动");
         //调用查询未支付订单的方法获取所有的订单信息
