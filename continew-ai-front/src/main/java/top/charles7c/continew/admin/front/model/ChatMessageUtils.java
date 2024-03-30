@@ -36,7 +36,6 @@ public class ChatMessageUtils {
 
     public static ChatMessageDO convertMessageUtils(ChatMessageRequestValidate messageRequestValidate,
                                                     ModelDetailResp modelDetailResp,
-                                                    ModelScriptDetailResp modelScriptDetailResp,
                                                     String messageId,
                                                     String sessionId) {
 
@@ -76,6 +75,7 @@ public class ChatMessageUtils {
             messageList.add(0, message);
         }
         jsonObject.put("model", modelDetailResp.getName());
+        jsonObject.put("max_tokens", 3000);
         jsonObject.put("messages", messageList);
         jsonObject.put("stream", true);
         return jsonObject.toJSONString();

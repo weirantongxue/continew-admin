@@ -55,7 +55,7 @@ public class ChatGlmServiceImpl implements ChatGlmService {
             ModelScriptDetailResp modelScriptDetailResp = modelScriptService.get(messageCreateValidate
                 .getModelScriptId());
             ChatMessageDO message = ChatMessageUtils
-                .convertMessageUtils(messageCreateValidate, modelDetailResp, modelScriptDetailResp, messageId, sessionId);
+                .convertMessageUtils(messageCreateValidate, modelDetailResp, messageId, sessionId);
 
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer);
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
@@ -67,13 +67,4 @@ public class ChatGlmServiceImpl implements ChatGlmService {
             log.error("Glm6B请求失败");
         }
     }
-
-    private ModelDetailResp getModel(Long modelId) {
-        return modelService.get(modelId);
-    }
-
-    private ModelScriptDetailResp getModelScript(Long modelId) {
-        return modelScriptService.get(modelId);
-    }
-
 }
