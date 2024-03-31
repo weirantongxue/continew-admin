@@ -138,6 +138,7 @@ public class DrawServiceImpl implements DrawService {
             drawImgDO.setUpdateUser(LoginHelper.getUserId());
             drawImgDO.setCreateTime(LocalDateTime.now());
             drawImgDO.setUpdateTime(LocalDateTime.now());
+            drawImgMapper.insert(drawImgDO);
 
             drawTaskVo.setTaskId(taskId);
             drawTaskVo.setUrl(fileInfo.getUrl());

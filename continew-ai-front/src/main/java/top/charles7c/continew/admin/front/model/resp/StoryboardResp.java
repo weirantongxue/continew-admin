@@ -16,17 +16,19 @@
 
 package top.charles7c.continew.admin.front.model.resp;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
-
 import java.io.Serial;
+
+import lombok.Data;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
 
 /**
  * 分镜列信息
  *
  * @author weiran
- * @since 2024/03/26 20:23
+ * @since 2024/03/31 03:52
  */
 @Data
 @Schema(description = "分镜列信息")
@@ -36,28 +38,22 @@ public class StoryboardResp extends BaseResp {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 镜号
-     */
-    @Schema(description = "镜号")
-    private Integer shot;
-
-    /**
      * 场号
      */
     @Schema(description = "场号")
     private String sceneNumber;
 
     /**
+     * 镜号
+     */
+    @Schema(description = "镜号")
+    private Integer shot;
+
+    /**
      * 画面
      */
     @Schema(description = "画面")
     private String picture;
-
-    /**
-     * 参考
-     */
-    @Schema(description = "参考")
-    private String referencePicture;
 
     /**
      * 景别
@@ -114,9 +110,9 @@ public class StoryboardResp extends BaseResp {
     private String cameraEquipment;
 
     /**
-     * 镜头焦段
+     * 项目id
      */
-    @Schema(description = "镜头焦段")
-    private String lens;
+    @Schema(description = "项目id")
+    private Long projectId;
 
 }

@@ -16,17 +16,19 @@
 
 package top.charles7c.continew.admin.front.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
-
 import java.io.Serial;
+
+import lombok.Data;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
 
 /**
  * 分镜列实体
  *
  * @author weiran
- * @since 2024/03/26 20:11
+ * @since 2024/03/31 00:02
  */
 @Data
 @TableName("lb_storyboard")
@@ -36,24 +38,19 @@ public class StoryboardDO extends BaseDO {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 镜号
-     */
-    private Integer shot;
-
-    /**
      * 场号
      */
     private String sceneNumber;
 
     /**
+     * 镜号
+     */
+    private Integer shot;
+
+    /**
      * 画面
      */
     private String picture;
-
-    /**
-     * 参考
-     */
-    private String referencePicture;
 
     /**
      * 景别
@@ -99,11 +96,6 @@ public class StoryboardDO extends BaseDO {
      * 摄影机装备
      */
     private String cameraEquipment;
-
-    /**
-     * 镜头焦段
-     */
-    private String lens;
 
     /**
      * 项目id
