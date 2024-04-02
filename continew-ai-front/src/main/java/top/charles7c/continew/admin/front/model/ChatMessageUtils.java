@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.model;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.unfbx.chatgpt.entity.chat.Message;
@@ -27,7 +28,6 @@ import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValid
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by WeiRan on 2023.09.15 15:47
@@ -68,7 +68,7 @@ public class ChatMessageUtils {
         JSONObject jsonObject = new JSONObject();
         List<Message> messageList = messageCreateValidate.getMessages();
         //添加预设prompt
-        if (Objects.nonNull(modelScriptDetailResp) && StrUtil.isNotBlank(modelScriptDetailResp.getPrompt())) {
+        if (ObjectUtil.isNotEmpty(modelScriptDetailResp) && StrUtil.isNotBlank(modelScriptDetailResp.getPrompt())) {
             Message message = new Message();
             message.setRole("system");
             message.setContent(modelScriptDetailResp.getPrompt());

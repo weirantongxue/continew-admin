@@ -103,7 +103,7 @@ public class AliPayController {
             //2.判断 total_amount 是否确实为该订单的实际金额（即商户订单创建时的金额）
             //从参数中获取金额(单位为元)，但是数据库中的单位为分，因此需要进行转换
             String totalAmount = params.get("total_amount");
-            int totalAmountInt = new BigDecimal(totalAmount).multiply(new BigDecimal("100")).intValue();
+            int totalAmountInt = Integer.parseInt(totalAmount);
             //获取订单中的金额
             int totalFeeInt = order.getTotalFee();
             if (totalFeeInt != totalAmountInt) {
