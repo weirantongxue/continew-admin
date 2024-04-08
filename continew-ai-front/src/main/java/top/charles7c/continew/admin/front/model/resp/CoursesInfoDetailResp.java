@@ -74,7 +74,7 @@ public class CoursesInfoDetailResp extends BaseDetailResp {
      */
     @Schema(description = "文件地址")
     @ExcelProperty(value = "文件地址")
-    private Integer fileUrl;
+    private String fileUrl;
 
     /**
      * 文件id

@@ -60,7 +60,7 @@ public class CoursesInfoDO extends BaseDO {
     /**
      * 文件地址
      */
-    private Integer fileUrl;
+    private String fileUrl;
 
     /**
      * 文件id

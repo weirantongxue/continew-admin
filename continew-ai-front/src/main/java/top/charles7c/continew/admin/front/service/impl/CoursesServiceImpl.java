@@ -16,10 +16,19 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import top.charles7c.continew.admin.common.util.ParameterUtils;
+import top.charles7c.continew.admin.common.util.SignGeneratorUtils;
+import top.charles7c.continew.admin.front.model.vo.CategoryVo;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.CoursesMapper;
 import top.charles7c.continew.admin.front.model.entity.CoursesDO;
@@ -29,6 +38,12 @@ import top.charles7c.continew.admin.front.model.resp.CoursesDetailResp;
 import top.charles7c.continew.admin.front.model.resp.CoursesResp;
 import top.charles7c.continew.admin.front.service.CoursesService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * 课程教程业务实现
  *
@@ -37,4 +52,69 @@ import top.charles7c.continew.admin.front.service.CoursesService;
  */
 @Service
 @RequiredArgsConstructor
-public class CoursesServiceImpl extends BaseServiceImpl<CoursesMapper, CoursesDO, CoursesResp, CoursesDetailResp, CoursesQuery, CoursesReq> implements CoursesService {}
+public class CoursesServiceImpl extends BaseServiceImpl<CoursesMapper, CoursesDO, CoursesResp, CoursesDetailResp, CoursesQuery, CoursesReq> implements CoursesService {
+    private final CoursesMapper coursesMapper;
+
+    /**
+     * 同步课程信息
+     *
+     * @return
+     */
+    @Override
+    public void syncCourses() {
+//        Map<String, Object> map = new HashMap<>();
+//        String timestamp = String.valueOf(DateUtil.current());
+//        map.put("partner_id", 37441272);
+//        map.put("timestamp", timestamp);
+//        map.put("sign", SignGeneratorUtils.getBaiJaYunSign(map));
+        //根据分类id获取课程
+        String re = HttpUtil.post("https://e37441272.at.baijiayun.com/openapi/video/getCategoryList", ParameterUtils.categoryListAssembly());
+        JSONObject jsonObject = JSONObject.parseObject(re);
+        if (jsonObject.containsKey("code") && 0 == jsonObject.getInteger("code")) {
+            List<CategoryVo> categoryVoList = JSONObject.parseArray(jsonObject.getJSONObject("data").getString("list"), CategoryVo.class);
+            List<CategoryVo> filteredList = categoryVoList.stream()
+                    .filter(categoryVo -> categoryVo.getId() == 34976)
+                    .collect(Collectors.toList());
+            if (ObjectUtil.isNotNull(filteredList)) {
+                List<CoursesDO> coursesDOList = new ArrayList<>();
+                for (int i = 0; i < filteredList.get(0).getChildren().size(); i++) {
+                    CoursesDO coursesDO = new CoursesDO();
+                    coursesDO.setName(filteredList.get(0).getChildren().get(i).getName());
+                    coursesDO.setFileId(String.valueOf(filteredList.get(0).getChildren().get(i).getId()));
+                    coursesDO.setTotal(filteredList.get(0).getChildren().get(i).getVideo_count());
+                    coursesDO.setSort(i);
+                    coursesDOList.add(coursesDO);
+                }
+                coursesMapper.insertBatch(coursesDOList);
+            }
+        }
+    }
+
+
+    @Override
+    public List<CoursesDO> coursesInfoList() {
+        return coursesMapper.selectList(null);
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("partner_id", 37441272);
+        // map.put("category_id", 34976);
+        map.put("sign", "78fc18d5c0c129032526dc53ca09afae");
+        map.put("timestamp", "1712488878792");
+        //根据分类id获取课程
+        String re = HttpUtil.post("https://e37441272.at.baijiayun.com/openapi/video/getCategoryList", map);
+        JSONObject jsonObject = JSONObject.parseObject(re);
+        if (jsonObject.containsKey("code") && 0 == jsonObject.getInteger("code")) {
+            List<CategoryVo> categoryVoList = JSONObject.parseArray(jsonObject.getJSONObject("data").getString("list"), CategoryVo.class);
+            categoryVoList.forEach(categoryVo -> {
+                System.out.println(JSONObject.toJSONString(categoryVo));
+                System.out.println("-------------------------");
+            });
+
+        }
+
+    }
+
+
+}

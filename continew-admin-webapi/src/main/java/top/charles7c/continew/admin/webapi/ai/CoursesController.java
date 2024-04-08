@@ -51,7 +51,17 @@ public class CoursesController extends BaseController<CoursesService, CoursesRes
     @ResponseBody
     @GetMapping("/coursesList")
     public R<List<CoursesResp>> coursesList(CoursesQuery coursesQuery, @Validated PageQuery pageQuery) {
-        pageQuery.setSort(new String[] {"sort,asc"});
+        pageQuery.setSort(new String[]{"sort,asc"});
         return R.ok(baseService.list(coursesQuery, pageQuery));
     }
+
+
+    @Operation(summary = "同步课程信息", description = "同步课程信息")
+    @ResponseBody
+    @GetMapping("/syncCourses")
+    public R<Object> syncCourses() {
+        baseService.syncCourses();
+        return R.ok();
+    }
+
 }

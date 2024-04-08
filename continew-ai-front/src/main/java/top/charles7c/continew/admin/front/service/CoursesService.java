@@ -16,11 +16,14 @@
 
 package top.charles7c.continew.admin.front.service;
 
+import top.charles7c.continew.admin.front.model.entity.CoursesDO;
 import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.CoursesQuery;
 import top.charles7c.continew.admin.front.model.req.CoursesReq;
 import top.charles7c.continew.admin.front.model.resp.CoursesDetailResp;
 import top.charles7c.continew.admin.front.model.resp.CoursesResp;
+
+import java.util.List;
 
 /**
  * 课程教程业务接口
@@ -28,4 +31,12 @@ import top.charles7c.continew.admin.front.model.resp.CoursesResp;
  * @author weiran
  * @since 2024/04/07 18:29
  */
-public interface CoursesService extends BaseService<CoursesResp, CoursesDetailResp, CoursesQuery, CoursesReq> {}
+public interface CoursesService extends BaseService<CoursesResp, CoursesDetailResp, CoursesQuery, CoursesReq> {
+    /**
+     * 同步课程信息
+     * @return
+     */
+    void syncCourses();
+
+    List<CoursesDO> coursesInfoList();
+}

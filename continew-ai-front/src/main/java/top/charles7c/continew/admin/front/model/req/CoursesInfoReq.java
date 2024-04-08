@@ -73,7 +73,7 @@ public class CoursesInfoReq extends BaseReq {
      * 文件地址
      */
     @Schema(description = "文件地址")
-    private Integer fileUrl;
+    private String fileUrl;
 
     /**
      * 文件id

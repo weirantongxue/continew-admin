@@ -16,10 +16,15 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import top.charles7c.continew.admin.common.util.ParameterUtils;
+import top.charles7c.continew.admin.common.util.SignGeneratorUtils;
+import top.charles7c.continew.admin.front.model.entity.CoursesDO;
+import top.charles7c.continew.admin.front.service.CoursesService;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.CoursesInfoMapper;
 import top.charles7c.continew.admin.front.model.entity.CoursesInfoDO;
@@ -29,6 +34,10 @@ import top.charles7c.continew.admin.front.model.resp.CoursesInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.CoursesInfoResp;
 import top.charles7c.continew.admin.front.service.CoursesInfoService;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 课程信息业务实现
  *
@@ -37,4 +46,34 @@ import top.charles7c.continew.admin.front.service.CoursesInfoService;
  */
 @Service
 @RequiredArgsConstructor
-public class CoursesInfoServiceImpl extends BaseServiceImpl<CoursesInfoMapper, CoursesInfoDO, CoursesInfoResp, CoursesInfoDetailResp, CoursesInfoQuery, CoursesInfoReq> implements CoursesInfoService {}
+public class CoursesInfoServiceImpl extends BaseServiceImpl<CoursesInfoMapper, CoursesInfoDO, CoursesInfoResp, CoursesInfoDetailResp, CoursesInfoQuery, CoursesInfoReq> implements CoursesInfoService {
+    private final CoursesInfoMapper coursesInfoMapper;
+    private final CoursesService coursesService;
+
+
+    @Override
+    public void syncCoursesInfo() {
+        List<CoursesDO> coursesDOList = coursesService.coursesInfoList();
+        coursesDOList.forEach(courses -> {
+            if (courses.getTotal()>0) {
+                String timestamp = String.valueOf(DateUtil.current());
+                //分页数据
+               int pageCount= getPageCount(courses.getTotal(), 20);
+                for (int i = 0; i <pageCount ; i++) {
+                    //获取课程信息
+                    ParameterUtils.categoryVideoAssembly(courses.getFileId(),i+1);
+                }
+
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        int pageCount = getPageCount(0, 20);
+        System.out.println(pageCount);
+    }
+
+    public static int getPageCount(int totalCount, int pageSize) {
+        return (totalCount - 1) / pageSize + 1;
+    }
+}

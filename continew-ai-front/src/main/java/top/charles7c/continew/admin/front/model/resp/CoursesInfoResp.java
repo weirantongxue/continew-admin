@@ -65,7 +65,7 @@ public class CoursesInfoResp extends BaseResp {
      * 文件地址
      */
     @Schema(description = "文件地址")
-    private Integer fileUrl;
+    private String fileUrl;
 
     /**
      * 文件id

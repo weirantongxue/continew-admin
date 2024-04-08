@@ -54,4 +54,12 @@ public class CoursesInfoController extends BaseController<CoursesInfoService, Co
         pageQuery.setSort(new String[] {"sort,asc"});
         return R.ok(baseService.list(coursesInfoQuery, pageQuery));
     }
+
+    @Operation(summary = "同步课程内容", description = "同步课程内容")
+    @ResponseBody
+    @GetMapping("/syncCoursesInfo")
+    public R<Object> syncCourses() {
+        baseService.syncCoursesInfo();
+        return R.ok();
+    }
 }
