@@ -63,6 +63,11 @@ public class CoursesDO extends BaseDO {
     private String coverUrl;
 
     /**
+     * 总节数
+     */
+    private Integer total;
+
+    /**
      * 排序值
      */
     private Integer sort;

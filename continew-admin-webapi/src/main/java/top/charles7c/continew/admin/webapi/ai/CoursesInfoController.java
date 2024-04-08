@@ -32,8 +32,9 @@ import top.charles7c.continew.admin.front.model.resp.CoursesInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.CoursesInfoResp;
 import top.charles7c.continew.admin.front.service.CoursesInfoService;
 import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
-import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
 import top.charles7c.continew.starter.web.model.R;
+
+import java.util.List;
 
 /**
  * 课程信息管理 API
@@ -49,9 +50,8 @@ public class CoursesInfoController extends BaseController<CoursesInfoService, Co
     @Operation(summary = "课程信息管理列表", description = "课程信息管理列表")
     @ResponseBody
     @GetMapping("/coursesInfoList")
-    public R<PageResp<CoursesInfoResp>> coursesInfoList(CoursesInfoQuery coursesInfoQuery,
-                                                        @Validated PageQuery pageQuery) {
+    public R<List<CoursesInfoResp>> coursesInfoList(CoursesInfoQuery coursesInfoQuery, @Validated PageQuery pageQuery) {
         pageQuery.setSort(new String[] {"sort,asc"});
-        return R.ok(baseService.page(coursesInfoQuery, pageQuery));
+        return R.ok(baseService.list(coursesInfoQuery, pageQuery));
     }
 }

@@ -79,6 +79,12 @@ public class CoursesReq extends BaseReq {
     private String coverUrl;
 
     /**
+     * 总节数
+     */
+    @Schema(description = "总节数")
+    private Integer total;
+
+    /**
      * 排序值
      */
     @Schema(description = "排序值")
