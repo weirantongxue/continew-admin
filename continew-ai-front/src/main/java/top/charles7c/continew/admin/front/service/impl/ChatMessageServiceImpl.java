@@ -26,6 +26,7 @@ import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
+import top.charles7c.continew.admin.front.service.DeptAccountService;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 /**
@@ -40,10 +41,15 @@ public class ChatMessageServiceImpl extends BaseServiceImpl<ChatMessageMapper, C
 
     private final ChatMessageMapper chatMessageMapper;
     private final ItemMapper itemMapper;
+    private final DeptAccountService deptAccountService;
 
     @Override
-    public int insertMessage(ChatMessageDO message) {
-        itemMapper.numberAdd(message.getItemId(), message.getCreateUser());
+    public int insertMessage(ChatMessageDO message,Long deptId) {
+        //itemMapper.numberAdd(message.getItemId(), message.getCreateUser());
+        System.out.println("-------deptId-------"+deptId);
+        //扣减余额
+        deptAccountService.deductBalance(deptId);
+
         return this.chatMessageMapper.insert(message);
     }
 

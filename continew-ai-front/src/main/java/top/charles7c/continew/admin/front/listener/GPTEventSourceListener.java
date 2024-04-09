@@ -52,6 +52,8 @@ public class GPTEventSourceListener extends EventSourceListener {
 
     private final TimeInterval timer;
 
+    private final Long deptId;
+
     private String last = "";
 
     public GPTEventSourceListener(WebSocketSendService webSocketSendService,
@@ -59,13 +61,15 @@ public class GPTEventSourceListener extends EventSourceListener {
                                   String messageId,
                                   ChatMessageService chatMessageService,
                                   ChatMessageDO message,
-                                  TimeInterval timer) {
+                                  TimeInterval timer,
+                                  Long deptId) {
         this.webSocketSendService = webSocketSendService;
         this.sessionId = sessionId;
         this.messageId = messageId;
         this.chatMessageService = chatMessageService;
         this.message = message;
         this.timer = timer;
+        this.deptId = deptId;
     }
 
     /**
@@ -97,7 +101,7 @@ public class GPTEventSourceListener extends EventSourceListener {
             webSocketSendService.sendMessage(sessionId, ChatMessageUtils
                 .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
             chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)));
+                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)),deptId);
             return;
         }
         ObjectMapper mapper = new ObjectMapper();

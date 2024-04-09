@@ -37,4 +37,10 @@ import top.charles7c.continew.admin.front.service.DeptAccountService;
  */
 @Service
 @RequiredArgsConstructor
-public class DeptAccountServiceImpl extends BaseServiceImpl<DeptAccountMapper, DeptAccountDO, DeptAccountResp, DeptAccountDetailResp, DeptAccountQuery, DeptAccountReq> implements DeptAccountService {}
+public class DeptAccountServiceImpl extends BaseServiceImpl<DeptAccountMapper, DeptAccountDO, DeptAccountResp, DeptAccountDetailResp, DeptAccountQuery, DeptAccountReq> implements DeptAccountService {
+    private final DeptAccountMapper deptAccountMapper;
+    @Override
+    public void deductBalance(Long deptId) {
+        deptAccountMapper.deductBalance(deptId, 1);
+    }
+}

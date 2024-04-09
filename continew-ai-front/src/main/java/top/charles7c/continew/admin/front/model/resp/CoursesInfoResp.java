@@ -86,6 +86,12 @@ public class CoursesInfoResp extends BaseResp {
     private String duration;
 
     /**
+     * token
+     */
+    @Schema(description = "token")
+    private String token;
+
+    /**
      * 排序值
      */
     @Schema(description = "排序值")

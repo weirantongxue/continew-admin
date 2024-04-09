@@ -98,6 +98,13 @@ public class CoursesInfoDetailResp extends BaseDetailResp {
     private String duration;
 
     /**
+     * token
+     */
+    @Schema(description = "token")
+    @ExcelProperty(value = "token")
+    private String token;
+
+    /**
      * 排序值
      */
     @Schema(description = "排序值")

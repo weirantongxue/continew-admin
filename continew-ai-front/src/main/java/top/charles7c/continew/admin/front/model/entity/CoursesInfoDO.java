@@ -78,6 +78,11 @@ public class CoursesInfoDO extends BaseDO {
     private String duration;
 
     /**
+     * token
+     */
+    private String token;
+
+    /**
      * 排序值
      */
     private Integer sort;

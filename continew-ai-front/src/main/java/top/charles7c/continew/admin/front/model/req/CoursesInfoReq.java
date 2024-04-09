@@ -97,6 +97,13 @@ public class CoursesInfoReq extends BaseReq {
     private String duration;
 
     /**
+     * token
+     */
+    @Schema(description = "token")
+    @Length(max = 255, message = "时长长度不能超过 {max} 个字符")
+    private String token;
+
+    /**
      * 排序值
      */
     @Schema(description = "排序值")

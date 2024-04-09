@@ -16,14 +16,17 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.charles7c.continew.admin.common.constant.TimerConstant;
+import top.charles7c.continew.admin.common.model.dto.LoginUser;
 import top.charles7c.continew.admin.common.util.ApiTokenUtils;
 import top.charles7c.continew.admin.common.util.StreamUtils;
+import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.listener.GPTEventSourceListener;
 import top.charles7c.continew.admin.front.model.ChatMessageUtils;
 import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
@@ -56,8 +59,8 @@ public class ChatGlmServiceImpl implements ChatGlmService {
                 .getModelScriptId());
             ChatMessageDO message = ChatMessageUtils
                 .convertMessageUtils(messageCreateValidate, modelDetailResp, messageId, sessionId);
-
-            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer);
+            LoginUser loginUser= LoginHelper.getLoginUser(StpUtil.getTokenValueByLoginId(sessionId));
+            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer,loginUser.getDeptId());
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
 
             StreamUtils

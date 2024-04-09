@@ -21,20 +21,15 @@ import top.charles7c.continew.admin.common.util.SignGeneratorUtils;
 
 import java.util.Map;
 import java.util.TreeMap;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.io.UnsupportedEncodingException;
 
 public class SignGenerator {
-
-
 
     public static void main(String[] args) {
         Map<String, Object> params = new TreeMap<>();
         params.put("partner_id", "37441272");
         params.put("category_id", "34976");
-//                params.put("page_size", "20");
-//                params.put("page", "1");
+        //                params.put("page_size", "20");
+        //                params.put("page", "1");
         String ti = String.valueOf(DateUtil.current());
         System.out.println(ti);
         params.put("timestamp", ti);

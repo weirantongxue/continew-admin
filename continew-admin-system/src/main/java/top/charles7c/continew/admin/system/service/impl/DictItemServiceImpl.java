@@ -68,6 +68,7 @@ public class DictItemServiceImpl extends BaseServiceImpl<DictItemMapper, DictIte
 
     @Override
     public List<LabelValueResp<Serializable>> listByDictCode(String dictCode) {
+        List<LabelValueResp<Serializable>> code = baseMapper.listByDictCode(dictCode);
         return baseMapper.listByDictCode(dictCode);
     }
 

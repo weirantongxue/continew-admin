@@ -34,6 +34,7 @@ import java.util.List;
 public interface CoursesService extends BaseService<CoursesResp, CoursesDetailResp, CoursesQuery, CoursesReq> {
     /**
      * 同步课程信息
+     * 
      * @return
      */
     void syncCourses();

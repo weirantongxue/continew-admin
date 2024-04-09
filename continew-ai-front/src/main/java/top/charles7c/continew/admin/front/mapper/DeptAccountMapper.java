@@ -25,4 +25,7 @@ import top.charles7c.continew.admin.front.model.entity.DeptAccountDO;
  * @author weiran
  * @since 2024/04/01 18:42
  */
-public interface DeptAccountMapper extends BaseMapper<DeptAccountDO> {}
+public interface DeptAccountMapper extends BaseMapper<DeptAccountDO> {
+
+    int deductBalance(Long deptId, int i);
+}

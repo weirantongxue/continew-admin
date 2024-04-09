@@ -28,4 +28,6 @@ import top.charles7c.continew.admin.front.model.resp.DeptAccountResp;
  * @author weiran
  * @since 2024/04/01 18:42
  */
-public interface DeptAccountService extends BaseService<DeptAccountResp, DeptAccountDetailResp, DeptAccountQuery, DeptAccountReq> {}
+public interface DeptAccountService extends BaseService<DeptAccountResp, DeptAccountDetailResp, DeptAccountQuery, DeptAccountReq> {
+    void deductBalance(Long deptId);
+}

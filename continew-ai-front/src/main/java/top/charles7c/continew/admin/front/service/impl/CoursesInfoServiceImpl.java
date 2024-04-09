@@ -16,14 +16,16 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
-import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
 import top.charles7c.continew.admin.common.util.ParameterUtils;
-import top.charles7c.continew.admin.common.util.SignGeneratorUtils;
 import top.charles7c.continew.admin.front.model.entity.CoursesDO;
+import top.charles7c.continew.admin.front.model.vo.CategoryVideo;
 import top.charles7c.continew.admin.front.service.CoursesService;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.CoursesInfoMapper;
@@ -34,9 +36,8 @@ import top.charles7c.continew.admin.front.model.resp.CoursesInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.CoursesInfoResp;
 import top.charles7c.continew.admin.front.service.CoursesInfoService;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 课程信息业务实现
@@ -50,20 +51,54 @@ public class CoursesInfoServiceImpl extends BaseServiceImpl<CoursesInfoMapper, C
     private final CoursesInfoMapper coursesInfoMapper;
     private final CoursesService coursesService;
 
-
     @Override
     public void syncCoursesInfo() {
         List<CoursesDO> coursesDOList = coursesService.coursesInfoList();
         coursesDOList.forEach(courses -> {
-            if (courses.getTotal()>0) {
-                String timestamp = String.valueOf(DateUtil.current());
+            if (courses.getTotal() > 0) {
                 //分页数据
-               int pageCount= getPageCount(courses.getTotal(), 20);
-                for (int i = 0; i <pageCount ; i++) {
-                    //获取课程信息
-                    ParameterUtils.categoryVideoAssembly(courses.getFileId(),i+1);
-                }
+                int pageCount = getPageCount(courses.getTotal(), 100);
+                if (pageCount != 0) {
+                    for (int i = 0; i < pageCount; i++) {
+                        //获取课程信息
+                        String re = HttpUtil
+                            .post("https://e37441272.at.baijiayun.com/openapi/video/getCategoryVideo", ParameterUtils
+                                .categoryVideoAssembly(courses.getFileId(), i + 1));
+                        JSONObject jsonObject = JSONObject.parseObject(re);
+                        if (jsonObject.containsKey("code") && 0 == jsonObject.getInteger("code")) {
+                            List<CoursesInfoDO> coursesInfoDOList = new ArrayList<>();
+                            List<CategoryVideo> categoryVideoList = JSONObject.parseArray(jsonObject
+                                .getJSONObject("data")
+                                .getString("list"), CategoryVideo.class);
+                            if (CollectionUtil.isNotEmpty(categoryVideoList)) {
+                                for (int i1 = 0; i1 < categoryVideoList.size(); i1++) {
+                                    CoursesInfoDO coursesInfoDO = new CoursesInfoDO();
+                                    coursesInfoDO.setCoursesId(courses.getId());
+                                    coursesInfoDO.setName(categoryVideoList.get(i1).getName());
+                                    coursesInfoDO.setFileId(String.valueOf(categoryVideoList.get(i1).getVideo_id()));
+                                    coursesInfoDO.setCoverUrl(categoryVideoList.get(i1).getPreface_url());
+                                    coursesInfoDO.setDuration(categoryVideoList.get(i1).getLength());
+                                    coursesInfoDO.setType(1);
+                                    coursesInfoDO.setSort(i1);
+                                    String token = "";
+                                    //获取token
+                                    String res = HttpUtil
+                                        .post("https://e37441272.at.baijiayun.com/openapi/video/getPlayerToken", ParameterUtils
+                                            .playerTokenAssembly(categoryVideoList.get(i1).getVideo_id()));
+                                    JSONObject jsonObject1 = JSONObject.parseObject(res);
+                                    if (jsonObject1.containsKey("code") && 0 == jsonObject1.getInteger("code")) {
+                                        token = jsonObject1.getJSONObject("data").getString("token");
+                                    }
+                                    coursesInfoDO.setToken(token);
+                                    coursesInfoDO.setFileUrl("https://e37441272.at.baijiayun.com/web/video/player");
+                                    coursesInfoDOList.add(coursesInfoDO);
+                                }
+                                coursesInfoMapper.insertBatch(coursesInfoDOList);
+                            }
+                        }
 
+                    }
+                }
             }
         });
     }
@@ -74,6 +109,10 @@ public class CoursesInfoServiceImpl extends BaseServiceImpl<CoursesInfoMapper, C
     }
 
     public static int getPageCount(int totalCount, int pageSize) {
+        if (totalCount == 0) {
+            return 0;
+        }
         return (totalCount - 1) / pageSize + 1;
     }
+
 }
