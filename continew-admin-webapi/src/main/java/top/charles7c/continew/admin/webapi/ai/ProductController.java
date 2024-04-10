@@ -16,6 +16,8 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.validation.annotation.Validated;
 import top.charles7c.continew.starter.extension.crud.enums.Api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +31,11 @@ import top.charles7c.continew.admin.front.model.req.ProductReq;
 import top.charles7c.continew.admin.front.model.resp.ProductDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ProductResp;
 import top.charles7c.continew.admin.front.service.ProductService;
+import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
+import top.charles7c.continew.starter.log.core.annotation.Log;
+import top.charles7c.continew.starter.web.model.R;
+
+import java.util.List;
 
 /**
  * 产品管理 API
@@ -40,5 +47,14 @@ import top.charles7c.continew.admin.front.service.ProductService;
 @RestController
 @CrudRequestMapping(value = "/ai/product", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
 public class ProductController extends BaseController<ProductService, ProductResp, ProductDetailResp, ProductQuery, ProductReq> {
+
+    @Log(ignore = true)
+    @Operation(summary = "产品信息", description = "产品信息")
+    @ResponseBody
+    @GetMapping("/productList")
+    public R<List<ProductResp>> coursesInfoList(ProductQuery productQuery, @Validated PageQuery pageQuery) {
+        pageQuery.setSort(new String[] {"sort,asc"});
+        return R.ok(baseService.list(productQuery, pageQuery));
+    }
 
 }

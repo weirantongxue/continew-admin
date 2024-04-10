@@ -30,5 +30,5 @@ import top.charles7c.continew.starter.extension.crud.service.BaseService;
  * @since 2024/03/10 23:15
  */
 public interface ChatMessageService extends BaseService<ChatMessageResp, ChatMessageDetailResp, ChatMessageQuery, ChatMessageReq> {
-    int insertMessage(ChatMessageDO chatMessageDO,Long deptId);
+    int insertMessage(ChatMessageDO chatMessageDO, Long deptId);
 }

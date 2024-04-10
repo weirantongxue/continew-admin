@@ -51,9 +51,16 @@ public class ProductDetailResp extends BaseDetailResp {
     /**
      * 价格（分）
      */
-    @Schema(description = "价格（分）")
-    @ExcelProperty(value = "价格（分）")
+    @Schema(description = "价格（元）")
+    @ExcelProperty(value = "价格（元）")
     private Integer price;
+
+    /**
+     * 价格（分）
+     */
+    @Schema(description = "排序值")
+    @ExcelProperty(value = "排序值")
+    private Integer sort;
 
     /**
      * token数量

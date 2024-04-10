@@ -51,12 +51,12 @@ public class RefundInfoDO extends BaseDO {
     private String refundId;
 
     /**
-     * 原订单金额(分)
+     * 原订单金额(元)
      */
     private Integer totalFee;
 
     /**
-     * 退款金额(分)
+     * 退款金额(元)
      */
     private Integer refund;
 

@@ -101,7 +101,7 @@ public class GPTEventSourceListener extends EventSourceListener {
             webSocketSendService.sendMessage(sessionId, ChatMessageUtils
                 .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
             chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)),deptId);
+                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
             return;
         }
         ObjectMapper mapper = new ObjectMapper();

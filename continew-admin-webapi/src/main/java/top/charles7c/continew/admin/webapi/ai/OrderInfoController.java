@@ -16,6 +16,8 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
+import io.swagger.v3.oas.annotations.Operation;
+import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
 import top.charles7c.continew.starter.extension.crud.enums.Api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +31,8 @@ import top.charles7c.continew.admin.front.model.req.OrderInfoReq;
 import top.charles7c.continew.admin.front.model.resp.OrderInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.OrderInfoResp;
 import top.charles7c.continew.admin.front.service.OrderInfoService;
+import top.charles7c.continew.starter.log.core.annotation.Log;
+import top.charles7c.continew.starter.web.model.R;
 
 /**
  * 订单信息管理 API
@@ -41,4 +45,11 @@ import top.charles7c.continew.admin.front.service.OrderInfoService;
 @CrudRequestMapping(value = "/ai/orderInfo", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
 public class OrderInfoController extends BaseController<OrderInfoService, OrderInfoResp, OrderInfoDetailResp, OrderInfoQuery, OrderInfoReq> {
 
+    @Log(ignore = true)
+    @Operation(summary = "创建订单", description = "创建订单")
+    @ResponseBody
+    @GetMapping("/createOrderByProductId")
+    public R<OrderInfoDO> createOrderByProductId(Long id) {
+        return R.ok(baseService.createOrderByProductId(id));
+    }
 }

@@ -77,10 +77,10 @@ public class PaymentInfoDetailResp extends BaseDetailResp {
     private String tradeState;
 
     /**
-     * 支付金额(分)
+     * 支付金额(元)
      */
-    @Schema(description = "支付金额(分)")
-    @ExcelProperty(value = "支付金额(分)")
+    @Schema(description = "支付金额(元)")
+    @ExcelProperty(value = "支付金额(元)")
     private Integer payerTotal;
 
     /**

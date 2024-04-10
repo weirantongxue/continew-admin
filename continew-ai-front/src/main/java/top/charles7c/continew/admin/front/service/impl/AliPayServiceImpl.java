@@ -61,12 +61,12 @@ public class AliPayServiceImpl implements AliPayService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String tradeCreate(Long productId) {
+    public String tradeCreate(String orderNo) {
         try {
-
             log.info("生成订单....");
             //调用orderInfoService对象在数据库中创建订单
             OrderInfoDO orderInfo = orderInfoService.createOrderByProductId(productId);
+            OrderInfoDO orderInfo = orderInfoService.getOrderByOrderNo(orderNo);
 
             //调用支付宝接口
             //创建支付宝请求对象

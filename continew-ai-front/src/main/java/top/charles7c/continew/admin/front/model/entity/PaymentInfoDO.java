@@ -65,7 +65,7 @@ public class PaymentInfoDO implements Serializable {
     private String tradeState;
 
     /**
-     * 支付金额(分)
+     * 支付金额(元)
      */
     private Integer payerTotal;
 

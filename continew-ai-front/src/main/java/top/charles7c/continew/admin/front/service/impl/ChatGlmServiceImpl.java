@@ -59,8 +59,9 @@ public class ChatGlmServiceImpl implements ChatGlmService {
                 .getModelScriptId());
             ChatMessageDO message = ChatMessageUtils
                 .convertMessageUtils(messageCreateValidate, modelDetailResp, messageId, sessionId);
-            LoginUser loginUser= LoginHelper.getLoginUser(StpUtil.getTokenValueByLoginId(sessionId));
-            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer,loginUser.getDeptId());
+            LoginUser loginUser = LoginHelper.getLoginUser(StpUtil.getTokenValueByLoginId(sessionId));
+            GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer, loginUser
+                .getDeptId());
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
 
             StreamUtils

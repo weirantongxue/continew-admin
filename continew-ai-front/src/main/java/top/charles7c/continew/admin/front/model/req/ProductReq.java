@@ -57,6 +57,12 @@ public class ProductReq extends BaseReq {
     private Integer price;
 
     /**
+     * 价格（分）
+     */
+    @Schema(description = "排序值")
+    private Integer sort;
+
+    /**
      * token数量
      */
     @Schema(description = "token数量")

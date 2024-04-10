@@ -46,8 +46,13 @@ public class ProductDO extends BaseDO {
     private Integer price;
 
     /**
-     * 价格（元）
+     * token数量
      */
     private Integer tokenPrice;
+
+    /**
+     * 排序值
+     */
+    private Integer sort;
 
 }

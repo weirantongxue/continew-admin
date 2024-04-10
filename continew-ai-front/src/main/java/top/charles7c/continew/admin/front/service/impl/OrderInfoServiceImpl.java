@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.common.enums.OrderStatus;
 import top.charles7c.continew.admin.common.util.OrderNoUtils;
+import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.mapper.OrderInfoMapper;
 import top.charles7c.continew.admin.front.mapper.ProductMapper;
 import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
@@ -166,7 +167,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfoMapper, Order
         //设置判断条件，id和类型信息
         orderInfoQueryWrapper.eq("product_id", productId);
         orderInfoQueryWrapper.eq("order_status", OrderStatus.NOTPAY.getType());
-
+        orderInfoQueryWrapper.eq("create_user", LoginHelper.getUserId());
         //使用自带的selectOne方法判断是否同时满足条件
         OrderInfoDO orderInfo = orderInfoMapper.selectOne(orderInfoQueryWrapper);
         return orderInfo;

@@ -57,9 +57,9 @@ public class OrderInfoResp extends BaseResp {
     private Long productId;
 
     /**
-     * 订单金额(分)
+     * 订单金额(元)
      */
-    @Schema(description = "订单金额(分)")
+    @Schema(description = "订单金额(元)")
     private Integer totalFee;
 
     /**

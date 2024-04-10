@@ -47,7 +47,7 @@ public class ProductResp extends BaseResp {
     /**
      * 价格（分）
      */
-    @Schema(description = "价格（分）")
+    @Schema(description = "价格（元）")
     private Integer price;
 
     /**
@@ -55,6 +55,12 @@ public class ProductResp extends BaseResp {
      */
     @Schema(description = "token数量")
     private Integer tokenPrice;
+
+    /**
+     * 排序
+     */
+    @Schema(description = "排序")
+    private Integer sort;
 
     /**
      * 修改人
