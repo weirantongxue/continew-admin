@@ -64,4 +64,9 @@ public class OrderInfoDO extends BaseDO {
      * 订单状态
      */
     private String orderStatus;
+
+    /**
+     * 部门id
+     */
+    private Long deptId;
 }

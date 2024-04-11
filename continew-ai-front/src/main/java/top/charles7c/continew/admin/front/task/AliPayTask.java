@@ -45,12 +45,12 @@ public class AliPayTask {
     public void orderConfirm() {
         log.info("定时查询订单任务启动");
         //调用查询未支付订单的方法获取所有的订单信息
-        List<OrderInfoDO> noPayOrderList = orderInfoService.getNoPayOrderByDuration(1, PayType.ALIPAY.getType());
+        List<OrderInfoDO> noPayOrderList = orderInfoService.getNoPayOrderByDuration(5, PayType.ALIPAY.getType());
 
         //遍历超时订单
         for (OrderInfoDO orderInfo : noPayOrderList) {
             String orderNo = orderInfo.getOrderNo();
-            log.info("超时1分钟未支付的订单---》{}", orderNo);
+            log.info("超时5分钟未支付的订单---》{}", orderNo);
             //核实订单状态，调用支付宝端查单接口
             aliPayService.checkOrderStatus(orderNo);
         }

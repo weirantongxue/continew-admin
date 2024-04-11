@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.mapper;
 
+import org.apache.ibatis.annotations.Update;
 import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
 import top.charles7c.continew.admin.front.model.entity.DeptAccountDO;
 
@@ -26,6 +27,9 @@ import top.charles7c.continew.admin.front.model.entity.DeptAccountDO;
  * @since 2024/04/01 18:42
  */
 public interface DeptAccountMapper extends BaseMapper<DeptAccountDO> {
+    @Update("UPDATE lb_dept_account set balance_token = balance_token - #{balanceToken} where dept_id = #{deptId}")
+    int deductBalance(Long deptId, int balanceToken);
 
-    int deductBalance(Long deptId, int i);
+    @Update("UPDATE lb_dept_account SET balance_token = balance_token + #{tokenPrice}, recharge_amount = recharge_amount + #{totalFee}, recharge_token = recharge_token + #{tokenPrice} WHERE dept_id = #{deptId}")
+    int rechargeBalance(Integer totalFee, Integer tokenPrice, Long deptId);
 }

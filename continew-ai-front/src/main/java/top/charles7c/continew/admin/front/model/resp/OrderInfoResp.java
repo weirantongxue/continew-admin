@@ -75,6 +75,12 @@ public class OrderInfoResp extends BaseResp {
     private String orderStatus;
 
     /**
+     * 部门id
+     */
+    @Schema(description = "部门id")
+    private Long deptId;
+
+    /**
      * 更新时间
      */
     @Schema(description = "更新时间")

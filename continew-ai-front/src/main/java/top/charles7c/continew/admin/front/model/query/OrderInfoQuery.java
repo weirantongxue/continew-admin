@@ -68,6 +68,13 @@ public class OrderInfoQuery implements Serializable {
     private String orderStatus;
 
     /**
+     * 部门id
+     */
+    @Schema(description = "部门id")
+    @Query(type = QueryType.EQ)
+    private Long deptId;
+
+    /**
      * 创建人
      */
     @Schema(description = "创建人")

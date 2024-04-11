@@ -82,4 +82,11 @@ public class OrderInfoDetailResp extends BaseDetailResp {
     @Schema(description = "订单状态")
     @ExcelProperty(value = "订单状态")
     private String orderStatus;
+
+    /**
+     * 部门id
+     */
+    @Schema(description = "部门id")
+    @ExcelProperty(value = "部门id")
+    private Long deptId;
 }

@@ -74,7 +74,7 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
         //设置交易状态
         paymentInfo.setTradeState(params.get("trade_status"));
         //设置交易金额，此处依旧需要转换(支付宝端对应的是元，数据库中对应分)
-        int totalAmount = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal("100")).intValue();
+        int totalAmount = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal("1")).intValue();
         paymentInfo.setPayerTotal(totalAmount);
 
         //之后设置备注信息，需要将平台传入的map集合信息转成字符串类型存入数据库

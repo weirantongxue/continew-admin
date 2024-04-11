@@ -78,4 +78,10 @@ public class OrderInfoReq extends BaseReq {
     @Schema(description = "订单状态")
     @Length(max = 10, message = "订单状态长度不能超过 {max} 个字符")
     private String orderStatus;
+
+    /**
+     * 部门id
+     */
+    @Schema(description = "部门id")
+    private Long deptId;
 }

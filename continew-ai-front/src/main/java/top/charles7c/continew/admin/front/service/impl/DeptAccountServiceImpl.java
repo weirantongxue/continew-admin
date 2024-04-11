@@ -16,10 +16,15 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
+import top.charles7c.continew.admin.front.model.resp.ProductDetailResp;
+import top.charles7c.continew.admin.front.model.vo.DeptAccountVo;
+import top.charles7c.continew.admin.front.service.ProductService;
 import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.DeptAccountMapper;
 import top.charles7c.continew.admin.front.model.entity.DeptAccountDO;
@@ -39,9 +44,47 @@ import top.charles7c.continew.admin.front.service.DeptAccountService;
 @RequiredArgsConstructor
 public class DeptAccountServiceImpl extends BaseServiceImpl<DeptAccountMapper, DeptAccountDO, DeptAccountResp, DeptAccountDetailResp, DeptAccountQuery, DeptAccountReq> implements DeptAccountService {
     private final DeptAccountMapper deptAccountMapper;
+    private final ProductService productService;
 
+    /**
+     * 扣减余额
+     *
+     * @param deptId
+     */
     @Override
-    public void deductBalance(Long deptId) {
-        deptAccountMapper.deductBalance(deptId, 1);
+    public void deductBalance(Long deptId, int balanceToken) {
+        deptAccountMapper.deductBalance(deptId, balanceToken);
+    }
+
+    /**
+     * 充值余额
+     *
+     * @param orderInfo
+     */
+    @Override
+    public void rechargeBalance(OrderInfoDO orderInfo) {
+        //获取产品信息
+        ProductDetailResp productDetailResp = productService.get(orderInfo.getProductId());
+        deptAccountMapper.rechargeBalance(orderInfo.getTotalFee(), productDetailResp.getTokenPrice(), orderInfo
+            .getDeptId());
+    }
+
+    /**
+     * 查询余额
+     *
+     * @return
+     */
+    @Override
+    public DeptAccountVo selectBalance(Long deptId) {
+        DeptAccountVo deptAccountVo = new DeptAccountVo();
+        DeptAccountDO deptAccountDO = deptAccountMapper.lambdaQuery().eq(DeptAccountDO::getDeptId, deptId).one();
+        if (ObjectUtil.isNotNull(deptAccountDO)) {
+            deptAccountVo.setBalanceToken(deptAccountDO.getBalanceToken());
+            deptAccountVo.setDeptId(deptAccountDO.getDeptId());
+            return deptAccountVo;
+        }
+        deptAccountVo.setBalanceToken(0);
+        deptAccountVo.setDeptId(deptId);
+        return deptAccountVo;
     }
 }

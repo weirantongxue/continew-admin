@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.charles7c.continew.admin.common.enums.OrderStatus;
+import top.charles7c.continew.admin.common.model.dto.LoginUser;
 import top.charles7c.continew.admin.common.util.OrderNoUtils;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.mapper.OrderInfoMapper;
@@ -62,6 +63,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfoMapper, Order
      */
     @Override
     public OrderInfoDO createOrderByProductId(Long productId) {
+        LoginUser loginUser = LoginHelper.getLoginUser();
         //查找已存在，但是并未支付的订单信息
         OrderInfoDO orderInfoNoPay = getNoPayOrderByProductId(productId);
         if (orderInfoNoPay != null) {
@@ -78,7 +80,7 @@ public class OrderInfoServiceImpl extends BaseServiceImpl<OrderInfoMapper, Order
         orderInfo.setTotalFee(product.getPrice());
         orderInfo.setProductId(productId);
         orderInfo.setOrderStatus(OrderStatus.NOTPAY.getType());
-
+        orderInfo.setDeptId(loginUser.getDeptId());
         //将订单信息存入数据库
         orderInfoMapper.insert(orderInfo);
 

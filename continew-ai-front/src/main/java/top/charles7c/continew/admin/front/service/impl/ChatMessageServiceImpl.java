@@ -48,7 +48,7 @@ public class ChatMessageServiceImpl extends BaseServiceImpl<ChatMessageMapper, C
         //itemMapper.numberAdd(message.getItemId(), message.getCreateUser());
         System.out.println("-------deptId-------" + deptId);
         //扣减余额
-        deptAccountService.deductBalance(deptId);
+        deptAccountService.deductBalance(deptId, 1);
 
         return this.chatMessageMapper.insert(message);
     }

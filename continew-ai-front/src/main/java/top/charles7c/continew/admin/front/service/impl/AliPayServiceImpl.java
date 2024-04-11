@@ -16,6 +16,7 @@
 
 package top.charles7c.continew.admin.front.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -32,10 +33,7 @@ import top.charles7c.continew.admin.common.enums.AliPayTradeState;
 import top.charles7c.continew.admin.common.enums.OrderStatus;
 import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
 import top.charles7c.continew.admin.front.model.entity.RefundInfoDO;
-import top.charles7c.continew.admin.front.service.AliPayService;
-import top.charles7c.continew.admin.front.service.OrderInfoService;
-import top.charles7c.continew.admin.front.service.PaymentInfoService;
-import top.charles7c.continew.admin.front.service.RefundInfoService;
+import top.charles7c.continew.admin.front.service.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -51,6 +49,7 @@ public class AliPayServiceImpl implements AliPayService {
     private final Environment config;
     private final PaymentInfoService paymentInfoService;
     private final RefundInfoService refundInfoService;
+    private final DeptAccountService deptAccountService;
     private final ReentrantLock lock = new ReentrantLock();
 
     /**
@@ -65,7 +64,7 @@ public class AliPayServiceImpl implements AliPayService {
         try {
             log.info("生成订单....");
             //调用orderInfoService对象在数据库中创建订单
-            OrderInfoDO orderInfo = orderInfoService.createOrderByProductId(productId);
+            //OrderInfoDO orderInfo = orderInfoService.createOrderByProductId(productId);
             OrderInfoDO orderInfo = orderInfoService.getOrderByOrderNo(orderNo);
 
             //调用支付宝接口
@@ -126,7 +125,11 @@ public class AliPayServiceImpl implements AliPayService {
             try {
                 //接口调用幂等性问题：在更新订单状态，记录支付日志之前过滤重复通知（无论接口被调用多少次，以下只执行一次）
                 //首先获取订单状态
-                String orderStatus = orderInfoService.getOrderStatus(orderNo);
+                OrderInfoDO orderInfo = orderInfoService.getOrderByOrderNo(orderNo);
+                if (ObjectUtil.isNull(orderInfo)) {
+                    return;
+                }
+                String orderStatus = orderInfo.getOrderStatus();
                 if (!OrderStatus.NOTPAY.getType().equals(orderStatus)) {
                     //如果订单状态不是未支付，则直接返回，不需要任何处理
                     return;
@@ -135,6 +138,9 @@ public class AliPayServiceImpl implements AliPayService {
                 orderInfoService.updateStatusByOrderNo(orderNo, OrderStatus.SUCCESS);
                 //记录支付日志
                 paymentInfoService.createPaymentInfoForAliPay(params);
+                //充值到账户
+                deptAccountService.rechargeBalance(orderInfo);
+
             } finally {
                 //必须要主动释放锁
                 lock.unlock();
@@ -288,7 +294,7 @@ public class AliPayServiceImpl implements AliPayService {
             JSONObject bizContent = new JSONObject();
             bizContent.put("out_trade_no", orderNo);
             //设置退款单金额(需要除以100),分转化成元
-            BigDecimal refund = new BigDecimal(refundInfo.getRefund().toString()).divide(new BigDecimal("100"));
+            BigDecimal refund = new BigDecimal(refundInfo.getRefund().toString()).divide(new BigDecimal("1"));
             bizContent.put("refund_amount", refund);
             bizContent.put("refund_reason", reason);
             //将参数设置到请求中

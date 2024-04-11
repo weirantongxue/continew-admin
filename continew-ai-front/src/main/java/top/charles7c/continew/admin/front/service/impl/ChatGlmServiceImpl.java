@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.charles7c.continew.admin.common.constant.TimerConstant;
+import top.charles7c.continew.admin.common.enums.EventNameType;
 import top.charles7c.continew.admin.common.model.dto.LoginUser;
 import top.charles7c.continew.admin.common.util.ApiTokenUtils;
 import top.charles7c.continew.admin.common.util.StreamUtils;
@@ -33,6 +34,7 @@ import top.charles7c.continew.admin.front.model.entity.ChatMessageDO;
 import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ModelScriptDetailResp;
 import top.charles7c.continew.admin.front.model.validate.ChatMessageRequestValidate;
+import top.charles7c.continew.admin.front.model.vo.DeptAccountVo;
 import top.charles7c.continew.admin.front.service.*;
 
 /**
@@ -46,6 +48,7 @@ public class ChatGlmServiceImpl implements ChatGlmService {
     private final WebSocketSendService webSocketSendService;
     private final ModelService modelService;
     private final ModelScriptService modelScriptService;
+    private final DeptAccountService deptAccountService;
 
     @Override
     public void aiApi(ChatMessageRequestValidate messageCreateValidate, String sessionId) {
@@ -53,13 +56,21 @@ public class ChatGlmServiceImpl implements ChatGlmService {
             TimeInterval timer = new TimeInterval();
             timer.start(TimerConstant.RESPONSE_TIME);
             String messageId = IdUtil.fastSimpleUUID();
-
+            LoginUser loginUser = LoginHelper.getLoginUser(StpUtil.getTokenValueByLoginId(sessionId));
+            //判断账户余额
+            DeptAccountVo deptAccountVo = deptAccountService.selectBalance(loginUser.getDeptId());
+            if (deptAccountVo.getBalanceToken() <= 0) {
+                webSocketSendService.sendMessage(sessionId, ChatMessageUtils
+                    .chatModelMsg(messageId, sessionId, "学校账号余额不足,请联系管理员充值", EventNameType.ERROR.getCode()));
+                webSocketSendService.close(sessionId, "余额不足,关闭链接");
+                return;
+            }
             ModelDetailResp modelDetailResp = modelService.get(messageCreateValidate.getModelId());
             ModelScriptDetailResp modelScriptDetailResp = modelScriptService.get(messageCreateValidate
                 .getModelScriptId());
             ChatMessageDO message = ChatMessageUtils
                 .convertMessageUtils(messageCreateValidate, modelDetailResp, messageId, sessionId);
-            LoginUser loginUser = LoginHelper.getLoginUser(StpUtil.getTokenValueByLoginId(sessionId));
+
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer, loginUser
                 .getDeptId());
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");

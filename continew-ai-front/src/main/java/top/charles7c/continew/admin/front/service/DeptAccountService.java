@@ -16,6 +16,8 @@
 
 package top.charles7c.continew.admin.front.service;
 
+import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
+import top.charles7c.continew.admin.front.model.vo.DeptAccountVo;
 import top.charles7c.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.DeptAccountQuery;
 import top.charles7c.continew.admin.front.model.req.DeptAccountReq;
@@ -29,5 +31,24 @@ import top.charles7c.continew.admin.front.model.resp.DeptAccountResp;
  * @since 2024/04/01 18:42
  */
 public interface DeptAccountService extends BaseService<DeptAccountResp, DeptAccountDetailResp, DeptAccountQuery, DeptAccountReq> {
-    void deductBalance(Long deptId);
+    /**
+     * 扣减余额
+     * 
+     * @param deptId
+     */
+    void deductBalance(Long deptId, int balanceToken);
+
+    /**
+     * 充值余额
+     * 
+     * @param orderInfo
+     */
+    void rechargeBalance(OrderInfoDO orderInfo);
+
+    /**
+     * 查询余额
+     * 
+     * @return
+     */
+    DeptAccountVo selectBalance(Long deptId);
 }
