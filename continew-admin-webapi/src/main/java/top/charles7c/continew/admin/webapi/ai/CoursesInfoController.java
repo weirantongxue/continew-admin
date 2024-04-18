@@ -58,8 +58,8 @@ public class CoursesInfoController extends BaseController<CoursesInfoService, Co
     @Operation(summary = "同步课程内容", description = "同步课程内容")
     @ResponseBody
     @GetMapping("/syncCoursesInfo")
-    public R<Object> syncCourses() {
-        baseService.syncCoursesInfo();
+    public R<Object> syncCoursesInfo(Integer id) {
+        baseService.syncCoursesInfo(id);
         return R.ok();
     }
 }

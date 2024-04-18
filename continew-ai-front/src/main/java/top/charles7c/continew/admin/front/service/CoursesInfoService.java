@@ -29,5 +29,5 @@ import top.charles7c.continew.admin.front.model.resp.CoursesInfoResp;
  * @since 2024/04/07 18:32
  */
 public interface CoursesInfoService extends BaseService<CoursesInfoResp, CoursesInfoDetailResp, CoursesInfoQuery, CoursesInfoReq> {
-    void syncCoursesInfo();
+    void syncCoursesInfo(Integer id);
 }

@@ -19,6 +19,7 @@ package top.charles7c.continew.admin.front.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -89,8 +90,12 @@ public class CoursesServiceImpl extends BaseServiceImpl<CoursesMapper, CoursesDO
     }
 
     @Override
-    public List<CoursesDO> coursesInfoList() {
-        return coursesMapper.selectList(null);
+    public List<CoursesDO> coursesList(Integer id) {
+        LambdaQueryWrapper<CoursesDO> queryWrapper = new LambdaQueryWrapper<>();
+        if (null!=id){
+            queryWrapper.eq(CoursesDO::getFileId, id);
+        }
+        return coursesMapper.selectList(queryWrapper);
     }
 
     public static void main(String[] args) {

@@ -39,5 +39,5 @@ public interface CoursesService extends BaseService<CoursesResp, CoursesDetailRe
      */
     void syncCourses(int id);
 
-    List<CoursesDO> coursesInfoList();
+    List<CoursesDO> coursesList(Integer id);
 }

@@ -52,8 +52,8 @@ public class CoursesInfoServiceImpl extends BaseServiceImpl<CoursesInfoMapper, C
     private final CoursesService coursesService;
 
     @Override
-    public void syncCoursesInfo() {
-        List<CoursesDO> coursesDOList = coursesService.coursesInfoList();
+    public void syncCoursesInfo(Integer id) {
+        List<CoursesDO> coursesDOList = coursesService.coursesList(id);
         coursesDOList.forEach(courses -> {
             if (courses.getTotal() > 0) {
                 //分页数据
