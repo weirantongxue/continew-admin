@@ -57,7 +57,7 @@ public class CoursesServiceImpl extends BaseServiceImpl<CoursesMapper, CoursesDO
      * @return
      */
     @Override
-    public void syncCourses() {
+    public void syncCourses(int id) {
         //        Map<String, Object> map = new HashMap<>();
         //        String timestamp = String.valueOf(DateUtil.current());
         //        map.put("partner_id", 37441272);
@@ -71,7 +71,7 @@ public class CoursesServiceImpl extends BaseServiceImpl<CoursesMapper, CoursesDO
             List<CategoryVo> categoryVoList = JSONObject.parseArray(jsonObject.getJSONObject("data")
                 .getString("list"), CategoryVo.class);
             List<CategoryVo> filteredList = categoryVoList.stream()
-                .filter(categoryVo -> categoryVo.getId() == 34976)
+                .filter(categoryVo -> categoryVo.getId() == id)
                 .collect(Collectors.toList());
             if (ObjectUtil.isNotNull(filteredList)) {
                 List<CoursesDO> coursesDOList = new ArrayList<>();

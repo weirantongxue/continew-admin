@@ -242,6 +242,7 @@ public class DrawServiceImpl implements DrawService {
         LambdaQueryWrapper<DrawTaskDO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(DrawTaskDO::getState, "success");
         queryWrapper.eq(DrawTaskDO::getCreateUser, LoginHelper.getUserId());
+        queryWrapper.orderByDesc(DrawTaskDO::getCreateTime);
 
         IPage<DrawTaskDO> page = drawTaskMapper.selectPage(pageQuery.toPage(), queryWrapper);
         List<DrawTaskDO> recordList = page.getRecords();
