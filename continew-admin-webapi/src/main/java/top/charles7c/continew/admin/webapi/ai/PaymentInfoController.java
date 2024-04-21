@@ -24,18 +24,18 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.enums.Api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
 import top.charles7c.continew.admin.front.model.query.PaymentInfoQuery;
 import top.charles7c.continew.admin.front.model.resp.PaymentInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.PaymentInfoResp;
 import top.charles7c.continew.admin.front.service.PaymentInfoService;
-import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
-import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
-import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.extension.crud.model.query.PageQuery;
+import top.continew.starter.extension.crud.model.query.SortQuery;
+import top.continew.starter.extension.crud.model.resp.PageResp;
+import top.continew.starter.web.model.R;
 
 import java.util.List;
 

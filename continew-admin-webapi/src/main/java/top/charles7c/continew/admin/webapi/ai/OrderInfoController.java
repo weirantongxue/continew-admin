@@ -18,21 +18,21 @@ package top.charles7c.continew.admin.webapi.ai;
 
 import io.swagger.v3.oas.annotations.Operation;
 import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.enums.Api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
 
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.admin.front.model.query.OrderInfoQuery;
 import top.charles7c.continew.admin.front.model.req.OrderInfoReq;
 import top.charles7c.continew.admin.front.model.resp.OrderInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.OrderInfoResp;
 import top.charles7c.continew.admin.front.service.OrderInfoService;
-import top.charles7c.continew.starter.log.core.annotation.Log;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.log.core.annotation.Log;
+import top.continew.starter.web.model.R;
 
 /**
  * 订单信息管理 API

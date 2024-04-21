@@ -27,7 +27,7 @@ import top.charles7c.continew.admin.common.util.ParameterUtils;
 import top.charles7c.continew.admin.front.model.entity.CoursesDO;
 import top.charles7c.continew.admin.front.model.vo.CategoryVideo;
 import top.charles7c.continew.admin.front.service.CoursesService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.CoursesInfoMapper;
 import top.charles7c.continew.admin.front.model.entity.CoursesInfoDO;
 import top.charles7c.continew.admin.front.model.query.CoursesInfoQuery;

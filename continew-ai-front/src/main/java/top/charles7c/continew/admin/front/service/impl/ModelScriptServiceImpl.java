@@ -31,7 +31,7 @@ import top.charles7c.continew.admin.front.model.resp.ModelScriptResp;
 import top.charles7c.continew.admin.front.model.vo.ModelScriptVo;
 import top.charles7c.continew.admin.front.service.ModelScriptService;
 import top.charles7c.continew.admin.front.service.ModelService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 import java.util.List;
 

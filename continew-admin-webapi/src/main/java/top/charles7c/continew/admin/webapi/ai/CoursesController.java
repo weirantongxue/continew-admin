@@ -18,21 +18,21 @@ package top.charles7c.continew.admin.webapi.ai;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.enums.Api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
 
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.admin.front.model.query.CoursesQuery;
 import top.charles7c.continew.admin.front.model.req.CoursesReq;
 import top.charles7c.continew.admin.front.model.resp.CoursesDetailResp;
 import top.charles7c.continew.admin.front.model.resp.CoursesResp;
 import top.charles7c.continew.admin.front.service.CoursesService;
-import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.extension.crud.model.query.PageQuery;
+import top.continew.starter.web.model.R;
 
 import java.util.List;
 

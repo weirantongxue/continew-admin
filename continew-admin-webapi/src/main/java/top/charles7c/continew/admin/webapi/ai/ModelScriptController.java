@@ -27,9 +27,9 @@ import top.charles7c.continew.admin.front.model.resp.ModelScriptDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ModelScriptResp;
 import top.charles7c.continew.admin.front.model.vo.ModelScriptVo;
 import top.charles7c.continew.admin.front.service.ModelScriptService;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.enums.Api;
 
 import java.util.List;
 

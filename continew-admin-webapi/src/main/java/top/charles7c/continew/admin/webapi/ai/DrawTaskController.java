@@ -23,9 +23,9 @@ import top.charles7c.continew.admin.front.model.req.DrawTaskReq;
 import top.charles7c.continew.admin.front.model.resp.DrawTaskDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DrawTaskResp;
 import top.charles7c.continew.admin.front.service.DrawTaskService;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.enums.Api;
 
 /**
  * 绘图任务管理 API

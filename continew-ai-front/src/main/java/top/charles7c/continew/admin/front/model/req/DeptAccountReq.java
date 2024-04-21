@@ -24,7 +24,7 @@ import lombok.Data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import top.charles7c.continew.starter.extension.crud.model.req.BaseReq;
+import top.continew.starter.extension.crud.model.req.BaseReq;
 
 /**
  * 创建或修改部门账户信息

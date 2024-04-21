@@ -28,9 +28,9 @@ import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.model.query.ChatMessageQuery;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
-import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
-import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.extension.crud.model.query.PageQuery;
+import top.continew.starter.extension.crud.model.resp.PageResp;
+import top.continew.starter.web.model.R;
 
 /**
  * 对话消息管理 API

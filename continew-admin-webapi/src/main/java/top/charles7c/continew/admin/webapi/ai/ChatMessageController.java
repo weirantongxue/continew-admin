@@ -23,9 +23,9 @@ import top.charles7c.continew.admin.front.model.req.ChatMessageReq;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.enums.Api;
 
 /**
  * 对话消息管理 API

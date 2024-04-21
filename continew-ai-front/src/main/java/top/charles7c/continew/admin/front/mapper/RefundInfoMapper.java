@@ -17,7 +17,7 @@
 package top.charles7c.continew.admin.front.mapper;
 
 import top.charles7c.continew.admin.front.model.entity.RefundInfoDO;
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.continew.starter.data.mybatis.plus.base.BaseMapper;
 
 /**
  * 退款信息 Mapper

@@ -20,7 +20,7 @@ import top.charles7c.continew.admin.front.model.query.DrawImgQuery;
 import top.charles7c.continew.admin.front.model.req.DrawImgReq;
 import top.charles7c.continew.admin.front.model.resp.DrawImgDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DrawImgResp;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
+import top.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 绘图素材业务接口

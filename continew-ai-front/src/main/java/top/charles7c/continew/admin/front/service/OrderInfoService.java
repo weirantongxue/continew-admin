@@ -18,7 +18,7 @@ package top.charles7c.continew.admin.front.service;
 
 import top.charles7c.continew.admin.common.enums.OrderStatus;
 import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
+import top.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.OrderInfoQuery;
 import top.charles7c.continew.admin.front.model.req.OrderInfoReq;
 import top.charles7c.continew.admin.front.model.resp.OrderInfoDetailResp;

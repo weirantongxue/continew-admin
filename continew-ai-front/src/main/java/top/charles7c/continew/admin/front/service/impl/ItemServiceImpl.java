@@ -25,7 +25,7 @@ import top.charles7c.continew.admin.front.model.req.ItemReq;
 import top.charles7c.continew.admin.front.model.resp.ItemDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ItemResp;
 import top.charles7c.continew.admin.front.service.ItemService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 /**
  * AI会话业务实现

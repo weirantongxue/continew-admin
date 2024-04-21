@@ -34,7 +34,7 @@ import top.charles7c.continew.admin.front.model.req.OrderInfoReq;
 import top.charles7c.continew.admin.front.model.resp.OrderInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.OrderInfoResp;
 import top.charles7c.continew.admin.front.service.OrderInfoService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 import java.time.Duration;
 import java.time.Instant;

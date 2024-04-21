@@ -25,7 +25,7 @@ import top.charles7c.continew.admin.front.model.req.StoryboardSortReq;
 import top.charles7c.continew.admin.front.model.resp.StoryboardResp;
 import top.charles7c.continew.admin.front.model.vo.StoryboardVo;
 import top.charles7c.continew.admin.front.service.StoryboardService;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.web.model.R;
 
 import java.util.List;
 

@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.PayConfigMapper;
 import top.charles7c.continew.admin.front.model.entity.PayConfigDO;
 import top.charles7c.continew.admin.front.model.query.PayConfigQuery;

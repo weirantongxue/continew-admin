@@ -34,7 +34,7 @@ import top.charles7c.continew.admin.front.service.ColumnsTableService;
 import top.charles7c.continew.admin.system.model.query.DictItemQuery;
 import top.charles7c.continew.admin.system.model.resp.DictItemResp;
 import top.charles7c.continew.admin.system.service.DictItemService;
-import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
+import top.continew.starter.extension.crud.model.query.SortQuery;
 
 import java.util.ArrayList;
 import java.util.List;

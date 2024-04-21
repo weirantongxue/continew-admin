@@ -24,8 +24,8 @@ import lombok.Data;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import top.charles7c.continew.starter.data.core.annotation.Query;
-import top.charles7c.continew.starter.data.core.enums.QueryType;
+import top.continew.starter.data.core.annotation.Query;
+import top.continew.starter.data.core.enums.QueryType;
 
 /**
  * 课程信息查询条件

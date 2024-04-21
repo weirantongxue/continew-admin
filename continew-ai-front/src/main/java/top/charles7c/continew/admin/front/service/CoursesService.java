@@ -17,7 +17,7 @@
 package top.charles7c.continew.admin.front.service;
 
 import top.charles7c.continew.admin.front.model.entity.CoursesDO;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
+import top.continew.starter.extension.crud.service.BaseService;
 import top.charles7c.continew.admin.front.model.query.CoursesQuery;
 import top.charles7c.continew.admin.front.model.req.CoursesReq;
 import top.charles7c.continew.admin.front.model.resp.CoursesDetailResp;

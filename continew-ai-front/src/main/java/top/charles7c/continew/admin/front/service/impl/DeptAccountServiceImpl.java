@@ -25,7 +25,7 @@ import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
 import top.charles7c.continew.admin.front.model.resp.ProductDetailResp;
 import top.charles7c.continew.admin.front.model.vo.DeptAccountVo;
 import top.charles7c.continew.admin.front.service.ProductService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.DeptAccountMapper;
 import top.charles7c.continew.admin.front.model.entity.DeptAccountDO;
 import top.charles7c.continew.admin.front.model.query.DeptAccountQuery;

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import top.charles7c.continew.admin.front.model.entity.OrderInfoDO;
 import top.charles7c.continew.admin.front.service.AliPayService;
 import top.charles7c.continew.admin.front.service.OrderInfoService;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.web.model.R;
 
 import java.math.BigDecimal;
 import java.util.Map;

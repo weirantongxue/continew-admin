@@ -20,9 +20,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import top.charles7c.continew.admin.front.model.query.PaymentInfoQuery;
 import top.charles7c.continew.admin.front.model.resp.PaymentInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.PaymentInfoResp;
-import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
-import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
-import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
+import top.continew.starter.extension.crud.model.query.PageQuery;
+import top.continew.starter.extension.crud.model.query.SortQuery;
+import top.continew.starter.extension.crud.model.resp.PageResp;
 
 import java.util.List;
 import java.util.Map;

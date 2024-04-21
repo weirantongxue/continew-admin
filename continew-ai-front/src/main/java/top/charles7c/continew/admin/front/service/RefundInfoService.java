@@ -21,7 +21,7 @@ import top.charles7c.continew.admin.front.model.query.RefundInfoQuery;
 import top.charles7c.continew.admin.front.model.req.RefundInfoReq;
 import top.charles7c.continew.admin.front.model.resp.RefundInfoDetailResp;
 import top.charles7c.continew.admin.front.model.resp.RefundInfoResp;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
+import top.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 退款信息业务接口

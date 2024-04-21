@@ -16,7 +16,7 @@
 
 package top.charles7c.continew.admin.front.mapper;
 
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.continew.starter.data.mybatis.plus.base.BaseMapper;
 import top.charles7c.continew.admin.front.model.entity.CoursesDO;
 
 /**

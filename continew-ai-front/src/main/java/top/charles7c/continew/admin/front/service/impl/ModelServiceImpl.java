@@ -25,7 +25,7 @@ import top.charles7c.continew.admin.front.model.req.ModelReq;
 import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ModelResp;
 import top.charles7c.continew.admin.front.service.ModelService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 /**
  * AI模型业务实现

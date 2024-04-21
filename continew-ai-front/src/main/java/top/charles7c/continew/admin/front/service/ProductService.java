@@ -20,7 +20,7 @@ import top.charles7c.continew.admin.front.model.query.ProductQuery;
 import top.charles7c.continew.admin.front.model.req.ProductReq;
 import top.charles7c.continew.admin.front.model.resp.ProductDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ProductResp;
-import top.charles7c.continew.starter.extension.crud.service.BaseService;
+import top.continew.starter.extension.crud.service.BaseService;
 
 /**
  * 产品业务接口

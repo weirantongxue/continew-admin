@@ -25,7 +25,7 @@ import top.charles7c.continew.admin.front.model.req.DrawTaskReq;
 import top.charles7c.continew.admin.front.model.resp.DrawTaskDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DrawTaskResp;
 import top.charles7c.continew.admin.front.service.DrawTaskService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 /**
  * 绘图任务业务实现

@@ -23,9 +23,9 @@ import top.charles7c.continew.admin.front.model.req.ModelReq;
 import top.charles7c.continew.admin.front.model.resp.ModelDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ModelResp;
 import top.charles7c.continew.admin.front.service.ModelService;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.enums.Api;
 
 /**
  * AI模型管理 API

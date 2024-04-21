@@ -20,21 +20,21 @@ import io.swagger.v3.oas.annotations.Operation;
 import top.charles7c.continew.admin.common.model.dto.LoginUser;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.front.model.vo.DeptAccountVo;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.enums.Api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
 
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.admin.front.model.query.DeptAccountQuery;
 import top.charles7c.continew.admin.front.model.req.DeptAccountReq;
 import top.charles7c.continew.admin.front.model.resp.DeptAccountDetailResp;
 import top.charles7c.continew.admin.front.model.resp.DeptAccountResp;
 import top.charles7c.continew.admin.front.service.DeptAccountService;
-import top.charles7c.continew.starter.log.core.annotation.Log;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.log.core.annotation.Log;
+import top.continew.starter.web.model.R;
 
 /**
  * 部门账户管理 API

@@ -27,7 +27,7 @@ import top.charles7c.continew.admin.front.model.resp.ChatMessageDetailResp;
 import top.charles7c.continew.admin.front.model.resp.ChatMessageResp;
 import top.charles7c.continew.admin.front.service.ChatMessageService;
 import top.charles7c.continew.admin.front.service.DeptAccountService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 /**
  * 对话消息业务实现

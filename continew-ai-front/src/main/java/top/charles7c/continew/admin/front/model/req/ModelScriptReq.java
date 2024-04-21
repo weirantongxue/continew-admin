@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import top.charles7c.continew.starter.extension.crud.model.req.BaseReq;
+import top.continew.starter.extension.crud.model.req.BaseReq;
 
 import java.io.Serial;
 

@@ -16,14 +16,14 @@
 
 package top.charles7c.continew.admin.webapi.ai;
 
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.enums.Api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.*;
 
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
 import top.charles7c.continew.admin.front.model.query.RefundInfoQuery;
 import top.charles7c.continew.admin.front.model.req.RefundInfoReq;
 import top.charles7c.continew.admin.front.model.resp.RefundInfoDetailResp;

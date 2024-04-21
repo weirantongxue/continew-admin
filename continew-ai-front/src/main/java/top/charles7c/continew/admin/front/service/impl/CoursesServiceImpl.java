@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 
 import top.charles7c.continew.admin.common.util.ParameterUtils;
 import top.charles7c.continew.admin.front.model.vo.CategoryVo;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.charles7c.continew.admin.front.mapper.CoursesMapper;
 import top.charles7c.continew.admin.front.model.entity.CoursesDO;
 import top.charles7c.continew.admin.front.model.query.CoursesQuery;
@@ -92,7 +92,7 @@ public class CoursesServiceImpl extends BaseServiceImpl<CoursesMapper, CoursesDO
     @Override
     public List<CoursesDO> coursesList(Integer id) {
         LambdaQueryWrapper<CoursesDO> queryWrapper = new LambdaQueryWrapper<>();
-        if (null!=id){
+        if (null != id) {
             queryWrapper.eq(CoursesDO::getFileId, id);
         }
         return coursesMapper.selectList(queryWrapper);
