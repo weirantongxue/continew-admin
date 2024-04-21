@@ -16,11 +16,12 @@
 
 package top.charles7c.continew.admin.generator.config.properties;
 
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.map.MapUtil;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import top.charles7c.continew.starter.data.core.enums.DatabaseType;
+import top.continew.starter.data.core.enums.DatabaseType;
 
 import java.util.List;
 import java.util.Map;
@@ -71,5 +72,15 @@ public class GeneratorProperties {
          * 排除字段
          */
         private String[] excludeFields;
+
+        /**
+         * 扩展名
+         */
+        private String extension = FileNameUtil.EXT_JAVA;
+
+        /**
+         * 是否为后端模板
+         */
+        private boolean backend = true;
     }
 }

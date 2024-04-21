@@ -20,9 +20,6 @@ import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.alicp.jetcache.anno.CachePenetrationProtect;
-import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.Cached;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,12 +39,12 @@ import top.charles7c.continew.admin.system.model.query.OptionQuery;
 import top.charles7c.continew.admin.system.model.query.RoleQuery;
 import top.charles7c.continew.admin.system.model.resp.FileUploadResp;
 import top.charles7c.continew.admin.system.service.*;
-import top.charles7c.continew.starter.core.autoconfigure.project.ProjectProperties;
-import top.charles7c.continew.starter.core.util.validate.ValidationUtils;
-import top.charles7c.continew.starter.data.mybatis.plus.base.IBaseEnum;
-import top.charles7c.continew.starter.extension.crud.model.query.SortQuery;
-import top.charles7c.continew.starter.log.core.annotation.Log;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.core.autoconfigure.project.ProjectProperties;
+import top.continew.starter.core.util.validate.ValidationUtils;
+import top.continew.starter.data.mybatis.plus.base.IBaseEnum;
+import top.continew.starter.extension.crud.model.query.SortQuery;
+import top.continew.starter.log.core.annotation.Log;
+import top.continew.starter.web.model.R;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -86,19 +83,6 @@ public class CommonController {
         return R.ok(FileUploadResp.builder().url(fileInfo.getUrl()).build());
     }
 
-    @Operation(summary = "上传文件Table", description = "上传文件Table")
-    @PostMapping("/fileTable")
-    public R<Object> fileTable(@NotNull(message = "文件不能为空") MultipartFile file, String name, Long id) {
-        ValidationUtils.throwIf(projectProperties.isProduction(), "演示环境不支持上传文件");
-        ValidationUtils.throwIf(file::isEmpty, "文件不能为空");
-        FileInfo fileInfo = fileService.upload(file);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("url", fileInfo.getUrl());
-        jsonObject.put("name", name);
-        jsonObject.put("id", id);
-        return R.ok(jsonObject);
-    }
-
     @Operation(summary = "查询部门树", description = "查询树结构的部门列表")
     @GetMapping("/tree/dept")
     public R<List<Tree<Long>>> listDeptTree(DeptQuery query, SortQuery sortQuery) {
@@ -120,9 +104,6 @@ public class CommonController {
     @Operation(summary = "查询字典", description = "查询字典列表")
     @Parameter(name = "code", description = "字典编码", example = "announcement_type", in = ParameterIn.PATH)
     @GetMapping("/dict/{code}")
-    @CachePenetrationProtect
-    @CacheRefresh(refresh = 3600, stopRefreshAfterLastAccess = 7200)
-    @Cached(key = "#code", name = CacheConstants.DICT_KEY_PREFIX)
     public R<List<LabelValueResp<Serializable>>> listDict(@PathVariable String code) {
         Optional<Class<?>> enumClassOptional = this.getEnumClassByName(code);
         return R.ok(enumClassOptional.map(this::listEnumDict).orElseGet(() -> dictItemService.listByDictCode(code)));

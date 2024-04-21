@@ -10,10 +10,11 @@ CREATE TABLE IF NOT EXISTS "sys_menu" (
     "path"        varchar(255) DEFAULT NULL,
     "name"        varchar(50)  DEFAULT NULL,
     "component"   varchar(255) DEFAULT NULL,
+    "redirect"    varchar(255) DEFAULT NULL,
     "icon"        varchar(50)  DEFAULT NULL,
-    "is_external" bool         NOT NULL DEFAULT false,
-    "is_cache"    bool         NOT NULL DEFAULT false,
-    "is_hidden"   bool         NOT NULL DEFAULT false,
+    "is_external" bool         DEFAULT false,
+    "is_cache"    bool         DEFAULT false,
+    "is_hidden"   bool         DEFAULT false,
     "permission"  varchar(100) DEFAULT NULL,
     "sort"        int4         NOT NULL DEFAULT 999,
     "status"      int2         NOT NULL DEFAULT 1,
@@ -34,6 +35,7 @@ COMMENT ON COLUMN "sys_menu"."type"        IS '类型（1：目录；2：菜单�
 COMMENT ON COLUMN "sys_menu"."path"        IS '路由地址';
 COMMENT ON COLUMN "sys_menu"."name"        IS '组件名称';
 COMMENT ON COLUMN "sys_menu"."component"   IS '组件路径';
+COMMENT ON COLUMN "sys_menu"."redirect"    IS '重定向地址';
 COMMENT ON COLUMN "sys_menu"."icon"        IS '图标';
 COMMENT ON COLUMN "sys_menu"."is_external" IS '是否外链';
 COMMENT ON COLUMN "sys_menu"."is_cache"    IS '是否缓存';
@@ -254,6 +256,7 @@ CREATE TABLE IF NOT EXISTS "sys_dict_item" (
     "color"       varchar(30)  DEFAULT NULL,
     "sort"        int4         NOT NULL DEFAULT 999,
     "description" varchar(200) DEFAULT NULL,
+    "status"      int2         NOT NULL DEFAULT 1,
     "dict_id"     int8         NOT NULL,
     "create_user" int8         NOT NULL,
     "create_time" timestamp    NOT NULL,
@@ -271,6 +274,7 @@ COMMENT ON COLUMN "sys_dict_item"."value"       IS '值';
 COMMENT ON COLUMN "sys_dict_item"."color"       IS '标签颜色';
 COMMENT ON COLUMN "sys_dict_item"."sort"        IS '排序';
 COMMENT ON COLUMN "sys_dict_item"."description" IS '描述';
+COMMENT ON COLUMN "sys_dict_item"."status"      IS '状态（1：启用；2：禁用）';
 COMMENT ON COLUMN "sys_dict_item"."dict_id"     IS '字典ID';
 COMMENT ON COLUMN "sys_dict_item"."create_user" IS '创建人';
 COMMENT ON COLUMN "sys_dict_item"."create_time" IS '创建时间';
@@ -416,7 +420,7 @@ COMMENT ON COLUMN "sys_storage"."access_key"  IS 'Access Key（访问密钥）';
 COMMENT ON COLUMN "sys_storage"."secret_key"  IS 'Secret Key（私有密钥）';
 COMMENT ON COLUMN "sys_storage"."endpoint"    IS 'Endpoint（终端节点）';
 COMMENT ON COLUMN "sys_storage"."bucket_name" IS '桶名称';
-COMMENT ON COLUMN "sys_storage"."domain"      IS '自定义域名';
+COMMENT ON COLUMN "sys_storage"."domain"      IS '域名';
 COMMENT ON COLUMN "sys_storage"."description" IS '描述';
 COMMENT ON COLUMN "sys_storage"."is_default"  IS '是否为默认存储';
 COMMENT ON COLUMN "sys_storage"."sort"        IS '排序';
@@ -425,7 +429,7 @@ COMMENT ON COLUMN "sys_storage"."create_user" IS '创建人';
 COMMENT ON COLUMN "sys_storage"."create_time" IS '创建时间';
 COMMENT ON COLUMN "sys_storage"."update_user" IS '修改人';
 COMMENT ON COLUMN "sys_storage"."update_time" IS '修改时间';
-COMMENT ON TABLE  "sys_storage"               IS '存储库表';
+COMMENT ON TABLE  "sys_storage"               IS '存储表';
 
 CREATE TABLE IF NOT EXISTS "sys_file" (
     "id"            int8         NOT NULL,
@@ -451,7 +455,7 @@ COMMENT ON COLUMN "sys_file"."size"        IS '大小（字节）';
 COMMENT ON COLUMN "sys_file"."url"         IS 'URL';
 COMMENT ON COLUMN "sys_file"."extension"   IS '扩展名';
 COMMENT ON COLUMN "sys_file"."type"        IS '类型（1：其他；2：图片；3：文档；4：视频；5：音频）';
-COMMENT ON COLUMN "sys_file"."storage_id"  IS '存储库ID';
+COMMENT ON COLUMN "sys_file"."storage_id"  IS '存储ID';
 COMMENT ON COLUMN "sys_file"."create_user" IS '创建人';
 COMMENT ON COLUMN "sys_file"."create_time" IS '创建时间';
 COMMENT ON COLUMN "sys_file"."update_user" IS '修改人';

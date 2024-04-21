@@ -23,9 +23,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.dromara.x.file.storage.core.FileInfo;
 import top.charles7c.continew.admin.system.enums.FileTypeEnum;
-import top.charles7c.continew.starter.core.constant.StringConstants;
-import top.charles7c.continew.starter.core.util.URLUtils;
-import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+import top.continew.starter.core.constant.StringConstants;
+import top.continew.starter.core.util.URLUtils;
+import top.continew.starter.extension.crud.model.entity.BaseDO;
 
 import java.io.Serial;
 
@@ -71,14 +71,14 @@ public class FileDO extends BaseDO {
     private FileTypeEnum type;
 
     /**
-     * 存储库 ID
+     * 存储 ID
      */
     private Long storageId;
 
     /**
      * 转换为 X-File-Storage 文件信息对象
      *
-     * @param storageCode 存储库编码
+     * @param storageCode 存储编码
      * @return X-File-Storage 文件信息对象
      */
     public FileInfo toFileInfo(String storageCode) {

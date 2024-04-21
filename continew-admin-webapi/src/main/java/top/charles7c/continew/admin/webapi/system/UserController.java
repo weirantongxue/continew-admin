@@ -36,12 +36,13 @@ import top.charles7c.continew.admin.system.model.req.UserRoleUpdateReq;
 import top.charles7c.continew.admin.system.model.resp.UserDetailResp;
 import top.charles7c.continew.admin.system.model.resp.UserResp;
 import top.charles7c.continew.admin.system.service.UserService;
-import top.charles7c.continew.starter.core.util.ExceptionUtils;
-import top.charles7c.continew.starter.core.util.validate.ValidationUtils;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.util.ValidateGroup;
-import top.charles7c.continew.starter.web.model.R;
+import top.continew.starter.core.util.ExceptionUtils;
+import top.continew.starter.core.util.validate.ValidationUtils;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.util.ValidateGroup;
+import top.continew.starter.web.model.R;
 
 /**
  * 用户管理 API
@@ -52,7 +53,7 @@ import top.charles7c.continew.starter.web.model.R;
 @Tag(name = "用户管理 API")
 @Validated
 @RestController
-@CrudRequestMapping("/system/user")
+@CrudRequestMapping(value = "/system/user", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
 public class UserController extends BaseController<UserService, UserResp, UserDetailResp, UserQuery, UserReq> {
 
     @Override
@@ -67,7 +68,7 @@ public class UserController extends BaseController<UserService, UserResp, UserDe
         return R.ok("新增成功", id);
     }
 
-    @Operation(summary = "重置密码", description = "重置用户登录密码为默认密码")
+    @Operation(summary = "重置密码", description = "重置用户登录密码")
     @Parameter(name = "id", description = "ID", example = "1", in = ParameterIn.PATH)
     @SaCheckPermission("system:user:password:reset")
     @PatchMapping("/{id}/password")

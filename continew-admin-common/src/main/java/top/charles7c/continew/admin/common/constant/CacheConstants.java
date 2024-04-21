@@ -16,7 +16,7 @@
 
 package top.charles7c.continew.admin.common.constant;
 
-import top.charles7c.continew.starter.core.constant.StringConstants;
+import top.continew.starter.core.constant.StringConstants;
 
 /**
  * 缓存相关常量
@@ -55,11 +55,6 @@ public class CacheConstants {
      * 菜单缓存键前缀
      */
     public static final String MENU_KEY_PREFIX = "MENU" + DELIMITER;
-
-    /**
-     * 字典缓存键前缀
-     */
-    public static final String DICT_KEY_PREFIX = "DICT" + DELIMITER;
 
     /**
      * 参数缓存键前缀

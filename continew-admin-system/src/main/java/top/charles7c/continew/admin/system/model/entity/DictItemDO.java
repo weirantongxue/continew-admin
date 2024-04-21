@@ -18,7 +18,8 @@ package top.charles7c.continew.admin.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
+import top.continew.starter.extension.crud.model.entity.BaseDO;
 
 import java.io.Serial;
 
@@ -59,6 +60,11 @@ public class DictItemDO extends BaseDO {
      * 描述
      */
     private String description;
+
+    /**
+     * 状态
+     */
+    private DisEnableStatusEnum status;
 
     /**
      * 字典ID

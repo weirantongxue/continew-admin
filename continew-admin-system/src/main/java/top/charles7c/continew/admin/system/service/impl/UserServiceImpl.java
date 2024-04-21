@@ -48,10 +48,10 @@ import top.charles7c.continew.admin.system.service.FileService;
 import top.charles7c.continew.admin.system.service.RoleService;
 import top.charles7c.continew.admin.system.service.UserRoleService;
 import top.charles7c.continew.admin.system.service.UserService;
-import top.charles7c.continew.starter.core.constant.StringConstants;
-import top.charles7c.continew.starter.core.util.validate.CheckUtils;
-import top.charles7c.continew.starter.extension.crud.service.CommonUserService;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.core.constant.StringConstants;
+import top.continew.starter.core.util.validate.CheckUtils;
+import top.continew.starter.extension.crud.service.CommonUserService;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -92,7 +92,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         CheckUtils.throwIf(StrUtil.isNotBlank(email) && this.isEmailExists(email, null), errorMsgTemplate, email);
         String phone = req.getPhone();
         CheckUtils.throwIf(StrUtil.isNotBlank(phone) && this.isPhoneExists(phone, null), errorMsgTemplate, phone);
-        req.setStatus(DisEnableStatusEnum.ENABLE);
     }
 
     @Override
@@ -123,7 +122,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
                 .getNickname());
             Collection<Long> disjunctionRoleIds = CollUtil.disjunction(req.getRoleIds(), userRoleService
                 .listRoleIdByUserId(id));
-            CheckUtils.throwIfNotEmpty(disjunctionRoleIds, "[{}] 是系统内置用户，不允许变更所属角色", oldUser.getNickname());
+            CheckUtils.throwIfNotEmpty(disjunctionRoleIds, "[{}] 是系统内置用户，不允许变更角色", oldUser.getNickname());
         }
         // 更新信息
         super.update(req, id);

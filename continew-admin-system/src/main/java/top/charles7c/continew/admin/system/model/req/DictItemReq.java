@@ -22,7 +22,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import top.charles7c.continew.starter.extension.crud.model.req.BaseReq;
+import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
+import top.continew.starter.extension.crud.model.req.BaseReq;
 
 import java.io.Serial;
 
@@ -75,6 +76,12 @@ public class DictItemReq extends BaseReq {
     @Schema(description = "描述", example = "通知描述信息")
     @Length(max = 200, message = "描述长度不能超过 {max} 个字符")
     private String description;
+
+    /**
+     * 状态
+     */
+    @Schema(description = "状态（1：启用；2：禁用）", type = "Integer", allowableValues = {"1", "2"}, example = "1")
+    private DisEnableStatusEnum status;
 
     /**
      * 所属字典

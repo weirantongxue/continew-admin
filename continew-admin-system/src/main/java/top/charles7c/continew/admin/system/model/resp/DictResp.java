@@ -18,7 +18,7 @@ package top.charles7c.continew.admin.system.model.resp;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
+import top.continew.starter.extension.crud.model.resp.BaseDetailResp;
 
 import java.io.Serial;
 
@@ -30,7 +30,7 @@ import java.io.Serial;
  */
 @Data
 @Schema(description = "字典信息")
-public class DictResp extends BaseResp {
+public class DictResp extends BaseDetailResp {
 
     @Serial
     private static final long serialVersionUID = 1L;

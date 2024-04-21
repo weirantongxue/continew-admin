@@ -17,14 +17,16 @@
 package top.charles7c.continew.admin.webapi.system;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
+
 import top.charles7c.continew.admin.system.model.query.FileQuery;
 import top.charles7c.continew.admin.system.model.req.FileReq;
 import top.charles7c.continew.admin.system.model.resp.FileResp;
 import top.charles7c.continew.admin.system.service.FileService;
-import top.charles7c.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.charles7c.continew.starter.extension.crud.controller.BaseController;
-import top.charles7c.continew.starter.extension.crud.enums.Api;
+import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
+import top.continew.starter.extension.crud.controller.BaseController;
+import top.continew.starter.extension.crud.enums.Api;
 
 /**
  * 文件管理 API
@@ -34,5 +36,5 @@ import top.charles7c.continew.starter.extension.crud.enums.Api;
  */
 @Tag(name = "文件管理 API")
 @RestController
-@CrudRequestMapping(value = "/system/file", api = {Api.LIST, Api.PAGE, Api.UPDATE, Api.DELETE})
+@CrudRequestMapping(value = "/system/file", api = {Api.PAGE, Api.UPDATE, Api.DELETE})
 public class FileController extends BaseController<FileService, FileResp, FileResp, FileQuery, FileReq> {}

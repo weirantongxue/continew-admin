@@ -16,12 +16,14 @@
 
 package top.charles7c.continew.admin.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
-
 import java.io.Serial;
 import java.time.LocalDateTime;
+
+import lombok.Data;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import top.continew.starter.extension.crud.model.entity.BaseDO;
 
 /**
  * 公告实体

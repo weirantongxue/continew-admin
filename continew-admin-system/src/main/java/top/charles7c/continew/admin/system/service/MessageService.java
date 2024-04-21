@@ -19,8 +19,8 @@ package top.charles7c.continew.admin.system.service;
 import top.charles7c.continew.admin.system.model.query.MessageQuery;
 import top.charles7c.continew.admin.system.model.req.MessageReq;
 import top.charles7c.continew.admin.system.model.resp.MessageResp;
-import top.charles7c.continew.starter.extension.crud.model.query.PageQuery;
-import top.charles7c.continew.starter.extension.crud.model.resp.PageResp;
+import top.continew.starter.extension.crud.model.query.PageQuery;
+import top.continew.starter.extension.crud.model.resp.PageResp;
 
 import java.util.List;
 

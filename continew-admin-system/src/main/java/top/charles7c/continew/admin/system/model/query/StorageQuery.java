@@ -18,35 +18,35 @@ package top.charles7c.continew.admin.system.model.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import top.charles7c.continew.starter.data.core.annotation.Query;
-import top.charles7c.continew.starter.data.core.enums.QueryType;
+import top.continew.starter.data.core.annotation.Query;
+import top.continew.starter.data.core.enums.QueryType;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 存储库查询条件
+ * 存储查询条件
  *
  * @author Charles7c
  * @since 2023/12/26 22:09
  */
 @Data
-@Schema(description = "存储库查询条件")
+@Schema(description = "存储查询条件")
 public class StorageQuery implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 名称
+     * 关键词
      */
-    @Schema(description = "名称")
-    @Query(type = QueryType.LIKE)
-    private String name;
+    @Schema(description = "关键词", example = "本地存储")
+    @Query(columns = {"name", "code", "description"}, type = QueryType.LIKE)
+    private String description;
 
     /**
      * 状态
      */
-    @Schema(description = "状态")
+    @Schema(description = "状态（1：启用；2：禁用）", example = "1")
     private Integer status;
 }

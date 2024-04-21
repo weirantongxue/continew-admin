@@ -16,14 +16,16 @@
 
 package top.charles7c.continew.admin.system.enums;
 
-import cn.hutool.core.util.StrUtil;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import top.charles7c.continew.starter.data.mybatis.plus.base.IBaseEnum;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import cn.hutool.core.util.StrUtil;
+
+import top.continew.starter.data.mybatis.plus.base.IBaseEnum;
 
 /**
  * 文件类型枚举

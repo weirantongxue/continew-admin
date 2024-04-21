@@ -29,8 +29,8 @@ import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
 import top.charles7c.continew.admin.common.enums.GenderEnum;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
 import top.charles7c.continew.admin.system.service.DeptService;
-import top.charles7c.continew.starter.extension.crud.converter.ExcelBaseEnumConverter;
-import top.charles7c.continew.starter.extension.crud.model.resp.BaseDetailResp;
+import top.continew.starter.extension.crud.converter.ExcelBaseEnumConverter;
+import top.continew.starter.extension.crud.model.resp.BaseDetailResp;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -125,7 +125,7 @@ public class UserDetailResp extends BaseDetailResp {
      * 部门 ID
      */
     @Schema(description = "部门 ID", example = "5")
-    @AssembleMethod(targetType = DeptService.class, method = @ContainerMethod(bindMethod = "get", resultType = DeptDetailResp.class), props = @Mapping(src = "name", ref = "deptName"))
+    @AssembleMethod(targetType = DeptService.class, method = @ContainerMethod(bindMethod = "get", resultType = DeptResp.class), props = @Mapping(src = "name", ref = "deptName"))
     private Long deptId;
 
     /**
@@ -142,10 +142,10 @@ public class UserDetailResp extends BaseDetailResp {
     private List<Long> roleIds;
 
     /**
-     * 所属角色
+     * 角色
      */
-    @Schema(description = "所属角色", example = "测试人员")
-    @ExcelProperty(value = "所属角色")
+    @Schema(description = "角色", example = "测试人员")
+    @ExcelProperty(value = "角色")
     private String roleNames;
 
     @Override

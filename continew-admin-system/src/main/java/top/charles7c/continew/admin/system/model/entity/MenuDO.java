@@ -20,7 +20,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
 import top.charles7c.continew.admin.common.enums.MenuTypeEnum;
-import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+import top.continew.starter.extension.crud.model.entity.BaseDO;
+
+import java.io.Serial;
 
 import java.io.Serial;
 
@@ -66,6 +68,11 @@ public class MenuDO extends BaseDO {
      * 组件路径
      */
     private String component;
+
+    /**
+     * 重定向地址
+     */
+    private String redirect;
 
     /**
      * 图标

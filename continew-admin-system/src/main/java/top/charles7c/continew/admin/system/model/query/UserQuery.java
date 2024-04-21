@@ -20,8 +20,8 @@ import cn.hutool.core.date.DatePattern;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import top.charles7c.continew.starter.data.core.annotation.Query;
-import top.charles7c.continew.starter.data.core.enums.QueryType;
+import top.continew.starter.data.core.annotation.Query;
+import top.continew.starter.data.core.enums.QueryType;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -42,11 +42,11 @@ public class UserQuery implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户名
+     * 关键词
      */
-    @Schema(description = "用户名", example = "zhangsan")
-    @Query(columns = {"username", "nickname"}, type = QueryType.LIKE)
-    private String username;
+    @Schema(description = "关键词", example = "zhangsan")
+    @Query(columns = {"username", "nickname", "description"}, type = QueryType.LIKE)
+    private String description;
 
     /**
      * 状态

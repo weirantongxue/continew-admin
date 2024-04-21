@@ -21,19 +21,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
 import top.charles7c.continew.admin.system.enums.StorageTypeEnum;
-import top.charles7c.continew.starter.extension.crud.model.resp.BaseResp;
+import top.continew.starter.extension.crud.model.resp.BaseDetailResp;
+
+import java.io.Serial;
 
 import java.io.Serial;
 
 /**
- * 存储库信息
+ * 存储响应信息
  *
  * @author Charles7c
  * @since 2023/12/26 22:09
  */
 @Data
-@Schema(description = "存储库信息")
-public class StorageResp extends BaseResp {
+@Schema(description = "存储响应信息")
+public class StorageResp extends BaseDetailResp {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -41,7 +43,7 @@ public class StorageResp extends BaseResp {
     /**
      * 名称
      */
-    @Schema(description = "名称", example = "存储库1")
+    @Schema(description = "名称", example = "存储1")
     private String name;
 
     /**
@@ -49,6 +51,12 @@ public class StorageResp extends BaseResp {
      */
     @Schema(description = "编码", example = "local")
     private String code;
+
+    /**
+     * 状态
+     */
+    @Schema(description = "状态（1：启用；2：禁用）", type = "Integer", allowableValues = {"1", "2"}, example = "1")
+    private DisEnableStatusEnum status;
 
     /**
      * 类型
@@ -82,15 +90,15 @@ public class StorageResp extends BaseResp {
     private String bucketName;
 
     /**
-     * 自定义域名
+     * 域名
      */
-    @Schema(description = "自定义域名", example = "http://localhost:8000/file")
+    @Schema(description = "域名", example = "http://localhost:8000/file")
     private String domain;
 
     /**
      * 描述
      */
-    @Schema(description = "描述", example = "存储库描述")
+    @Schema(description = "描述", example = "存储描述")
     private String description;
 
     /**
@@ -104,12 +112,6 @@ public class StorageResp extends BaseResp {
      */
     @Schema(description = "排序", example = "1")
     private Integer sort;
-
-    /**
-     * 状态
-     */
-    @Schema(description = "状态（1：启用；2：禁用）", type = "Integer", allowableValues = {"1", "2"}, example = "1")
-    private DisEnableStatusEnum status;
 
     @Override
     public Boolean getDisabled() {

@@ -24,7 +24,9 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
 import top.charles7c.continew.admin.common.enums.MenuTypeEnum;
-import top.charles7c.continew.starter.extension.crud.model.req.BaseReq;
+import top.continew.starter.extension.crud.model.req.BaseReq;
+
+import java.io.Serial;
 
 import java.io.Serial;
 
@@ -100,6 +102,12 @@ public class MenuReq extends BaseReq {
     private String component;
 
     /**
+     * 重定向地址
+     */
+    @Schema(description = "重定向地址")
+    private String redirect;
+
+    /**
      * 是否外链
      */
     @Schema(description = "是否外链", example = "false")
@@ -127,5 +135,6 @@ public class MenuReq extends BaseReq {
      * 状态
      */
     @Schema(description = "状态（1：启用；2：禁用）", type = "Integer", allowableValues = {"1", "2"}, example = "1")
+    @NotNull(message = "状态非法")
     private DisEnableStatusEnum status;
 }

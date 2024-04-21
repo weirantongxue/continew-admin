@@ -18,8 +18,8 @@ package top.charles7c.continew.admin.system.model.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import top.charles7c.continew.starter.data.core.annotation.Query;
-import top.charles7c.continew.starter.data.core.enums.QueryType;
+import top.continew.starter.data.core.annotation.Query;
+import top.continew.starter.data.core.enums.QueryType;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -38,10 +38,10 @@ public class RoleQuery implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 名称
+     * 关键词
      */
-    @Schema(description = "名称", example = "测试人员")
-    @Query(columns = {"name", "code"}, type = QueryType.LIKE)
+    @Schema(description = "关键词", example = "测试人员")
+    @Query(columns = {"name", "code", "description"}, type = QueryType.LIKE)
     private String name;
 
     /**

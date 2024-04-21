@@ -24,14 +24,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.charles7c.continew.admin.common.constant.CacheConstants;
 import top.charles7c.continew.admin.common.enums.DisEnableStatusEnum;
+import top.charles7c.continew.admin.common.enums.MenuTypeEnum;
 import top.charles7c.continew.admin.system.mapper.MenuMapper;
 import top.charles7c.continew.admin.system.model.entity.MenuDO;
 import top.charles7c.continew.admin.system.model.query.MenuQuery;
 import top.charles7c.continew.admin.system.model.req.MenuReq;
 import top.charles7c.continew.admin.system.model.resp.MenuResp;
 import top.charles7c.continew.admin.system.service.MenuService;
-import top.charles7c.continew.starter.core.util.validate.CheckUtils;
-import top.charles7c.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.core.util.validate.CheckUtils;
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 
 import java.util.List;
 import java.util.Set;
@@ -51,7 +52,9 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, MenuDO, MenuRes
     public Long add(MenuReq req) {
         String title = req.getTitle();
         CheckUtils.throwIf(this.isNameExists(title, req.getParentId(), null), "新增失败，[{}] 已存在", title);
-        req.setStatus(DisEnableStatusEnum.ENABLE);
+        if (MenuTypeEnum.DIR.equals(req.getType())) {
+            req.setComponent("Layout");
+        }
         return super.add(req);
     }
 

@@ -18,10 +18,10 @@ package top.charles7c.continew.admin.common.config.mybatis;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import top.charles7c.continew.admin.common.util.helper.LoginHelper;
-import top.charles7c.continew.starter.extension.crud.model.entity.BaseDO;
+import top.continew.starter.core.exception.BusinessException;
+import top.continew.starter.extension.crud.model.entity.BaseDO;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +31,6 @@ import java.time.LocalDateTime;
  * @author Charles7c
  * @since 2022/12/22 19:52
  */
-@Slf4j
 public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
 
     /** 创建人 */
@@ -67,8 +66,7 @@ public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
                 this.fillFieldValue(metaObject, CREATE_TIME, createTime, false);
             }
         } catch (Exception e) {
-            //log.error("插入数据时未获取到填充信息");
-            //throw new BusinessException("插入数据时自动填充异常：" + e.getMessage());
+            throw new BusinessException("插入数据时自动填充异常：" + e.getMessage());
         }
     }
 
@@ -96,7 +94,7 @@ public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
                 this.fillFieldValue(metaObject, UPDATE_TIME, updateTime, true);
             }
         } catch (Exception e) {
-            //throw new BusinessException("修改数据时自动填充异常：" + e.getMessage());
+            throw new BusinessException("修改数据时自动填充异常：" + e.getMessage());
         }
     }
 

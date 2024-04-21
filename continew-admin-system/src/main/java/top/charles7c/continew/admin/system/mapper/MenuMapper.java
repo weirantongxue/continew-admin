@@ -18,7 +18,7 @@ package top.charles7c.continew.admin.system.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import top.charles7c.continew.admin.system.model.entity.MenuDO;
-import top.charles7c.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.continew.starter.data.mybatis.plus.base.BaseMapper;
 
 import java.util.List;
 import java.util.Set;
