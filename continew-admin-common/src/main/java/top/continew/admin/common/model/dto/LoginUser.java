@@ -22,7 +22,7 @@ import top.continew.admin.common.constant.SysConstants;
 
 import cn.hutool.core.collection.CollUtil;
 import lombok.Data;
-import top.charles7c.continew.admin.common.constant.SysConstants;
+import top.continew.admin.common.constant.SysConstants;
 
 import java.io.Serial;
 import java.io.Serializable;

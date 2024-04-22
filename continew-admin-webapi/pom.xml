@@ -50,7 +50,7 @@
         </dependency>
 
         <dependency>
-            <groupId>top.charles7c.continew</groupId>
+            <groupId>top.continew</groupId>
             <artifactId>continew-ai-front</artifactId>
         </dependency>
 

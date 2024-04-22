@@ -20,7 +20,7 @@ import lombok.Data;
 import top.continew.admin.common.enums.DataScopeEnum;
 
 import lombok.Data;
-import top.charles7c.continew.admin.common.enums.DataScopeEnum;
+import top.continew.admin.common.enums.DataScopeEnum;
 
 import java.io.Serial;
 import java.io.Serializable;

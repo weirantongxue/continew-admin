@@ -68,7 +68,7 @@
 
             <!-- 公共模块（存放公共工具类，公共配置等） -->
             <dependency>
-                <groupId>top.charles7c.continew</groupId>
+                <groupId>top.continew</groupId>
                 <artifactId>continew-ai-front</artifactId>
                 <version>${revision}</version>
             </dependency>

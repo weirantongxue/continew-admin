@@ -22,7 +22,7 @@ import top.continew.admin.common.enums.MessageTypeEnum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import top.charles7c.continew.admin.common.enums.MessageTypeEnum;
+import top.continew.admin.common.enums.MessageTypeEnum;
 
 import java.io.Serial;
 import java.io.Serializable;
