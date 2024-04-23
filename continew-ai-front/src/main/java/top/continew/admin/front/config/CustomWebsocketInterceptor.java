@@ -20,6 +20,8 @@ package top.continew.admin.front.config;
  * Created by WeiRan on 2024.03.13 16:43
  */
 
+import cn.dev33.satoken.util.SaFoxUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
@@ -61,8 +63,15 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
         ServletServerHttpRequest req = (ServletServerHttpRequest)request;
         ServletServerHttpResponse res = (ServletServerHttpResponse)response;
         String token = req.getServletRequest().getParameter("token");
-        log.info("建立连接....token:{}", token);
+        log.info("开始建立连接....token:{}", token);
         log.info("attributes:{}", attributes);
+        if (StrUtil.isBlank(token)) {
+            res.setStatusCode(HttpStatus.UNAUTHORIZED);
+            res.getServletResponse().setContentType("application/json");
+            String errorMessage = "{\"error\": \"Authentication failed. Please provide valid credentials.\"}";
+            res.getBody().write(errorMessage.getBytes());
+            return false;
+        }
 
         /**
          * 鉴权: return false 不通过
@@ -77,6 +86,8 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
             res.getBody().write(errorMessage.getBytes());
             return false;
         }
+        long userId = SaFoxUtil.getValueByType(loginUser.getId(), long.class);
+
         attributes.put("userId", String.valueOf(loginUser.getId()));
         super.setCreateSession(true);
         return super.beforeHandshake(request, response, wsHandler, attributes);

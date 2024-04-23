@@ -79,6 +79,9 @@ springdoc:
     - group: monitor
       display-name: 系统监控
       packages-to-scan: ${project.base-package}.webapi.monitor
+    - group: ai
+      display-name: AI模块
+      packages-to-scan: ${project.base-package}.webapi.ai
   ## 组件配置
   components:
     # 鉴权配置
