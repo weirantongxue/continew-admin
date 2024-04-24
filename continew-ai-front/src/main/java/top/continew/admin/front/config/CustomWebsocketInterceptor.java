@@ -20,7 +20,6 @@ package top.continew.admin.front.config;
  * Created by WeiRan on 2024.03.13 16:43
  */
 
-import cn.dev33.satoken.util.SaFoxUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -84,10 +83,9 @@ public class CustomWebsocketInterceptor extends HttpSessionHandshakeInterceptor 
             res.getServletResponse().setContentType("application/json");
             String errorMessage = "{\"error\": \"Authentication failed. Please provide valid credentials.\"}";
             res.getBody().write(errorMessage.getBytes());
+            res.close();
             return false;
         }
-        long userId = SaFoxUtil.getValueByType(loginUser.getId(), long.class);
-
         attributes.put("userId", String.valueOf(loginUser.getId()));
         super.setCreateSession(true);
         return super.beforeHandshake(request, response, wsHandler, attributes);

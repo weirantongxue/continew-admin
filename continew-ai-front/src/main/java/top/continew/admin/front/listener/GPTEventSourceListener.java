@@ -26,8 +26,10 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
+import org.springframework.web.socket.WebSocketSession;
 import top.continew.admin.common.constant.TimerConstant;
 import top.continew.admin.common.enums.EventNameType;
+import top.continew.admin.common.util.WsUtils;
 import top.continew.admin.front.model.ChatMessageUtils;
 import top.continew.admin.front.model.entity.ChatMessageDO;
 import top.continew.admin.front.service.ChatMessageService;
@@ -55,6 +57,8 @@ public class GPTEventSourceListener extends EventSourceListener {
     private final Long deptId;
 
     private String last = "";
+
+    private boolean first = false;
 
     public GPTEventSourceListener(WebSocketSendService webSocketSendService,
                                   String sessionId,
@@ -99,9 +103,9 @@ public class GPTEventSourceListener extends EventSourceListener {
         log.info("收到消息:" + data);
         if (data.equals("[DONE]")) {
             webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
+                    .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
             chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
+                    .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
@@ -116,8 +120,16 @@ public class GPTEventSourceListener extends EventSourceListener {
             }
 
             last = last + content;
+            //判断连接是否关闭
+            WebSocketSession webSocketSession = WsUtils.getWebSocketSession(sessionId);
+            if (webSocketSession == null || !webSocketSession.isOpen()) {
+                first = true;
+                //客户端连接已断开,关闭sse调用
+                eventSource.cancel();
+                return;
+            }
             webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                .chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
+                    .chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
         }
     }
 
@@ -138,14 +150,21 @@ public class GPTEventSourceListener extends EventSourceListener {
             return;
         }
         ResponseBody body = response.body();
-        if (Objects.nonNull(body)) {
+        if (Objects.nonNull(body) && !first) {
             log.error("sse连接异常data：{}，异常：{}", body.string(), t);
-        } else {
+        } else if (!first) {
             log.error("sse连接异常data：{}，异常：{}", response, t);
+
         }
-        webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-            .chatModelMsg(messageId, sessionId, "模型服务异常请联系管理员", EventNameType.ERROR.getCode()));
-        webSocketSendService.close(sessionId, "sse连接异常");
+        if (!first) {
+            webSocketSendService.sendMessage(sessionId, ChatMessageUtils
+                    .chatModelMsg(messageId, sessionId, "模型服务异常请联系管理员", EventNameType.ERROR.getCode()));
+            webSocketSendService.close(sessionId, "sse连接异常");
+        }else {
+            //消息入库
+            chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
+                    .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
+        }
         eventSource.cancel();
     }
 }

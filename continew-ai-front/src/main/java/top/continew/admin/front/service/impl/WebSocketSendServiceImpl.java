@@ -21,14 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import top.continew.admin.common.util.WsUtils;
 import top.continew.admin.front.service.WebSocketSendService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-
-import static top.continew.admin.front.handler.CustomWebSocketHandler.WEB_SOCKET_SESSION_MAP;
 
 /**
  * Created by WeiRan on 2024.03.13 17:23
@@ -55,8 +54,9 @@ public class WebSocketSendServiceImpl implements WebSocketSendService {
      * @throws IOException IO
      */
     public void sendMessage(String sessionId, String message) throws IOException {
-        WebSocketSession webSocketSession = WEB_SOCKET_SESSION_MAP.get(sessionId);
+        WebSocketSession webSocketSession = WsUtils.getWebSocketSession(sessionId);
         if (webSocketSession == null || !webSocketSession.isOpen()) {
+            //关闭sse
             log.warn("连接对象【{}】已关闭，无法送消息：{}", sessionId, message);
         } else {
             webSocketSession.sendMessage(new TextMessage(message));
@@ -77,18 +77,18 @@ public class WebSocketSendServiceImpl implements WebSocketSendService {
 
     /**
      * 主动关闭连接
-     * 
+     *
      * @param sessionId
      * @param msg
      * @throws IOException
      */
     public void close(String sessionId, String msg) throws IOException {
-        WebSocketSession webSocketSession = WEB_SOCKET_SESSION_MAP.get(sessionId);
+        WebSocketSession webSocketSession = WsUtils.getWebSocketSession(sessionId);
         if (webSocketSession == null || !webSocketSession.isOpen()) {
             log.warn("连接对象【{}】已关闭：{}", sessionId, msg);
         } else {
             webSocketSession.close();
-            WEB_SOCKET_SESSION_MAP.remove(sessionId);
+            WsUtils.remove(sessionId);
             log.info("服务端主动关闭连接：用户{}错误信息：{}", sessionId, msg);
         }
     }
@@ -99,7 +99,7 @@ public class WebSocketSendServiceImpl implements WebSocketSendService {
      * @return ids
      */
     public List<String> getSessionIds() {
-        Enumeration<String> keys = WEB_SOCKET_SESSION_MAP.keys();
+        Enumeration<String> keys = WsUtils.getSessionIdList();
         List<String> ks = new ArrayList<>();
         while (keys.hasMoreElements()) {
             ks.add(keys.nextElement());

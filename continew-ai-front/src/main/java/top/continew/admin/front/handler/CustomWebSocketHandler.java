@@ -22,19 +22,19 @@ package top.continew.admin.front.handler;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import top.continew.admin.common.util.WsUtils;
 import top.continew.admin.front.model.validate.ChatMessageRequestValidate;
 import top.continew.admin.front.service.ChatGlmService;
 import top.continew.admin.front.service.WebSocketSendService;
 
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhong
@@ -43,15 +43,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 public class CustomWebSocketHandler extends TextWebSocketHandler {
-    @Autowired
+    @Resource
     private WebSocketSendService webSocketSendService;
-    @Autowired
+    @Resource
     private ChatGlmService chatGlmService;
 
     /**
      * 当前websocket连接集合
      */
-    public static final ConcurrentHashMap<String, WebSocketSession> WEB_SOCKET_SESSION_MAP = new ConcurrentHashMap<>();
+    //public static final ConcurrentHashMap<String, WebSocketSession> WEB_SOCKET_SESSION_MAP = new ConcurrentHashMap<>();
 
     /**
      * 收到客户端消息时触发的回调
@@ -89,11 +89,11 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String sessionId = webSocketSendService.getSessionId(session);
         // 如果存在则断开连接
-        if (WEB_SOCKET_SESSION_MAP.containsKey(sessionId)) {
-            WEB_SOCKET_SESSION_MAP.get(sessionId).close();
+        if (WsUtils.contains(sessionId)) {
+            WsUtils.close(sessionId);
         }
         // 将新连接添加
-        WEB_SOCKET_SESSION_MAP.put(sessionId, session);
+        WsUtils.add(sessionId, session);
         log.info("与用户【{}】建立了连接", sessionId);
         log.info("attributes:{}", session.getAttributes());
 
@@ -112,7 +112,7 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         // 关闭连接
         session.close(CloseStatus.SERVER_ERROR);
         // 删除对象
-        WEB_SOCKET_SESSION_MAP.remove(webSocketSendService.getSessionId(session));
+        WsUtils.remove(webSocketSendService.getSessionId(session));
     }
 
     /**
@@ -129,6 +129,6 @@ public class CustomWebSocketHandler extends TextWebSocketHandler {
         if (session.isOpen()) {
             session.close();
         }
-        WEB_SOCKET_SESSION_MAP.remove(webSocketSendService.getSessionId(session));
+        WsUtils.remove(webSocketSendService.getSessionId(session));
     }
 }

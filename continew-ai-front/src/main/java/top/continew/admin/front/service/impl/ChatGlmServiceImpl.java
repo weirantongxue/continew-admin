@@ -74,12 +74,13 @@ public class ChatGlmServiceImpl implements ChatGlmService {
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(webSocketSendService, sessionId, messageId, chatMessageService, message, timer, loginUser
                 .getDeptId());
             String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
-
             StreamUtils
                 .streamCompletion("https://open.bigmodel.cn/api/paas/v4/chat/completions", authToken, gptEventSourceListener, ChatMessageUtils
                     .convertModelRequest(messageCreateValidate, modelDetailResp, modelScriptDetailResp));
+            System.out.println("------Last------" + gptEventSourceListener.getLast());
         } catch (Exception e) {
             log.error("Glm6B请求失败");
         }
     }
+
 }
