@@ -29,6 +29,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.continew.starter.core.autoconfigure.project.ProjectProperties;
@@ -53,6 +54,7 @@ import java.net.InetAddress;
 @EnableCrudRestController
 @EnableGlobalExceptionHandler
 @EnableMethodCache(basePackages = "top.continew.admin")
+@EnableScheduling
 public class ContiNewAdminApplication implements ApplicationRunner {
 
     private final ProjectProperties projectProperties;
