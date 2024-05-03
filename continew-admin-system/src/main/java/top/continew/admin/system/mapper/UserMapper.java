@@ -16,10 +16,14 @@
 
 package top.continew.admin.system.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import top.continew.admin.common.config.mybatis.DataPermissionMapper;
 import top.continew.admin.system.model.entity.UserDO;
+import top.continew.starter.data.mybatis.plus.datapermission.DataPermission;
 import top.continew.starter.security.crypto.annotation.FieldEncrypt;
 
 /**
@@ -29,6 +33,17 @@ import top.continew.starter.security.crypto.annotation.FieldEncrypt;
  * @since 2022/12/22 21:47
  */
 public interface UserMapper extends DataPermissionMapper<UserDO> {
+
+    /**
+     * 分页查询列表
+     *
+     * @param page         分页条件
+     * @param queryWrapper 查询条件
+     * @return 分页列表信息
+     */
+    @DataPermission
+    IPage<UserDO> selectUserPage(@Param("page") IPage<UserDO> page,
+                                 @Param(Constants.WRAPPER) QueryWrapper<UserDO> queryWrapper);
 
     /**
      * 根据用户名查询
@@ -65,4 +80,20 @@ public interface UserMapper extends DataPermissionMapper<UserDO> {
      */
     @Select("SELECT nickname FROM sys_user WHERE id = #{id}")
     String selectNicknameById(@Param("id") Long id);
+
+    /**
+     * 根据邮箱查询数量
+     *
+     * @param email 邮箱
+     * @return 用户数量
+     */
+    Long selectCountByEmail(@FieldEncrypt @Param("email") String email, @Param("id") Long id);
+
+    /**
+     * 根据手机号查询数量
+     *
+     * @param phone 手机号
+     * @return 用户数量
+     */
+    Long selectCountByPhone(@FieldEncrypt @Param("phone") String phone, @Param("id") Long id);
 }
