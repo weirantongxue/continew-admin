@@ -46,10 +46,8 @@ public class ChatMessageServiceImpl extends BaseServiceImpl<ChatMessageMapper, C
     @Override
     public int insertMessage(ChatMessageDO message, Long deptId) {
         //itemMapper.numberAdd(message.getItemId(), message.getCreateUser());
-        System.out.println("-------deptId-------" + deptId);
         //扣减余额
-        deptAccountService.deductBalance(deptId, 1);
-
+        deptAccountService.deductBalance(deptId, 1, 1, message.getCreateUser(), message.getMessageId());
         return this.chatMessageMapper.insert(message);
     }
 

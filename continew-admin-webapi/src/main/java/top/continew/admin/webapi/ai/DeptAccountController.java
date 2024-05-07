@@ -16,6 +16,7 @@
 
 package top.continew.admin.webapi.ai;
 
+import cn.hutool.core.util.IdUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +62,7 @@ public class DeptAccountController extends BaseController<DeptAccountService, De
     @GetMapping("/deductBalance")
     public R<Object> deductBalance() {
         LoginUser loginUser = LoginHelper.getLoginUser();
-        baseService.deductBalance(loginUser.getDeptId(), 1);
+        baseService.deductBalance(loginUser.getDeptId(), 1, 1, loginUser.getId(), IdUtil.fastSimpleUUID());
         return R.ok();
     }
 

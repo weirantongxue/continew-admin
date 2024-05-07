@@ -32,6 +32,7 @@ import org.dromara.x.file.storage.core.FileInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.continew.admin.common.converter.FileToMultipartFileConverter;
+import top.continew.admin.common.model.dto.LoginUser;
 import top.continew.admin.common.util.ApiTokenUtils;
 import top.continew.admin.common.util.helper.LoginHelper;
 import top.continew.admin.front.mapper.DrawImgMapper;
@@ -44,8 +45,10 @@ import top.continew.admin.front.model.resp.DrawImgDetailResp;
 import top.continew.admin.front.model.resp.DrawResp;
 import top.continew.admin.front.model.resp.DrawTaskResp;
 import top.continew.admin.front.model.resp.ModelDetailResp;
+import top.continew.admin.front.model.vo.DeptAccountVo;
 import top.continew.admin.front.model.vo.DrawTaskVo;
 import top.continew.admin.front.model.vo.HistoricalImagesVo;
+import top.continew.admin.front.service.DeptAccountService;
 import top.continew.admin.front.service.DrawService;
 import top.continew.admin.front.service.ModelService;
 import top.continew.admin.system.service.FileService;
@@ -73,8 +76,15 @@ public class DrawServiceImpl implements DrawService {
 
     private final FileService fileService;
 
+    private final DeptAccountService deptAccountService;
+
     @Override
     public R<DrawTaskVo> createDrawTask(DrawReq drawReq) {
+        LoginUser loginUser = LoginHelper.getLoginUser();
+        DeptAccountVo deptAccountVo = deptAccountService.selectBalance(loginUser.getDeptId());
+        if (deptAccountVo.getBalanceToken() <= 0) {
+            throw new BadRequestException("余额不足");
+        }
         ModelDetailResp modelResp = modelService.get(drawReq.getModelId());
         if (modelResp == null) {
             throw new BadRequestException("模型不存在");
@@ -84,12 +94,12 @@ public class DrawServiceImpl implements DrawService {
             return chuzhanAi(drawReq, modelResp);
         }
         if ("cogview".equals(modelResp.getName())) {
-            return cogview(drawReq, modelResp);
+            return cogview(drawReq, modelResp, loginUser.getDeptId(), loginUser.getId());
         }
         return R.fail("未匹配到对应模型,请联系管理员.");
     }
 
-    private R<DrawTaskVo> cogview(DrawReq drawReq, ModelDetailResp modelResp) {
+    private R<DrawTaskVo> cogview(DrawReq drawReq, ModelDetailResp modelResp, Long deptId, Long userId) {
         DrawTaskVo drawTaskVo = new DrawTaskVo();
         String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
         JSONObject jsonObject = new JSONObject();
@@ -143,6 +153,8 @@ public class DrawServiceImpl implements DrawService {
             drawTaskVo.setTaskId(taskId);
             drawTaskVo.setUrl(fileInfo.getUrl());
             drawTaskVo.setResType("sync");
+            //扣减余额
+            deptAccountService.deductBalance(deptId, 3, 2, userId, taskId);
             return R.success(drawTaskVo);
         }
 

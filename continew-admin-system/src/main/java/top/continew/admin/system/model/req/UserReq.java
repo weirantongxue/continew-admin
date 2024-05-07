@@ -51,7 +51,7 @@ public class UserReq extends BaseReq {
      */
     @Schema(description = "用户名", example = "zhangsan")
     @NotBlank(message = "用户名不能为空")
-    @Pattern(regexp = RegexConstants.USERNAME, message = "用户名长度为 4 到 64 位，可以包含字母、数字，下划线，以字母开头")
+//    @Pattern(regexp = RegexConstants.USERNAME, message = "用户名长度为 4 到 64 位，可以包含字母、数字，下划线，以字母开头")
     private String username;
 
     /**

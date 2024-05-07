@@ -79,9 +79,6 @@ springdoc:
     - group: monitor
       display-name: 系统监控
       packages-to-scan: ${project.base-package}.webapi.monitor
-    - group: ai
-      display-name: AI模块
-      packages-to-scan: ${project.base-package}.webapi.ai
   ## 组件配置
   components:
     # 鉴权配置
@@ -193,7 +190,7 @@ cosid:
 server:
   servlet:
     # 应用访问路径
-    context-path: /
+    context-path: /api
   ## Undertow 服务器配置
   undertow:
     # HTTP POST 请求内容的大小上限（默认 -1，不限制）

@@ -103,9 +103,9 @@ public class GPTEventSourceListener extends EventSourceListener {
         log.info("收到消息:" + data);
         if (data.equals("[DONE]")) {
             webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                    .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
+                .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
             chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-                    .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
+                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
@@ -129,7 +129,7 @@ public class GPTEventSourceListener extends EventSourceListener {
                 return;
             }
             webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                    .chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
+                .chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
         }
     }
 
@@ -158,12 +158,12 @@ public class GPTEventSourceListener extends EventSourceListener {
         }
         if (!first) {
             webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                    .chatModelMsg(messageId, sessionId, "模型服务异常请联系管理员", EventNameType.ERROR.getCode()));
+                .chatModelMsg(messageId, sessionId, "模型服务异常请联系管理员", EventNameType.ERROR.getCode()));
             webSocketSendService.close(sessionId, "sse连接异常");
-        }else {
+        } else {
             //消息入库
             chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
-                    .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
+                .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
         }
         eventSource.cancel();
     }

@@ -23,14 +23,18 @@ import top.continew.admin.front.mapper.DeptAccountMapper;
 import top.continew.admin.front.model.entity.DeptAccountDO;
 import top.continew.admin.front.model.entity.OrderInfoDO;
 import top.continew.admin.front.model.query.DeptAccountQuery;
+import top.continew.admin.front.model.req.DeptAccountLogReq;
 import top.continew.admin.front.model.req.DeptAccountReq;
 import top.continew.admin.front.model.resp.DeptAccountDetailResp;
 import top.continew.admin.front.model.resp.DeptAccountResp;
 import top.continew.admin.front.model.resp.ProductDetailResp;
 import top.continew.admin.front.model.vo.DeptAccountVo;
+import top.continew.admin.front.service.DeptAccountLogService;
 import top.continew.admin.front.service.DeptAccountService;
 import top.continew.admin.front.service.ProductService;
 import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+
+import java.time.LocalDateTime;
 
 /**
  * 部门账户业务实现
@@ -43,6 +47,7 @@ import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 public class DeptAccountServiceImpl extends BaseServiceImpl<DeptAccountMapper, DeptAccountDO, DeptAccountResp, DeptAccountDetailResp, DeptAccountQuery, DeptAccountReq> implements DeptAccountService {
     private final DeptAccountMapper deptAccountMapper;
     private final ProductService productService;
+    private final DeptAccountLogService deptAccountLogService;
 
     /**
      * 扣减余额
@@ -50,8 +55,17 @@ public class DeptAccountServiceImpl extends BaseServiceImpl<DeptAccountMapper, D
      * @param deptId
      */
     @Override
-    public void deductBalance(Long deptId, int balanceToken) {
+    public void deductBalance(Long deptId, int balanceToken, Integer modelType, Long userId, String massageId) {
         deptAccountMapper.deductBalance(deptId, balanceToken);
+        //日志记录
+        DeptAccountLogReq deptAccountLogReq = new DeptAccountLogReq();
+        deptAccountLogReq.setDeptId(deptId);
+        deptAccountLogReq.setToken(balanceToken);
+        deptAccountLogReq.setModelType(modelType);
+        deptAccountLogReq.setMessageId(massageId);
+        deptAccountLogReq.setCreateUser(userId);
+        deptAccountLogReq.setCreateTime(LocalDateTime.now());
+        deptAccountLogService.add(deptAccountLogReq);
     }
 
     /**

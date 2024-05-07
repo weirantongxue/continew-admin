@@ -36,7 +36,7 @@ public interface DeptAccountService extends BaseService<DeptAccountResp, DeptAcc
      * 
      * @param deptId
      */
-    void deductBalance(Long deptId, int balanceToken);
+    void deductBalance(Long deptId, int balanceToken, Integer modelType, Long userId, String massageId);
 
     /**
      * 充值余额
