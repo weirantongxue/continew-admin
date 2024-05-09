@@ -36,6 +36,9 @@ public class GeneratePreviewResp implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "生成的文件路径", example = "continew-admin\\continew-admin\\continew-admin-generator\\src\\main\\java\\top\\continew\\admin\\generator\\service")
+    private String path;
+
     /**
      * 文件名
      */
