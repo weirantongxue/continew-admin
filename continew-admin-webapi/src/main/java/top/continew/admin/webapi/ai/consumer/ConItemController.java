@@ -68,10 +68,11 @@ public class ConItemController {
     @Operation(summary = "用户修改会话名称", description = "用户修改会话名称")
     @Parameter(name = "id", description = "ID", example = "1", in = ParameterIn.PATH)
     @ResponseBody
-    @PutMapping({"/updateItem/{id}"})
-    public R<Void> update(@Validated({ValidateGroup.Crud.Update.class}) @RequestBody ItemReq req,
-                          @PathVariable Long id) {
-        this.itemService.update(req, id);
+    @GetMapping({"/updateItem/{id}/{name}"})
+    public R<Void> update(@PathVariable Long id, @PathVariable String name) {
+        ItemReq req = new ItemReq();
+        req.setName(name);
+        this.itemService.update(req,id);
         return R.ok("修改成功");
     }
 

@@ -81,7 +81,7 @@ public class ColumnsProjectServiceImpl implements ColumnsProjectService {
         SortQuery sortQuery = new SortQuery();
         sortQuery.setSort(sort);
         DictItemQuery dictItemQuery = new DictItemQuery();
-        dictItemQuery.setDictId(560936357447446910L);
+        dictItemQuery.setDictId(577917474624770108L);
         List<DictItemResp> dictItemRespList = dictItemService.list(dictItemQuery, sortQuery);
         for (DictItemResp dictItemResp : dictItemRespList) {
             StoryboardFieDO storyboardFieDO = new StoryboardFieDO();
