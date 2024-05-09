@@ -72,7 +72,7 @@ public class ConItemController {
     public R<Void> update(@PathVariable Long id, @PathVariable String name) {
         ItemReq req = new ItemReq();
         req.setName(name);
-        this.itemService.update(req,id);
+        this.itemService.update(req, id);
         return R.ok("修改成功");
     }
 
