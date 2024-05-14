@@ -24,6 +24,7 @@ import lombok.Data;
 import org.dromara.x.file.storage.core.FileInfo;
 import top.continew.admin.system.enums.FileTypeEnum;
 import top.continew.starter.core.constant.StringConstants;
+import top.continew.starter.core.util.StrUtils;
 import top.continew.starter.core.util.URLUtils;
 import top.continew.starter.extension.crud.model.entity.BaseDO;
 
@@ -71,6 +72,16 @@ public class FileDO extends BaseDO {
     private FileTypeEnum type;
 
     /**
+     * 缩略图大小（字节)
+     */
+    private Long thumbnailSize;
+
+    /**
+     * 缩略图URL
+     */
+    private String thumbnailUrl;
+
+    /**
      * 存储 ID
      */
     private Long storageId;
@@ -83,9 +94,8 @@ public class FileDO extends BaseDO {
      */
     public FileInfo toFileInfo(String storageCode) {
         FileInfo fileInfo = new FileInfo();
-        fileInfo.setOriginalFilename(StrUtil.isNotBlank(this.extension)
-            ? this.name + StringConstants.DOT + this.extension
-            : this.name);
+        fileInfo.setOriginalFilename(StrUtils
+            .blankToDefault(this.extension, this.name, ex -> this.name + StringConstants.DOT + ex));
         fileInfo.setSize(this.size);
         fileInfo.setUrl(this.url);
         fileInfo.setExt(this.extension);
