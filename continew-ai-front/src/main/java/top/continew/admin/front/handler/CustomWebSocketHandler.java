@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package top.continew.admin.common.handler;
+package top.continew.admin.front.handler;
 
 /**
  * Created by WeiRan on 2024.03.13 16:41
  */
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -28,6 +30,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import top.continew.admin.common.util.WsUtils;
+import top.continew.admin.front.model.validate.ChatMessageRequestValidate;
+import top.continew.admin.front.service.ChatGlmService;
+
 
 import java.io.IOException;
 
@@ -37,7 +42,9 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
-public class MyWebSocketHandler extends TextWebSocketHandler {
+public class CustomWebSocketHandler extends TextWebSocketHandler {
+    @Resource
+    private ChatGlmService chatGlmService;
 
     /**
      * 收到客户端消息时触发的回调
@@ -49,13 +56,16 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException {
         log.info("接受到会话【{}】的消息：{}", session.getId(), message.getPayload());
         String jsonPayload = message.getPayload();
+        // Check for empty message
         if (StrUtil.isBlank(jsonPayload)) {
             log.error("接收到空消息");
+            WsUtils.close(session, "接收到空消息");
             return;
         }
         try {
-            //业务逻辑处理
-            // WsUtils.send(session, "我收到了你的消息");
+            ChatMessageRequestValidate chatMessageRequestValidate = JSONObject
+                    .parseObject(jsonPayload, ChatMessageRequestValidate.class);
+            chatGlmService.aiApi(chatMessageRequestValidate,WsUtils.getUserId(session));
         } catch (Exception e) {
             log.error("WebSocket消息解析失败：{}", e.getMessage(), e);
             WsUtils.close(session, "消息解析失败：" + e.getMessage());
@@ -92,7 +102,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         // 关闭连接
         WsUtils.close(session, "断开连接后触发的回调");
         log.info("用户【{}】断开连接,status:{},当前剩余在线人数【{}】", WsUtils.getUserId(session), status.getCode(), WsUtils.onlineCount
-            .get());
+                .get());
     }
 
     /**
