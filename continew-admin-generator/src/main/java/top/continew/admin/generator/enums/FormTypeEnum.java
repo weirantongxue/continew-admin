@@ -32,29 +32,59 @@ import top.continew.starter.data.mybatis.plus.base.IBaseEnum;
 public enum FormTypeEnum implements IBaseEnum<Integer> {
 
     /**
-     * 文本框
+     * 输入框
      */
-    TEXT(1, "文本框"),
+    INPUT(1, "输入框"),
+
     /**
-     * 文本域
+     * 数字输入框
      */
-    TEXT_AREA(2, "文本域"),
+    INPUT_NUMBER(2, "数字输入框"),
+
+    /**
+     * 密码输入框
+     */
+    INPUT_PASSWORD(3, "密码输入框"),
+
     /**
      * 下拉框
      */
-    SELECT(3, "下拉框"),
+    SELECT(4, "下拉框"),
+
     /**
      * 单选框
      */
-    RADIO(4, "单选框"),
+    RADIO(5, "单选框"),
+
     /**
-     * 日期框
+     * 开关
      */
-    DATE(5, "日期框"),
+    SWITCH(6, "开关"),
+
+    /**
+     * 复选框
+     */
+    CHECK_BOX(7, "复选框"),
+
+    /**
+     * 文本域
+     */
+    TEXT_AREA(8, "文本域"),
+
     /**
      * 日期时间框
      */
-    DATE_TIME(6, "日期时间框"),;
+    DATE_TIME(9, "日期时间框"),
+
+    /**
+     * 日期框
+     */
+    DATE(10, "日期框"),
+
+    /**
+     * 树形选择
+     */
+    TREE_SELECT(11, "树选择"),;
 
     private final Integer value;
     private final String description;

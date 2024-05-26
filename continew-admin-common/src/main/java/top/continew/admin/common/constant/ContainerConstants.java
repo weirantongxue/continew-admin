@@ -37,9 +37,9 @@ public class ContainerConstants extends ContainerPool {
     public static final String USER_ROLE_ID_LIST = "UserRoleIdList";
 
     /**
-     * 角色部门列表
+     * 用户角色名称列表
      */
-    public static final String ROLE_DEPT_ID_LIST = "RoleDeptIdList";
+    public static final String USER_ROLE_NAME_LIST = "UserRoleNameList";
 
     private ContainerConstants() {
     }
