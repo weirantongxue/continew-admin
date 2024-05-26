@@ -33,7 +33,6 @@ import top.continew.admin.common.util.WsUtils;
 import top.continew.admin.front.model.ChatMessageUtils;
 import top.continew.admin.front.model.entity.ChatMessageDO;
 import top.continew.admin.front.service.ChatMessageService;
-import top.continew.admin.front.service.WebSocketSendService;
 
 import java.util.Objects;
 
@@ -44,11 +43,10 @@ import java.util.Objects;
 @Data
 public class GPTEventSourceListener extends EventSourceListener {
 
-    private final WebSocketSendService webSocketSendService;
     private final String messageId;
     private final ChatMessageService chatMessageService;
 
-    private final String sessionId;
+    private final String userId;
 
     private final ChatMessageDO message;
 
@@ -60,15 +58,13 @@ public class GPTEventSourceListener extends EventSourceListener {
 
     private boolean first = false;
 
-    public GPTEventSourceListener(WebSocketSendService webSocketSendService,
-                                  String sessionId,
+    public GPTEventSourceListener(String userId,
                                   String messageId,
                                   ChatMessageService chatMessageService,
                                   ChatMessageDO message,
                                   TimeInterval timer,
                                   Long deptId) {
-        this.webSocketSendService = webSocketSendService;
-        this.sessionId = sessionId;
+        this.userId = userId;
         this.messageId = messageId;
         this.chatMessageService = chatMessageService;
         this.message = message;
@@ -102,8 +98,8 @@ public class GPTEventSourceListener extends EventSourceListener {
     public void onEvent(EventSource eventSource, String id, String type, String data) {
         log.info("收到消息:" + data);
         if (data.equals("[DONE]")) {
-            webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                .chatModelMsg(messageId, sessionId, "DONE", EventNameType.DONE.getCode()));
+            WsUtils.sendToUser(userId, ChatMessageUtils.chatModelMsg(messageId, userId, "DONE", EventNameType.DONE
+                .getCode()));
             chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer
                 .intervalMs(TimerConstant.RESPONSE_TIME), timer.intervalMs(TimerConstant.CHAT_RESPONSE_TIME)), deptId);
             return;
@@ -121,15 +117,15 @@ public class GPTEventSourceListener extends EventSourceListener {
 
             last = last + content;
             //判断连接是否关闭
-            WebSocketSession webSocketSession = WsUtils.getWebSocketSession(sessionId);
+            WebSocketSession webSocketSession = WsUtils.getWebSocketSession(userId);
             if (webSocketSession == null || !webSocketSession.isOpen()) {
                 first = true;
                 //客户端连接已断开,关闭sse调用
                 eventSource.cancel();
                 return;
             }
-            webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                .chatModelMsg(messageId, sessionId, content, EventNameType.ADD.getCode()));
+            WsUtils.sendToUser(userId, ChatMessageUtils.chatModelMsg(messageId, userId, content, EventNameType.ADD
+                .getCode()));
         }
     }
 
@@ -157,9 +153,9 @@ public class GPTEventSourceListener extends EventSourceListener {
 
         }
         if (!first) {
-            webSocketSendService.sendMessage(sessionId, ChatMessageUtils
-                .chatModelMsg(messageId, sessionId, "模型服务异常请联系管理员", EventNameType.ERROR.getCode()));
-            webSocketSendService.close(sessionId, "sse连接异常");
+            WsUtils.sendToUser(userId, ChatMessageUtils
+                .chatModelMsg(messageId, userId, "模型服务异常请联系管理员", EventNameType.ERROR.getCode()));
+            WsUtils.close(WsUtils.getWebSocketSession(userId), "sse连接异常");
         } else {
             //消息入库
             chatMessageService.insertMessage(ChatMessageUtils.setMessageDO(message, last, timer

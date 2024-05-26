@@ -81,13 +81,13 @@ public class ChatMessageUtils {
         return jsonObject.toJSONString();
     }
 
-    public static ChatModelMsg chatModelMsg(String msgId, String itemId, String content, String eventType) {
+    public static String chatModelMsg(String msgId, String itemId, String content, String eventType) {
         ChatModelMsg chatModelMsg = new ChatModelMsg();
         chatModelMsg.setMsgId(msgId);
         chatModelMsg.setItemId(itemId);
         chatModelMsg.setContent(content);
         chatModelMsg.setEventType(eventType);
-        return chatModelMsg;
+        return JSONObject.toJSONString(chatModelMsg);
     }
 
 }
