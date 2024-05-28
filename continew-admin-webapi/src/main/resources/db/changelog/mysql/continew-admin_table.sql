@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
     INDEX `idx_parent_id`(`parent_id`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
 
 CREATE TABLE IF NOT EXISTS `sys_dept` (
     `id`          bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `sys_dept` (
     INDEX `idx_parent_id`(`parent_id`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
 
 CREATE TABLE IF NOT EXISTS `sys_role` (
     `id`          bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `sys_role` (
     UNIQUE INDEX `uk_code`(`code`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
 CREATE TABLE IF NOT EXISTS `sys_user` (
     `id`             bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
     INDEX `idx_dept_id`(`dept_id`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 CREATE TABLE IF NOT EXISTS `sys_user_password_history` (
     `id`          bigint(20)   NOT NULL COMMENT 'ID',
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `sys_user_password_history` (
     `create_time` datetime     NOT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `idx_user_id`(`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户历史密码表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户历史密码表';
 
 CREATE TABLE IF NOT EXISTS `sys_user_social` (
     `source`          varchar(255) NOT NULL     COMMENT '来源',
@@ -112,25 +112,25 @@ CREATE TABLE IF NOT EXISTS `sys_user_social` (
     `last_login_time` datetime     DEFAULT NULL COMMENT '最后登录时间',
     `create_time`     datetime     NOT NULL     COMMENT '创建时间',
     UNIQUE INDEX `uk_source_open_id`(`source`, `open_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户社会化关联表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户社会化关联表';
 
 CREATE TABLE IF NOT EXISTS `sys_user_role` (
     `user_id` bigint(20) NOT NULL COMMENT '用户ID',
     `role_id` bigint(20) NOT NULL COMMENT '角色ID',
     PRIMARY KEY (`user_id`, `role_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户和角色关联表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户和角色关联表';
 
 CREATE TABLE IF NOT EXISTS `sys_role_menu` (
     `role_id` bigint(20) NOT NULL COMMENT '角色ID',
     `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
     PRIMARY KEY (`role_id`, `menu_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色和菜单关联表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色和菜单关联表';
 
 CREATE TABLE IF NOT EXISTS `sys_role_dept` (
     `role_id` bigint(20) NOT NULL COMMENT '角色ID',
     `dept_id` bigint(20) NOT NULL COMMENT '部门ID',
     PRIMARY KEY (`role_id`, `dept_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色和部门关联表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色和部门关联表';
 
 CREATE TABLE IF NOT EXISTS `sys_option` (
     `id`            bigint(20)   NOT NULL              COMMENT 'ID',
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `sys_option` (
     `update_time`   datetime     DEFAULT NULL COMMENT '修改时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `uk_category_code`(`category`, `code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='参数表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='参数表';
 
 CREATE TABLE IF NOT EXISTS `sys_dict` (
     `id`          bigint(20)   NOT NULL              COMMENT 'ID',
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `sys_dict` (
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `uk_name`(`name`) USING BTREE,
     UNIQUE INDEX `uk_code`(`code`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典表';
 
 CREATE TABLE IF NOT EXISTS `sys_dict_item` (
     `id`          bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `sys_dict_item` (
     INDEX `idx_dict_id`(`dict_id`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典项表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典项表';
 
 CREATE TABLE IF NOT EXISTS `sys_log` (
     `id`               bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `sys_log` (
     INDEX `idx_module`(`module`) USING BTREE,
     INDEX `idx_ip`(`ip`) USING BTREE,
     INDEX `idx_create_time`(`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统日志表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统日志表';
 
 CREATE TABLE IF NOT EXISTS `sys_message` (
     `id`          bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `sys_message` (
     `create_user` bigint(20)   DEFAULT NULL                COMMENT '创建人',
     `create_time` datetime     NOT NULL                    COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息表';
 
 CREATE TABLE IF NOT EXISTS `sys_message_user` (
     `message_id` bigint(20) NOT NULL              COMMENT '消息ID',
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `sys_message_user` (
     `is_read`    bit(1)     NOT NULL DEFAULT b'0' COMMENT '是否已读',
     `read_time`  datetime   DEFAULT NULL          COMMENT '读取时间',
     PRIMARY KEY (`message_id`, `user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息和用户关联表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息和用户关联表';
 
 CREATE TABLE IF NOT EXISTS `sys_notice` (
     `id`             bigint(20)   NOT NULL             COMMENT 'ID',
@@ -241,7 +241,7 @@ CREATE TABLE IF NOT EXISTS `sys_notice` (
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公告表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公告表';
 
 CREATE TABLE IF NOT EXISTS `sys_storage` (
     `id`          bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `sys_storage` (
     UNIQUE INDEX `uk_code`(`code`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='存储表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='存储表';
 
 CREATE TABLE IF NOT EXISTS `sys_file` (
     `id`             bigint(20)   NOT NULL                    COMMENT 'ID',
@@ -286,7 +286,7 @@ CREATE TABLE IF NOT EXISTS `sys_file` (
     INDEX `idx_type`(`type`) USING BTREE,
     INDEX `idx_create_user`(`create_user`) USING BTREE,
     INDEX `idx_update_user`(`update_user`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件表';
 
 CREATE TABLE IF NOT EXISTS `gen_config` (
     `table_name`    varchar(64)  NOT NULL              COMMENT '表名称',
@@ -299,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `gen_config` (
     `create_time`   datetime     NOT NULL              COMMENT '创建时间',
     `update_time`   datetime     DEFAULT NULL          COMMENT '修改时间',
     PRIMARY KEY (`table_name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='生成配置表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='生成配置表';
 
 CREATE TABLE IF NOT EXISTS `gen_field_config` (
     `table_name`    varchar(64)  NOT NULL              COMMENT '表名称',
@@ -318,4 +318,4 @@ CREATE TABLE IF NOT EXISTS `gen_field_config` (
     `query_type`    tinyint(1)   UNSIGNED DEFAULT NULL COMMENT '查询方式',
     `create_time`   datetime NOT NULL COMMENT '创建时间',
     INDEX `idx_table_name`(`table_name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字段配置表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字段配置表';
