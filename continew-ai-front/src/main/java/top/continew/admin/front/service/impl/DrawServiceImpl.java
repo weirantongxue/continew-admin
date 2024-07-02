@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.core.result.R;
+import org.apache.commons.lang3.StringUtils;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,17 +40,16 @@ import top.continew.admin.front.mapper.DrawImgMapper;
 import top.continew.admin.front.mapper.DrawTaskMapper;
 import top.continew.admin.front.model.entity.DrawImgDO;
 import top.continew.admin.front.model.entity.DrawTaskDO;
+import top.continew.admin.front.model.entity.ModelScriptDO;
 import top.continew.admin.front.model.req.DrawCallbackReq;
 import top.continew.admin.front.model.req.DrawReq;
-import top.continew.admin.front.model.resp.DrawImgDetailResp;
-import top.continew.admin.front.model.resp.DrawResp;
-import top.continew.admin.front.model.resp.DrawTaskResp;
-import top.continew.admin.front.model.resp.ModelDetailResp;
+import top.continew.admin.front.model.resp.*;
 import top.continew.admin.front.model.vo.DeptAccountVo;
 import top.continew.admin.front.model.vo.DrawTaskVo;
 import top.continew.admin.front.model.vo.HistoricalImagesVo;
 import top.continew.admin.front.service.DeptAccountService;
 import top.continew.admin.front.service.DrawService;
+import top.continew.admin.front.service.ModelScriptService;
 import top.continew.admin.front.service.ModelService;
 import top.continew.admin.system.service.FileService;
 import top.continew.starter.core.exception.BadRequestException;
@@ -69,17 +69,15 @@ import java.util.List;
 @Slf4j
 public class DrawServiceImpl implements DrawService {
     private final DrawTaskMapper drawTaskMapper;
-
     private final DrawImgMapper drawImgMapper;
-
     private final ModelService modelService;
-
     private final FileService fileService;
-
     private final DeptAccountService deptAccountService;
+    private final ModelScriptService modelScriptService;
 
     @Override
     public R<DrawTaskVo> createDrawTask(DrawReq drawReq) {
+        String preset = "";
         LoginUser loginUser = LoginHelper.getLoginUser();
         DeptAccountVo deptAccountVo = deptAccountService.selectBalance(loginUser.getDeptId());
         if (deptAccountVo.getBalanceToken() <= 0) {
@@ -89,25 +87,34 @@ public class DrawServiceImpl implements DrawService {
         if (modelResp == null) {
             throw new BadRequestException("模型不存在");
         }
+        ModelScriptDO modelScriptVo = modelScriptService.selectModelScriptByName("");
+        if (null != modelScriptVo && StringUtils.isNotBlank(modelScriptVo.getPrompt())) {
+            preset = modelScriptVo.getPrompt();
+        }
 
         if ("chuzhanAi".equals(modelResp.getName())) {
             return chuzhanAi(drawReq, modelResp);
         }
-        if ("cogview".equals(modelResp.getName())) {
-            return cogview(drawReq, modelResp, loginUser.getDeptId(), loginUser.getId());
+        if ("cogview-3".equals(modelResp.getName())) {
+            return cogview(drawReq, modelResp, loginUser.getDeptId(), loginUser.getId(), preset);
         }
         return R.fail("未匹配到对应模型,请联系管理员.");
     }
 
-    private R<DrawTaskVo> cogview(DrawReq drawReq, ModelDetailResp modelResp, Long deptId, Long userId) {
+    private R<DrawTaskVo> cogview(DrawReq drawReq, ModelDetailResp modelResp, Long deptId, Long userId, String preset) {
+        String prompt = drawReq.getPrompt();
+        if (StringUtils.isNoneBlank(preset)) {
+            prompt = preset + "\n" + prompt;
+        }
         DrawTaskVo drawTaskVo = new DrawTaskVo();
         String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("model", modelResp.getName());
-        jsonObject.put("prompt", drawReq.getPrompt());
+        jsonObject.put("prompt", prompt);
 
         HttpRequest request = HttpRequest.post(modelResp.getUrl())
             .header("Authorization", authToken)
+            .timeout(15000)
             .body(JSONObject.toJSONString(jsonObject));
         String result = request.execute().body();
         log.info("请求文生图返回结果:{}", JSONObject.toJSONString(result));

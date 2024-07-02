@@ -16,6 +16,7 @@
 
 package top.continew.admin.front.service;
 
+import top.continew.admin.front.model.entity.ModelScriptDO;
 import top.continew.admin.front.model.query.ModelScriptQuery;
 import top.continew.admin.front.model.req.ModelScriptReq;
 import top.continew.admin.front.model.resp.ModelScriptDetailResp;
@@ -33,4 +34,6 @@ import java.util.List;
  */
 public interface ModelScriptService extends BaseService<ModelScriptResp, ModelScriptDetailResp, ModelScriptQuery, ModelScriptReq> {
     List<ModelScriptVo> selectModelScript();
+
+    ModelScriptDO selectModelScriptByName(String name);
 }

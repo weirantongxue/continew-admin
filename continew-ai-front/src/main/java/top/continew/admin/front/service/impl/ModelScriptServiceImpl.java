@@ -62,4 +62,9 @@ public class ModelScriptServiceImpl extends BaseServiceImpl<ModelScriptMapper, M
         });
         return modelScriptVoList;
     }
+
+    @Override
+    public ModelScriptDO selectModelScriptByName(String name) {
+        return this.baseMapper.selectOne(new LambdaQueryWrapper<ModelScriptDO>().eq(ModelScriptDO::getName, name));
+    }
 }
