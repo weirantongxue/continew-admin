@@ -106,7 +106,7 @@ public class DrawServiceImpl implements DrawService {
         jsonObject.put("model", modelResp.getName());
         jsonObject.put("prompt", drawReq.getPrompt());
 
-        HttpRequest request = HttpRequest.post("https://open.bigmodel.cn/api/paas/v4/images/generations")
+        HttpRequest request = HttpRequest.post(modelResp.getUrl())
             .header("Authorization", authToken)
             .body(JSONObject.toJSONString(jsonObject));
         String result = request.execute().body();
