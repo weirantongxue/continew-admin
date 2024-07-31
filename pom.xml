@@ -29,6 +29,7 @@
         <module>continew-admin-system</module>
         <module>continew-admin-common</module>
         <module>continew-admin-extension</module>
+        <module>continew-admin-ai</module>
     </modules>
 
     <properties>
@@ -71,6 +72,11 @@
             <dependency>
                 <groupId>top.continew</groupId>
                 <artifactId>continew-admin-generator</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.continew</groupId>
+                <artifactId>continew-admin-ai</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>
