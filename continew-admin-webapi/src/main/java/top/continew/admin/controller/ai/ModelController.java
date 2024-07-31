@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.continew.admin.ai.context.ModelContext;
 import top.continew.admin.ai.model.req.MessageRequest;
+import top.continew.starter.log.core.annotation.Log;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class ModelController {
     private final ModelContext modelContext;
 
     @PostMapping("/v1/completions")
+    @Log(ignore = true)
     @SaIgnore
     public SseEmitter completions(@RequestBody MessageRequest messageRequest) {
         return modelContext.handlerInstance(messageRequest.getModel()).completions(messageRequest);
