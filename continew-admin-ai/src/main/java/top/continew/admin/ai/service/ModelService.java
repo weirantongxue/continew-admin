@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package top.continew.admin.controller.ai;
+package top.continew.admin.ai.service;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RestController;
+import top.continew.starter.extension.crud.service.BaseService;
 import top.continew.admin.ai.model.query.ModelQuery;
 import top.continew.admin.ai.model.req.ModelReq;
 import top.continew.admin.ai.model.resp.ModelDetailResp;
 import top.continew.admin.ai.model.resp.ModelResp;
-import top.continew.admin.ai.service.ModelService;
-import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.continew.starter.extension.crud.controller.BaseController;
-import top.continew.starter.extension.crud.enums.Api;
 
 /**
- * AI模型管理 API
+ * AI模型业务接口
  *
  * @author weiran
  * @since 2024/08/04 23:35
  */
-@Tag(name = "AI模型管理 API")
-@RestController
-@CrudRequestMapping(value = "/ai/model", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
-public class ModelController extends BaseController<ModelService, ModelResp, ModelDetailResp, ModelQuery, ModelReq> {}
+public interface ModelService extends BaseService<ModelResp, ModelDetailResp, ModelQuery, ModelReq> {}

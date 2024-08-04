@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package top.continew.admin.ai.utils;
+package top.continew.admin.ai.service;
 
-import com.unfbx.chatgpt.entity.chat.ChatCompletion;
-import top.continew.admin.ai.model.req.MessageRequest;
+import top.continew.starter.extension.crud.service.BaseService;
+import top.continew.admin.ai.model.query.ItemQuery;
+import top.continew.admin.ai.model.req.ItemReq;
+import top.continew.admin.ai.model.resp.ItemDetailResp;
+import top.continew.admin.ai.model.resp.ItemResp;
 
 /**
- * Created by WeiRan on 2023.09.15 15:47
+ * AI会话业务接口
+ *
+ * @author weiran
+ * @since 2024/08/04 23:37
  */
-public class ModelMessageUtils {
-
-    public static ChatCompletion convertModelCompletion(MessageRequest messageRequest) {
-        return ChatCompletion.builder()
-            .model("glm-4-flash")
-            .messages(messageRequest.getMessages())
-            .maxTokens(3000)
-            .stream(true)
-            .temperature(0.2)
-            .topP(0.2)
-            .build();
-    }
-
-}
+public interface ItemService extends BaseService<ItemResp, ItemDetailResp, ItemQuery, ItemReq> {}

@@ -40,14 +40,11 @@ public class GlmHandler implements ModelStrategy {
     @Override
     public SseEmitter completions(MessageRequest messageCreateValidate) {
         SseEmitter sseEmitter = new SseEmitter(-1L);
-        sseEmitter.onCompletion(() -> {
-            System.out.println();
-        });
         TimeInterval timer = new TimeInterval();
         timer.start(TimerConstant.INTERFACE_RESPONSE_TIME);
         String messageId = IdUtil.fastSimpleUUID();
         //获取模型配置
-        ChatCompletion chatCompletion = ModelMessageUtils.ConvertChatCompletion(messageCreateValidate);
+        ChatCompletion chatCompletion = ModelMessageUtils.convertModelCompletion(messageCreateValidate);
         GlmEventSourceListener glmEventSourceListener = new GlmEventSourceListener(sseEmitter, messageId, timer);
         log.info("开始请求模型:{}", JSONObject.toJSONString(chatCompletion));
         //请求模型

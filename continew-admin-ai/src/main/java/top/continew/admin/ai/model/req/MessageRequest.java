@@ -42,6 +42,6 @@ public class MessageRequest implements Serializable {
     @Schema(description = "对话信息")
     private List<Message> messages;
 
-    private boolean incremental = true;
+    private boolean stream = true;
 
 }

@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package top.continew.admin.ai.utils;
+package top.continew.admin.ai.mapper;
 
-import com.unfbx.chatgpt.entity.chat.ChatCompletion;
-import top.continew.admin.ai.model.req.MessageRequest;
+import top.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.continew.admin.ai.model.entity.ModelMessageDO;
 
 /**
- * Created by WeiRan on 2023.09.15 15:47
+ * 对话消息 Mapper
+ *
+ * @author weiran
+ * @since 2024/08/04 23:38
  */
-public class ModelMessageUtils {
-
-    public static ChatCompletion convertModelCompletion(MessageRequest messageRequest) {
-        return ChatCompletion.builder()
-            .model("glm-4-flash")
-            .messages(messageRequest.getMessages())
-            .maxTokens(3000)
-            .stream(true)
-            .temperature(0.2)
-            .topP(0.2)
-            .build();
-    }
-
-}
+public interface ModelMessageMapper extends BaseMapper<ModelMessageDO> {}

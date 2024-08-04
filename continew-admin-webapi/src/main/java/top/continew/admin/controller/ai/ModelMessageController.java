@@ -18,22 +18,22 @@ package top.continew.admin.controller.ai;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RestController;
-import top.continew.admin.ai.model.query.ModelQuery;
-import top.continew.admin.ai.model.req.ModelReq;
-import top.continew.admin.ai.model.resp.ModelDetailResp;
-import top.continew.admin.ai.model.resp.ModelResp;
-import top.continew.admin.ai.service.ModelService;
+import top.continew.admin.ai.model.query.ModelMessageQuery;
+import top.continew.admin.ai.model.req.ModelMessageReq;
+import top.continew.admin.ai.model.resp.ModelMessageDetailResp;
+import top.continew.admin.ai.model.resp.ModelMessageResp;
+import top.continew.admin.ai.service.ModelMessageService;
 import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
 import top.continew.starter.extension.crud.controller.BaseController;
 import top.continew.starter.extension.crud.enums.Api;
 
 /**
- * AI模型管理 API
+ * 对话消息管理 API
  *
  * @author weiran
- * @since 2024/08/04 23:35
+ * @since 2024/08/04 23:38
  */
-@Tag(name = "AI模型管理 API")
+@Tag(name = "对话消息管理 API")
 @RestController
-@CrudRequestMapping(value = "/ai/model", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
-public class ModelController extends BaseController<ModelService, ModelResp, ModelDetailResp, ModelQuery, ModelReq> {}
+@CrudRequestMapping(value = "/ai/modelMessage", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
+public class ModelMessageController extends BaseController<ModelMessageService, ModelMessageResp, ModelMessageDetailResp, ModelMessageQuery, ModelMessageReq> {}

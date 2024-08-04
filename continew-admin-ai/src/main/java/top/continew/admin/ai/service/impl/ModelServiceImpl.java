@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package top.continew.admin.controller.ai;
+package top.continew.admin.ai.service.impl;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+
+import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.admin.ai.mapper.ModelMapper;
+import top.continew.admin.ai.model.entity.ModelDO;
 import top.continew.admin.ai.model.query.ModelQuery;
 import top.continew.admin.ai.model.req.ModelReq;
 import top.continew.admin.ai.model.resp.ModelDetailResp;
 import top.continew.admin.ai.model.resp.ModelResp;
 import top.continew.admin.ai.service.ModelService;
-import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.continew.starter.extension.crud.controller.BaseController;
-import top.continew.starter.extension.crud.enums.Api;
 
 /**
- * AI模型管理 API
+ * AI模型业务实现
  *
  * @author weiran
  * @since 2024/08/04 23:35
  */
-@Tag(name = "AI模型管理 API")
-@RestController
-@CrudRequestMapping(value = "/ai/model", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
-public class ModelController extends BaseController<ModelService, ModelResp, ModelDetailResp, ModelQuery, ModelReq> {}
+@Service
+@RequiredArgsConstructor
+public class ModelServiceImpl extends BaseServiceImpl<ModelMapper, ModelDO, ModelResp, ModelDetailResp, ModelQuery, ModelReq> implements ModelService {}

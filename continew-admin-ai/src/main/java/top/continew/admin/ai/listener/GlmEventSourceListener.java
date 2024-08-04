@@ -1,7 +1,22 @@
+/*
+ * Copyright (c) 2022-present Charles7c Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package top.continew.admin.ai.listener;
 
 import cn.hutool.core.date.TimeInterval;
-import com.alibaba.fastjson2.JSONObject;
 import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
 import org.jetbrains.annotations.NotNull;
 import top.continew.admin.ai.enums.EventNameType;
@@ -9,16 +24,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import okhttp3.sse.EventSource;
 import okhttp3.sse.EventSourceListener;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import top.continew.admin.ai.constant.TimerConstant;
 import top.continew.admin.ai.utils.SseSendUtils;
-
-import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 public class GlmEventSourceListener extends EventSourceListener {
@@ -30,9 +40,10 @@ public class GlmEventSourceListener extends EventSourceListener {
 
     /**
      * 创建Listener监听
+     * 
      * @param sseEmitter 连接对象
-     * @param messageId 消息id
-     * @param timer 请求耗时
+     * @param messageId  消息id
+     * @param timer      请求耗时
      */
     public GlmEventSourceListener(SseEmitter sseEmitter, String messageId, TimeInterval timer) {
         this.sseEmitter = sseEmitter;
@@ -42,8 +53,9 @@ public class GlmEventSourceListener extends EventSourceListener {
 
     /**
      * 模型sse建立连接
+     * 
      * @param eventSource 事件源
-     * @param response 请求
+     * @param response    请求
      */
     @Override
     public void onOpen(@NotNull EventSource eventSource, Response response) {
@@ -53,17 +65,19 @@ public class GlmEventSourceListener extends EventSourceListener {
 
     /**
      * 接收到消息
+     * 
      * @param eventSource 事件源
-     * @param id 事件id
-     * @param type 事件类型
-     * @param data 事件内容
+     * @param id          事件id
+     * @param type        事件类型
+     * @param data        事件内容
      */
     @SneakyThrows
     @Override
     public void onEvent(@NotNull EventSource eventSource, String id, String type, String data) {
         try {
             if ("[DONE]".equals(data)) {
-                SseSendUtils.sendSseEvent(sseEmitter, messageId, EventNameType.DONE.getCode(), EventNameType.DONE.getCode());
+                SseSendUtils.sendSseEvent(sseEmitter, messageId, EventNameType.DONE.getCode(), EventNameType.DONE
+                    .getCode());
                 sseEmitter.complete();
                 return;
             }
@@ -86,6 +100,7 @@ public class GlmEventSourceListener extends EventSourceListener {
 
     /**
      * 模型关闭连接的时候出发此方法
+     * 
      * @param eventSource 事件源
      */
     @Override
@@ -95,31 +110,30 @@ public class GlmEventSourceListener extends EventSourceListener {
         sseEmitter.complete();
     }
 
-
     /**
      * 发生异常的时候触发此方法
+     * 
      * @param eventSource 事件源
-     * @param t Throwable
-     * @param response 请求消息
+     * @param t           Throwable
+     * @param response    请求消息
      */
     @SneakyThrows
     @Override
     public void onFailure(EventSource eventSource, Throwable t, Response response) {
-//        Optional.ofNullable(response).ifPresentOrElse(res -> {
-//            try (ResponseBody body = res.body()) {
-//                if (Objects.nonNull(body)) {
-//                    log.error("Model  sse连接异常data：{}，异常：{}", body.string(), t);
-//                } else {
-//                    log.error("Model  sse连接异常data：{}，异常：{}", res, t);
-//                }
-//            } catch (IOException e) {
-//                log.error("Error reading response body: {}", e.getMessage(), e);
-//            }
-//        }, () -> log.error("Model  sse连接异常data：{}，异常：{}", t));
+        //        Optional.ofNullable(response).ifPresentOrElse(res -> {
+        //            try (ResponseBody body = res.body()) {
+        //                if (Objects.nonNull(body)) {
+        //                    log.error("Model  sse连接异常data：{}，异常：{}", body.string(), t);
+        //                } else {
+        //                    log.error("Model  sse连接异常data：{}，异常：{}", res, t);
+        //                }
+        //            } catch (IOException e) {
+        //                log.error("Error reading response body: {}", e.getMessage(), e);
+        //            }
+        //        }, () -> log.error("Model  sse连接异常data：{}，异常：{}", t));
         log.error("Model  sse连接异常");
         eventSource.cancel();
         sseEmitter.complete();
     }
-
 
 }
