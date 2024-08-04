@@ -14,21 +14,29 @@
  * limitations under the License.
  */
 
-package top.continew.admin.extension.job;
+package top.continew.admin.system.enums;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import top.continew.admin.common.constant.UiConstants;
+import top.continew.starter.core.enums.BaseEnum;
 
 /**
- * 任务调度服务启动程序
+ * 消息类型枚举
  *
- * @author KAI
- * @since 2024/6/25 22:24
+ * @author Charles7c
+ * @since 2023/11/2 20:08
  */
-@SpringBootApplication
-public class ContinewAdminJobApplication {
+@Getter
+@RequiredArgsConstructor
+public enum MessageTypeEnum implements BaseEnum<Integer> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(com.aizuda.snailjob.server.SnailJobServerApplication.class, args);
-    }
+    /**
+     * 安全消息
+     */
+    SECURITY(1, "安全消息", UiConstants.COLOR_PRIMARY),;
+
+    private final Integer value;
+    private final String description;
+    private final String color;
 }

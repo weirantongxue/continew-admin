@@ -14,37 +14,21 @@
  * limitations under the License.
  */
 
-package top.continew.admin.common.enums;
+package top.continew.admin.extension.job;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import top.continew.starter.core.enums.BaseEnum;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 菜单类型枚举
+ * 任务调度服务启动程序
  *
- * @author Charles7c
- * @since 2023/2/15 20:12
+ * @author KAI
+ * @since 2024/6/25 22:24
  */
-@Getter
-@RequiredArgsConstructor
-public enum MenuTypeEnum implements BaseEnum<Integer> {
+@SpringBootApplication
+public class JobServerApplication {
 
-    /**
-     * 目录
-     */
-    DIR(1, "目录"),
-
-    /**
-     * 菜单
-     */
-    MENU(2, "菜单"),
-
-    /**
-     * 按钮
-     */
-    BUTTON(3, "按钮"),;
-
-    private final Integer value;
-    private final String description;
+    public static void main(String[] args) {
+        SpringApplication.run(com.aizuda.snailjob.server.SnailJobServerApplication.class, args);
+    }
 }

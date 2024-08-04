@@ -14,29 +14,37 @@
  * limitations under the License.
  */
 
-package top.continew.admin.common.enums;
+package top.continew.admin.system.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import top.continew.admin.common.constant.UiConstants;
 import top.continew.starter.core.enums.BaseEnum;
 
 /**
- * 消息类型枚举
+ * 菜单类型枚举
  *
  * @author Charles7c
- * @since 2023/11/2 20:08
+ * @since 2023/2/15 20:12
  */
 @Getter
 @RequiredArgsConstructor
-public enum MessageTypeEnum implements BaseEnum<Integer> {
+public enum MenuTypeEnum implements BaseEnum<Integer> {
 
     /**
-     * 安全消息
+     * 目录
      */
-    SECURITY(1, "安全消息", UiConstants.COLOR_PRIMARY),;
+    DIR(1, "目录"),
+
+    /**
+     * 菜单
+     */
+    MENU(2, "菜单"),
+
+    /**
+     * 按钮
+     */
+    BUTTON(3, "按钮"),;
 
     private final Integer value;
     private final String description;
-    private final String color;
 }
