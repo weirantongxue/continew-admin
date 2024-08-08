@@ -5,7 +5,7 @@ project:
   # 应用名称
   app-name: continew-admin
   # 版本
-  version: 3.1.0
+  version: 3.2.0
   # 描述
   description: 持续迭代优化的前后端分离中后台管理系统框架，开箱即用，持续提供舒适的开发体验。
   # 基本包
@@ -47,6 +47,20 @@ continew-starter.web:
       enable-invoke-time-print: false
       pattern: '[$spanId][$traceId]'
       mdc-enable: false
+
+--- ### 全局响应配置
+continew-starter.web:
+  response:
+    # 是否开启国际化（默认：false）
+    i18n: false
+    # 自定义成功响应码（默认：0）
+    default-success-code: 0
+    # 自定义成功提示（默认：ok）
+    default-success-msg: ok
+    # 自定义失败响应码（默认：1）
+    default-error-code: 1
+    # 自定义失败提示（默认：error）
+    default-error-msg: error
 
 --- ### 接口文档配置
 springdoc:
