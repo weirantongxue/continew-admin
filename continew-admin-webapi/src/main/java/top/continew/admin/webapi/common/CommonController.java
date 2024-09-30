@@ -20,6 +20,7 @@ import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.alicp.jetcache.anno.Cached;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,6 +34,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.continew.admin.common.constant.CacheConstants;
 import top.continew.admin.common.model.resp.LabelValueResp;
+import top.continew.admin.front.model.resp.StoryboardResp;
+import top.continew.admin.front.service.StoryboardService;
 import top.continew.admin.system.model.query.DeptQuery;
 import top.continew.admin.system.model.query.MenuQuery;
 import top.continew.admin.system.model.query.OptionQuery;
@@ -73,6 +76,7 @@ public class CommonController {
     private final RoleService roleService;
     private final DictItemService dictItemService;
     private final OptionService optionService;
+    private final StoryboardService storyboardService;
 
     @Operation(summary = "上传文件", description = "上传文件")
     @PostMapping("/file")
@@ -147,5 +151,23 @@ public class CommonController {
             IBaseEnum baseEnum = (IBaseEnum)e;
             return new LabelValueResp<>(baseEnum.getDescription(), baseEnum.getValue(), baseEnum.getColor());
         }).toList();
+    }
+
+    @Operation(summary = "上传文件", description = "上传文件")
+    @PostMapping("/fileTable")
+    public R<JSONObject> fileTable(@NotNull(message = "文件不能为空") MultipartFile file, Long id, String name) {
+        ValidationUtils.throwIf(projectProperties.isProduction(), "演示环境不支持上传文件");
+        ValidationUtils.throwIf(file::isEmpty, "文件不能为空");
+        FileInfo fileInfo = fileService.upload(file);
+        String url = fileInfo.getUrl();
+        StoryboardResp storyboardResp = new StoryboardResp();
+        storyboardResp.setId(id);
+        storyboardResp.setPicture(url);
+        storyboardService.updateTable(storyboardResp);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("url", url);
+        jsonObject.put("id", id);
+        jsonObject.put("name", name);
+        return R.ok(jsonObject);
     }
 }
