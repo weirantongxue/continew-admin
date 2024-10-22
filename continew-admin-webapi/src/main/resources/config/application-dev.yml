@@ -22,14 +22,14 @@ spring.datasource:
     datasource:
       # 主库配置（可配多个，构成多主）
       master:
-        url: jdbc:mysql://${DB_HOST:27.25.147.231}:${DB_PORT:6002}/${DB_NAME:continew_admin}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false
+        url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:6002}/${DB_NAME:continew_admin}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false
         username: ${DB_USER:root}
         password: ${DB_PWD:wr123123}
         driver-class-name: com.mysql.cj.jdbc.Driver
         type: ${spring.datasource.type}
       # 从库配置（可配多个，构成多从）
       slave_1:
-        url: jdbc:mysql://${DB_HOST:27.25.147.231}:${DB_PORT:3306}/${DB_NAME:continew_admin}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false
+        url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:continew_admin}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false
         username:
         password:
         lazy: true
@@ -67,7 +67,7 @@ spring.data:
   ## Redis 配置（单机模式）
   redis:
     # 地址
-    host: ${REDIS_HOST:27.25.147.231}
+    host: ${REDIS_HOST:127.0.0.1}
     # 端口（默认 6379）
     port: ${REDIS_PORT:6001}
     # 密码（未设置密码时可为空或注释掉）
