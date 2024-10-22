@@ -24,7 +24,7 @@ import org.apache.ibatis.annotations.Select;
 import top.continew.admin.common.config.mybatis.DataPermissionMapper;
 import top.continew.admin.system.model.entity.UserDO;
 import top.continew.admin.system.model.resp.UserDetailResp;
-import top.continew.starter.data.mybatis.plus.datapermission.DataPermission;
+import top.continew.starter.extension.datapermission.annotation.DataPermission;
 import top.continew.starter.security.crypto.annotation.FieldEncrypt;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public interface UserMapper extends DataPermissionMapper<UserDO> {
      * @param queryWrapper 查询条件
      * @return 分页列表信息
      */
-    @DataPermission("t1")
+    @DataPermission(tableAlias = "t1")
     IPage<UserDetailResp> selectUserPage(@Param("page") IPage<UserDO> page,
                                          @Param(Constants.WRAPPER) QueryWrapper<UserDO> queryWrapper);
 
@@ -54,7 +54,7 @@ public interface UserMapper extends DataPermissionMapper<UserDO> {
      * @param queryWrapper 查询条件
      * @return 列表信息
      */
-    @DataPermission("t1")
+    @DataPermission(tableAlias = "t1")
     List<UserDetailResp> selectUserList(@Param(Constants.WRAPPER) QueryWrapper<UserDO> queryWrapper);
 
     /**
@@ -97,6 +97,7 @@ public interface UserMapper extends DataPermissionMapper<UserDO> {
      * 根据邮箱查询数量
      *
      * @param email 邮箱
+     * @param id    ID
      * @return 用户数量
      */
     Long selectCountByEmail(@FieldEncrypt @Param("email") String email, @Param("id") Long id);
@@ -105,6 +106,7 @@ public interface UserMapper extends DataPermissionMapper<UserDO> {
      * 根据手机号查询数量
      *
      * @param phone 手机号
+     * @param id    ID
      * @return 用户数量
      */
     Long selectCountByPhone(@FieldEncrypt @Param("phone") String phone, @Param("id") Long id);

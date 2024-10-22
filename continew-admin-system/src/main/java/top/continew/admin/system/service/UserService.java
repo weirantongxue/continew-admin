@@ -25,7 +25,7 @@ import top.continew.admin.system.model.resp.UserDetailResp;
 import top.continew.admin.system.model.resp.UserImportParseResp;
 import top.continew.admin.system.model.resp.UserImportResp;
 import top.continew.admin.system.model.resp.UserResp;
-import top.continew.starter.data.mybatis.plus.service.IService;
+import top.continew.starter.data.mp.service.IService;
 import top.continew.starter.extension.crud.service.BaseService;
 
 import java.io.IOException;
@@ -69,6 +69,7 @@ public interface UserService extends BaseService<UserResp, UserDetailResp, UserQ
      * @param avatar 头像文件
      * @param id     ID
      * @return 新头像路径
+     * @throws IOException /
      */
     String updateAvatar(MultipartFile avatar, Long id) throws IOException;
 
@@ -141,12 +142,17 @@ public interface UserService extends BaseService<UserResp, UserDetailResp, UserQ
 
     /**
      * 下载用户导入模板
+     *
+     * @param response 响应对象
+     * @throws IOException /
      */
     void downloadImportUserTemplate(HttpServletResponse response) throws IOException;
 
     /**
      * 导入用户
      *
+     * @param req 导入信息
+     * @return 导入结果
      */
     UserImportResp importUser(UserImportReq req);
 

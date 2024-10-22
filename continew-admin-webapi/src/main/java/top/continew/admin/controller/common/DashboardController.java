@@ -31,12 +31,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.continew.admin.common.constant.CacheConstants;
-import top.continew.admin.system.model.resp.DashboardAccessTrendResp;
-import top.continew.admin.system.model.resp.DashboardGeoDistributionResp;
-import top.continew.admin.system.model.resp.DashboardPopularModuleResp;
-import top.continew.admin.system.model.resp.DashboardTotalResp;
+import top.continew.admin.system.model.resp.dashboard.*;
 import top.continew.admin.system.service.DashboardService;
-import top.continew.admin.system.model.resp.DashboardNoticeResp;
 import top.continew.starter.core.util.validate.ValidationUtils;
 import top.continew.starter.log.core.annotation.Log;
 
@@ -58,10 +54,22 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-    @Operation(summary = "查询总计信息", description = "查询总计信息")
-    @GetMapping("/total")
-    public DashboardTotalResp getTotal() {
-        return dashboardService.getTotal();
+    @Operation(summary = "查询公告列表", description = "查询公告列表")
+    @GetMapping("/notice")
+    public List<DashboardNoticeResp> listNotice() {
+        return dashboardService.listNotice();
+    }
+
+    @Operation(summary = "查询PV总览", description = "查询PV总览")
+    @GetMapping("/analysis/overview/pv")
+    public DashboardOverviewCommonResp getOverviewPv() {
+        return dashboardService.getOverviewPv();
+    }
+
+    @Operation(summary = "查询IP总览", description = "查询IP总览")
+    @GetMapping("/analysis/overview/ip")
+    public DashboardOverviewCommonResp getOverviewIp() {
+        return dashboardService.getOverviewIp();
     }
 
     @Operation(summary = "查询访问趋势信息", description = "查询访问趋势信息")
@@ -75,21 +83,48 @@ public class DashboardController {
         return dashboardService.listAccessTrend(days);
     }
 
-    @Operation(summary = "查询热门模块列表", description = "查询热门模块列表")
-    @GetMapping("/popular/module")
-    public List<DashboardPopularModuleResp> listPopularModule() {
-        return dashboardService.listPopularModule();
+    @Operation(summary = "查询访问时段分析", description = "查询访问时段分析")
+    @GetMapping("/analysis/timeslot")
+    @CachePenetrationProtect
+    @CacheRefresh(refresh = 7200)
+    @Cached(key = "'TIMESLOT'", name = CacheConstants.DASHBOARD_KEY_PREFIX, cacheType = CacheType.BOTH, syncLocal = true)
+    public List<DashboardChartCommonResp> getAnalysisTimeslot() {
+        return dashboardService.getAnalysisTimeslot();
     }
 
-    @Operation(summary = "查询访客地域分布信息", description = "查询访客地域分布信息")
-    @GetMapping("/geo/distribution")
-    public DashboardGeoDistributionResp getGeoDistribution() {
-        return dashboardService.getGeoDistribution();
+    @Operation(summary = "查询地域分析", description = "查询地域分析")
+    @GetMapping("/analysis/geo")
+    @CachePenetrationProtect
+    @CacheRefresh(refresh = 7200)
+    @Cached(key = "'GEO'", name = CacheConstants.DASHBOARD_KEY_PREFIX, cacheType = CacheType.BOTH, syncLocal = true)
+    public List<DashboardChartCommonResp> getAnalysisGeo() {
+        return dashboardService.getAnalysisGeo();
     }
 
-    @Operation(summary = "查询公告列表", description = "查询公告列表")
-    @GetMapping("/notice")
-    public List<DashboardNoticeResp> listNotice() {
-        return dashboardService.listNotice();
+    @Operation(summary = "查询模块分析", description = "查询模块分析")
+    @GetMapping("/analysis/module")
+    @CachePenetrationProtect
+    @CacheRefresh(refresh = 7200)
+    @Cached(key = "'MODULE'", name = CacheConstants.DASHBOARD_KEY_PREFIX, cacheType = CacheType.BOTH, syncLocal = true)
+    public List<DashboardChartCommonResp> getAnalysisModule() {
+        return dashboardService.getAnalysisModule();
+    }
+
+    @Operation(summary = "查询终端分析", description = "查询终端分析")
+    @GetMapping("/analysis/os")
+    @CachePenetrationProtect
+    @CacheRefresh(refresh = 7200)
+    @Cached(key = "'OS'", name = CacheConstants.DASHBOARD_KEY_PREFIX, cacheType = CacheType.BOTH, syncLocal = true)
+    public List<DashboardChartCommonResp> getAnalysisOs() {
+        return dashboardService.getAnalysisOs();
+    }
+
+    @Operation(summary = "查询浏览器分析", description = "查询浏览器分析")
+    @GetMapping("/analysis/browser")
+    @CachePenetrationProtect
+    @CacheRefresh(refresh = 7200)
+    @Cached(key = "'BROWSER'", name = CacheConstants.DASHBOARD_KEY_PREFIX, cacheType = CacheType.BOTH, syncLocal = true)
+    public List<DashboardChartCommonResp> getAnalysisBrowser() {
+        return dashboardService.getAnalysisBrowser();
     }
 }

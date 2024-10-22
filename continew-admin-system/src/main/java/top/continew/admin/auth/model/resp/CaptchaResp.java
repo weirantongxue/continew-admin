@@ -14,42 +14,44 @@
  * limitations under the License.
  */
 
-package top.continew.admin.system.model.resp;
+package top.continew.admin.auth.model.resp;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 仪表盘-访问趋势信息
+ * 验证码信息
  *
  * @author Charles7c
- * @since 2023/9/9 20:20
+ * @since 2022/12/11 13:55
  */
 @Data
-@Schema(description = "仪表盘-访问趋势信息")
-public class DashboardAccessTrendResp implements Serializable {
+@Builder
+@Schema(description = "验证码信息")
+public class CaptchaResp implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 日期
+     * 验证码标识
      */
-    @Schema(description = "日期", example = "2023-08-08")
-    private String date;
+    @Schema(description = "验证码标识", example = "090b9a2c-1691-4fca-99db-e4ed0cff362f")
+    private String uuid;
 
     /**
-     * 浏览量（PV）
+     * 验证码图片（Base64编码，带图片格式：data:image/gif;base64）
      */
-    @Schema(description = "浏览量（PV）", example = "1000")
-    private Long pvCount;
+    @Schema(description = "验证码图片（Base64编码，带图片格式：data:image/gif;base64）", example = "data:image/png;base64,iVBORw0KGgoAAAAN...")
+    private String img;
 
     /**
-     * IP 数
+     * 过期时间戳
      */
-    @Schema(description = "IP 数", example = "500")
-    private Long ipCount;
+    @Schema(description = "过期时间戳", example = "1714376969409")
+    private Long expireTime;
 }

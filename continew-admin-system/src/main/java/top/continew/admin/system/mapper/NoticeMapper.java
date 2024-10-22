@@ -17,8 +17,8 @@
 package top.continew.admin.system.mapper;
 
 import top.continew.admin.system.model.entity.NoticeDO;
-import top.continew.admin.system.model.resp.DashboardNoticeResp;
-import top.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.continew.admin.system.model.resp.dashboard.DashboardNoticeResp;
+import top.continew.starter.data.mp.base.BaseMapper;
 
 import java.util.List;
 

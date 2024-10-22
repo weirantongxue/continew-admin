@@ -14,31 +14,38 @@
  * limitations under the License.
  */
 
-package top.continew.admin.auth.service;
+package top.continew.admin.common.context;
 
-import java.util.Set;
+import lombok.Data;
+import top.continew.admin.common.enums.DataScopeEnum;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
- * 权限业务接口
+ * 角色上下文
  *
  * @author Charles7c
- * @since 2023/3/2 20:40
+ * @since 2023/3/7 22:08
  */
-public interface PermissionService {
+@Data
+public class RoleContext implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 根据用户 ID 查询权限码
-     *
-     * @param userId 用户 ID
-     * @return 权限码集合
+     * ID
      */
-    Set<String> listPermissionByUserId(Long userId);
+    private Long id;
 
     /**
-     * 根据用户 ID 查询角色编码
-     *
-     * @param userId 用户 ID
-     * @return 角色编码集合
+     * 角色编码
      */
-    Set<String> listRoleCodeByUserId(Long userId);
+    private String code;
+
+    /**
+     * 数据权限
+     */
+    private DataScopeEnum dataScope;
 }

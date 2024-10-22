@@ -18,17 +18,11 @@ package top.continew.admin.system.service;
 
 import jakarta.servlet.http.HttpServletResponse;
 import top.continew.admin.system.model.query.LogQuery;
-import top.continew.admin.system.model.resp.DashboardAccessTrendResp;
-import top.continew.admin.system.model.resp.DashboardPopularModuleResp;
-import top.continew.admin.system.model.resp.DashboardTotalResp;
 import top.continew.admin.system.model.resp.log.LogDetailResp;
 import top.continew.admin.system.model.resp.log.LogResp;
 import top.continew.starter.extension.crud.model.query.PageQuery;
 import top.continew.starter.extension.crud.model.query.SortQuery;
 import top.continew.starter.extension.crud.model.resp.PageResp;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 系统日志业务接口
@@ -72,33 +66,4 @@ public interface LogService {
      * @param response  响应对象
      */
     void exportOperationLog(LogQuery query, SortQuery sortQuery, HttpServletResponse response);
-
-    /**
-     * 查询仪表盘总计信息
-     *
-     * @return 仪表盘总计信息
-     */
-    DashboardTotalResp getDashboardTotal();
-
-    /**
-     * 查询仪表盘访问趋势信息
-     *
-     * @param days 日期数
-     * @return 仪表盘访问趋势信息
-     */
-    List<DashboardAccessTrendResp> listDashboardAccessTrend(Integer days);
-
-    /**
-     * 查询仪表盘热门模块列表
-     *
-     * @return 仪表盘热门模块列表
-     */
-    List<DashboardPopularModuleResp> listDashboardPopularModule();
-
-    /**
-     * 查询仪表盘访客地域分布信息
-     *
-     * @return 仪表盘访客地域分布信息
-     */
-    List<Map<String, Object>> listDashboardGeoDistribution();
 }

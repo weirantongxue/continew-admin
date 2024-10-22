@@ -2,13 +2,13 @@ package ${packageName}.${subPackageName};
 
 import java.io.Serial;
 import java.io.Serializable;
-<#if hasLocalDateTime>
-import java.time.LocalDateTime;
+<#if hasTimeField>
+import java.time.*;
 </#if>
-<#if hasBigDecimal>
+<#if hasBigDecimalField>
 import java.math.BigDecimal;
 </#if>
-<#if hasListQueryField>
+<#if hasListField>
 import java.util.List;
 </#if>
 
@@ -23,7 +23,7 @@ import top.continew.starter.data.core.enums.QueryType;
  * ${businessName}查询条件
  *
  * @author ${author}
- * @since ${date}
+ * @since ${datetime}
  */
 @Data
 @Schema(description = "${businessName}查询条件")

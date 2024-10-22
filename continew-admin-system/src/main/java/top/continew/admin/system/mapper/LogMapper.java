@@ -16,19 +16,22 @@
 
 package top.continew.admin.system.mapper;
 
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import top.continew.admin.common.constant.CacheConstants;
 import top.continew.admin.system.model.entity.LogDO;
-import top.continew.admin.system.model.resp.DashboardAccessTrendResp;
-import top.continew.admin.system.model.resp.DashboardPopularModuleResp;
-import top.continew.admin.system.model.resp.DashboardTotalResp;
+import top.continew.admin.system.model.resp.dashboard.DashboardAccessTrendResp;
+import top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp;
+import top.continew.admin.system.model.resp.dashboard.DashboardOverviewCommonResp;
 import top.continew.admin.system.model.resp.log.LogResp;
-import top.continew.starter.data.mybatis.plus.base.BaseMapper;
+import top.continew.starter.data.mp.base.BaseMapper;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统日志 Mapper
@@ -57,31 +60,91 @@ public interface LogMapper extends BaseMapper<LogDO> {
     List<LogResp> selectLogList(@Param(Constants.WRAPPER) QueryWrapper<LogDO> queryWrapper);
 
     /**
-     * 查询仪表盘总计信息
+     * 查询总数量
      *
-     * @return 仪表盘总计信息
+     * @return 总数量
      */
-    DashboardTotalResp selectDashboardTotal();
+    @Select("SELECT COUNT(*) FROM sys_log")
+    Long selectTotalCount();
+
+    /**
+     * 查询仪表盘 PV 总览
+     *
+     * @return 仪表盘 PV 总览
+     */
+    DashboardOverviewCommonResp selectDashboardOverviewPv();
+
+    /**
+     * 查询仪表盘 IP 总览
+     *
+     * @return 仪表盘 IP 总览
+     */
+    DashboardOverviewCommonResp selectDashboardOverviewIp();
+
+    /**
+     * 查询仪表盘 PV 近 N 月各月份信息
+     *
+     * @param months 近 N 月月份列表
+     * @return 仪表盘 PV 近 N 月各月份信息
+     */
+    @Cached(key = "#months[0]", name = CacheConstants.DASHBOARD_KEY_PREFIX + "PV:")
+    List<DashboardChartCommonResp> selectListDashboardAnalysisPv(@Param("months") List<String> months);
+
+    /**
+     * 查询仪表盘 IP 近 N 月各月份信息
+     *
+     * @param months 近 N 月月份列表
+     * @return 仪表盘 IP 近 N 月各月份信息
+     */
+    @Cached(key = "#months[0]", name = CacheConstants.DASHBOARD_KEY_PREFIX + "IP:")
+    List<DashboardChartCommonResp> selectListDashboardAnalysisIp(@Param("months") List<String> months);
 
     /**
      * 查询仪表盘访问趋势信息
      *
-     * @param days 日期数
+     * @param startTime 开始时间
+     * @param endTime   结束时间
      * @return 仪表盘访问趋势信息
      */
-    List<DashboardAccessTrendResp> selectListDashboardAccessTrend(@Param("days") Integer days);
+    List<DashboardAccessTrendResp> selectListDashboardAccessTrend(@Param("startTime") Date startTime,
+                                                                  @Param("endTime") Date endTime);
 
     /**
-     * 查询仪表盘热门模块列表
+     * 查询仪表盘访问时段分析信息
      *
-     * @return 仪表盘热门模块列表
+     * @return 仪表盘访问时段分析信息
      */
-    List<DashboardPopularModuleResp> selectListDashboardPopularModule();
+    List<DashboardChartCommonResp> selectListDashboardAnalysisTimeslot();
 
     /**
-     * 查询仪表盘访客地域分布信息
+     * 查询仪表盘地域分析信息
      *
-     * @return 仪表盘访客地域分布信息
+     * @param top 显示数量
+     * @return 仪表盘地域分析信息
      */
-    List<Map<String, Object>> selectListDashboardGeoDistribution();
+    List<DashboardChartCommonResp> selectListDashboardAnalysisGeo(@Param("top") Integer top);
+
+    /**
+     * 查询仪表盘模块分析信息
+     *
+     * @param top 显示数量
+     * @return 仪表盘模块分析信息
+     */
+    List<DashboardChartCommonResp> selectListDashboardAnalysisModule(@Param("top") Integer top);
+
+    /**
+     * 查询仪表盘终端分析信息
+     *
+     * @param top 显示数量
+     * @return 仪表盘终端分析信息
+     */
+    List<DashboardChartCommonResp> selectListDashboardAnalysisOs(@Param("top") Integer top);
+
+    /**
+     * 查询仪表盘浏览器分析信息
+     *
+     * @param top 显示数量
+     * @return 仪表盘浏览器分析信息
+     */
+    List<DashboardChartCommonResp> selectListDashboardAnalysisBrowser(@Param("top") Integer top);
 }

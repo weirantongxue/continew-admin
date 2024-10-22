@@ -5,7 +5,7 @@ project:
   # 应用名称
   app-name: continew-admin
   # 版本
-  version: 3.2.0
+  version: 3.3.0
   # 描述
   description: 持续迭代优化的前后端分离中后台管理系统框架，开箱即用，持续提供舒适的开发体验。
   # 基本包
@@ -41,7 +41,7 @@ logging:
 continew-starter.web:
   trace:
     enabled: true
-    header-name: traceId
+    trace-id-name: traceId
     ## TLog 配置
     tlog:
       enable-invoke-time-print: false
@@ -53,6 +53,8 @@ continew-starter.web:
   response:
     # 是否开启国际化（默认：false）
     i18n: false
+    # 自定义失败 HTTP 状态码（默认：200，建议业务和通信状态码区分）
+    default-http-status-code-on-error: 200
     # 自定义成功响应码（默认：0）
     default-success-code: 0
     # 自定义成功提示（默认：ok）
@@ -61,6 +63,8 @@ continew-starter.web:
     default-error-code: 1
     # 自定义失败提示（默认：error）
     default-error-msg: error
+    # 是否将原生异常错误信息填充到状态信息中
+    origin-exception-using-detail-message: false
 
 --- ### 接口文档配置
 springdoc:
@@ -162,9 +166,6 @@ mybatis-plus:
     # ID 生成器配置
     id-generator:
       type: COSID
-    # 数据权限配置
-    data-permission:
-      enabled: true
     # 分页插件配置
     pagination:
       enabled: true
@@ -191,7 +192,7 @@ cosid:
       friendly: true
     provider:
       safe-js:
-        machine-bit: 3
+        machine-bit: 7
         sequence-bit: 9
 
 --- ### 认证配置

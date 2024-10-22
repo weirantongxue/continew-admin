@@ -19,9 +19,9 @@ package top.continew.admin.generator.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.db.meta.Column;
@@ -33,11 +33,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.continew.admin.generator.config.properties.GeneratorProperties;
+import top.continew.admin.generator.enums.FormTypeEnum;
 import top.continew.admin.generator.enums.QueryTypeEnum;
 import top.continew.admin.generator.mapper.FieldConfigMapper;
 import top.continew.admin.generator.mapper.GenConfigMapper;
 import top.continew.admin.generator.model.entity.FieldConfigDO;
 import top.continew.admin.generator.model.entity.GenConfigDO;
+import top.continew.admin.generator.model.entity.InnerGenConfigDO;
 import top.continew.admin.generator.model.query.TableQuery;
 import top.continew.admin.generator.model.req.GenConfigReq;
 import top.continew.admin.generator.model.resp.GeneratePreviewResp;
@@ -78,6 +80,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private final ProjectProperties projectProperties;
     private final FieldConfigMapper fieldConfigMapper;
     private final GenConfigMapper genConfigMapper;
+    private static final List<String> TIME_PACKAGE_CLASS = Arrays.asList("LocalDate", "LocalTime", "LocalDateTime");
 
     @Override
     public PageResp<TableResp> pageTable(TableQuery query, PageQuery pageQuery) throws SQLException {
@@ -93,11 +96,11 @@ public class GeneratorServiceImpl implements GeneratorService {
             .reversed());
         List<TableResp> tableRespList = BeanUtil.copyToList(tableList, TableResp.class);
         PageResp<TableResp> pageResp = PageResp.build(pageQuery.getPage(), pageQuery.getSize(), tableRespList);
-        for (TableResp tableResp : pageResp.getList()) {
+        pageResp.getList().parallelStream().forEach(tableResp -> {
             long count = genConfigMapper.selectCount(Wrappers.lambdaQuery(GenConfigDO.class)
                 .eq(GenConfigDO::getTableName, tableResp.getTableName()));
             tableResp.setIsConfiged(count > 0);
-        }
+        });
         return pageResp;
     }
 
@@ -121,11 +124,6 @@ public class GeneratorServiceImpl implements GeneratorService {
                 .last("LIMIT 1"));
             if (null != lastGenConfig) {
                 genConfig.setAuthor(lastGenConfig.getAuthor());
-            }
-            // 默认表前缀（sys_user -> sys_）
-            int underLineIndex = StrUtil.indexOf(tableName, StringConstants.C_UNDERLINE);
-            if (-1 != underLineIndex) {
-                genConfig.setTablePrefix(StrUtil.subPre(tableName, underLineIndex + 1));
             }
         }
         return genConfig;
@@ -154,8 +152,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                 .orElseGet(() -> new FieldConfigDO(column));
             // 更新已有字段配置
             if (null != fieldConfig.getCreateTime()) {
-                String columnType = StrUtil.splitToArray(column.getTypeName(), StringConstants.SPACE)[0].toLowerCase();
-                fieldConfig.setColumnType(columnType);
+                fieldConfig.setColumnType(column.getTypeName());
                 fieldConfig.setColumnSize(Convert.toStr(column.getSize()));
             }
             String fieldType = typeMappingEntrySet.stream()
@@ -173,19 +170,22 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveConfig(GenConfigReq req, String tableName) {
-        // 保存字段配置
+        // 保存字段配置（先删除再保存）
         fieldConfigMapper.delete(Wrappers.lambdaQuery(FieldConfigDO.class).eq(FieldConfigDO::getTableName, tableName));
         List<FieldConfigDO> fieldConfigList = req.getFieldConfigs();
-        for (FieldConfigDO fieldConfig : fieldConfigList) {
+        for (int i = 0; i < fieldConfigList.size(); i++) {
+            FieldConfigDO fieldConfig = fieldConfigList.get(i);
+            // 重新设置排序
+            fieldConfig.setFieldSort(i + 1);
             if (Boolean.TRUE.equals(fieldConfig.getShowInForm())) {
-                CheckUtils.throwIfNull(fieldConfig.getFormType(), "字段 [{}] 的表单类型不能为空", fieldConfig.getFieldName());
+                fieldConfig.setFormType(ObjectUtil.defaultIfNull(fieldConfig.getFormType(), FormTypeEnum.INPUT));
             } else {
                 // 在表单中不显示，不需要设置必填
                 fieldConfig.setIsRequired(false);
             }
             if (Boolean.TRUE.equals(fieldConfig.getShowInQuery())) {
-                CheckUtils.throwIfNull(fieldConfig.getFormType(), "字段 [{}] 的表单类型不能为空", fieldConfig.getFieldName());
-                CheckUtils.throwIfNull(fieldConfig.getQueryType(), "字段 [{}] 的查询方式不能为空", fieldConfig.getFieldName());
+                fieldConfig.setFormType(ObjectUtil.defaultIfNull(fieldConfig.getFormType(), FormTypeEnum.INPUT));
+                fieldConfig.setQueryType(ObjectUtil.defaultIfNull(fieldConfig.getQueryType(), QueryTypeEnum.EQ));
             } else {
                 // 在查询中不显示，不需要设置查询方式
                 fieldConfig.setQueryType(null);
@@ -197,7 +197,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             }
             fieldConfig.setTableName(tableName);
         }
-        fieldConfigMapper.insertBatch(fieldConfigList);
+        fieldConfigMapper.insert(fieldConfigList);
         // 保存或更新生成配置信息
         GenConfigDO newGenConfig = req.getGenConfig();
         GenConfigDO oldGenConfig = genConfigMapper.selectById(tableName);
@@ -217,51 +217,50 @@ public class GeneratorServiceImpl implements GeneratorService {
         CheckUtils.throwIfNull(genConfig, "请先进行数据表 [{}] 生成配置", tableName);
         List<FieldConfigDO> fieldConfigList = fieldConfigMapper.selectListByTableName(tableName);
         CheckUtils.throwIfEmpty(fieldConfigList, "请先进行数据表 [{}] 字段配置", tableName);
-        Map<String, Object> genConfigMap = BeanUtil.beanToMap(genConfig);
-        genConfigMap.put("date", DateUtil.date().toString("yyyy/MM/dd HH:mm"));
-        String packageName = genConfig.getPackageName();
-        String apiModuleName = StrUtil.subSuf(packageName, StrUtil
-            .lastIndexOfIgnoreCase(packageName, StringConstants.DOT) + 1);
-        genConfigMap.put("apiModuleName", apiModuleName);
-        genConfigMap.put("apiName", StrUtil.lowerFirst(genConfig.getClassNamePrefix()));
+        InnerGenConfigDO innerGenConfig = new InnerGenConfigDO(genConfig);
         // 渲染代码
-        String classNamePrefix = genConfig.getClassNamePrefix();
+        String classNamePrefix = innerGenConfig.getClassNamePrefix();
         Map<String, GeneratorProperties.TemplateConfig> templateConfigMap = generatorProperties.getTemplateConfigs();
         for (Map.Entry<String, GeneratorProperties.TemplateConfig> templateConfigEntry : templateConfigMap.entrySet()) {
-            this.pretreatment(genConfigMap, fieldConfigList, templateConfigEntry);
-            String className = classNamePrefix + StrUtil.nullToEmpty(templateConfigEntry.getKey());
-            genConfigMap.put("className", className);
             GeneratorProperties.TemplateConfig templateConfig = templateConfigEntry.getValue();
+            // 移除需要忽略的字段
+            innerGenConfig.setFieldConfigs(fieldConfigList.stream()
+                .filter(fieldConfig -> !StrUtil.equalsAny(fieldConfig.getFieldName(), templateConfig
+                    .getExcludeFields()))
+                .toList());
+            // 预处理配置
+            this.pretreatment(innerGenConfig);
+            // 处理其他配置
+            innerGenConfig.setSubPackageName(templateConfig.getPackageName());
+            String classNameSuffix = templateConfigEntry.getKey();
+            String className = classNamePrefix + classNameSuffix;
+            innerGenConfig.setClassName(className);
             boolean isBackend = templateConfig.isBackend();
             String extension = templateConfig.getExtension();
             GeneratePreviewResp generatePreview = new GeneratePreviewResp();
             generatePreview.setBackend(isBackend);
             generatePreviewList.add(generatePreview);
-            if (isBackend) {
-                generatePreview.setFileName(className + extension);
-                generatePreview.setContent(TemplateUtils.render(templateConfig.getTemplatePath(), genConfigMap));
-            } else {
-                generatePreview.setFileName(".vue".equals(extension) && "index".equals(templateConfigEntry.getKey())
+            String fileName = className + extension;
+            if (!isBackend) {
+                fileName = ".vue".equals(extension) && "index".equals(classNameSuffix)
                     ? "index.vue"
-                    : this.getFrontendFileName(classNamePrefix, className, extension));
-                genConfigMap.put("fieldConfigs", fieldConfigList);
-                generatePreview.setContent(TemplateUtils.render(templateConfig.getTemplatePath(), genConfigMap));
+                    : this.getFrontendFileName(classNamePrefix, className, extension);
             }
-            setPreviewPath(generatePreview, genConfig, templateConfig);
+            generatePreview.setFileName(fileName);
+            generatePreview.setContent(TemplateUtils.render(templateConfig.getTemplatePath(), BeanUtil
+                .beanToMap(innerGenConfig)));
+            this.setPreviewPath(generatePreview, innerGenConfig, templateConfig);
         }
         return generatePreviewList;
     }
 
     private void setPreviewPath(GeneratePreviewResp generatePreview,
-                                GenConfigDO genConfig,
+                                InnerGenConfigDO genConfig,
                                 GeneratorProperties.TemplateConfig templateConfig) {
         // 获取前后端基础路径
         String backendBasicPackagePath = this.buildBackendBasicPackagePath(genConfig);
         String frontendBasicPackagePath = String.join(File.separator, projectProperties.getAppName(), projectProperties
             .getAppName() + "-ui");
-        String packageName = genConfig.getPackageName();
-        String moduleName = StrUtil.subSuf(packageName, StrUtil
-            .lastIndexOfIgnoreCase(packageName, StringConstants.DOT) + 1);
         String packagePath;
         if (generatePreview.isBackend()) {
             // 例如：continew-admin/continew-system/src/main/java/top/continew/admin/system/service/impl
@@ -270,7 +269,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         } else {
             // 例如：continew-admin/continew-admin-ui/src/views/system
             packagePath = String.join(File.separator, frontendBasicPackagePath, templateConfig.getPackageName()
-                .replace(StringConstants.SLASH, File.separator), moduleName);
+                .replace(StringConstants.SLASH, File.separator), genConfig.getApiModuleName());
             // 例如：continew-admin/continew-admin-ui/src/views/system/user
             packagePath = ".vue".equals(templateConfig.getExtension())
                 ? packagePath + File.separator + StrUtil.lowerFirst(genConfig.getClassNamePrefix())
@@ -349,42 +348,36 @@ public class GeneratorServiceImpl implements GeneratorService {
     /**
      * 预处理生成配置
      *
-     * @param genConfigMap          生成配置
-     * @param originFieldConfigList 原始字段配置列表
-     * @param templateConfigEntry   模板配置
+     * @param genConfig 生成配置
      */
-    private void pretreatment(Map<String, Object> genConfigMap,
-                              List<FieldConfigDO> originFieldConfigList,
-                              Map.Entry<String, GeneratorProperties.TemplateConfig> templateConfigEntry) {
-        GeneratorProperties.TemplateConfig templateConfig = templateConfigEntry.getValue();
-        // 移除需要忽略的字段
-        List<FieldConfigDO> fieldConfigList = originFieldConfigList.stream()
-            .filter(fieldConfig -> !StrUtil.equalsAny(fieldConfig.getFieldName(), templateConfig.getExcludeFields()))
-            .toList();
-        genConfigMap.put("fieldConfigs", fieldConfigList);
+    private void pretreatment(InnerGenConfigDO genConfig) {
+        List<FieldConfigDO> fieldConfigList = genConfig.getFieldConfigs();
         // 统计部分特殊字段特征
-        genConfigMap.put("hasLocalDateTime", false);
-        genConfigMap.put("hasBigDecimal", false);
-        genConfigMap.put("hasRequiredField", false);
-        genConfigMap.put("hasListQueryField", false);
+        Set<String> dictCodeSet = new HashSet<>();
         for (FieldConfigDO fieldConfig : fieldConfigList) {
             String fieldType = fieldConfig.getFieldType();
-            if ("LocalDateTime".equals(fieldType)) {
-                genConfigMap.put("hasLocalDateTime", true);
-            }
-            if ("BigDecimal".equals(fieldType)) {
-                genConfigMap.put("hasBigDecimal", true);
-            }
+            // 必填项
             if (Boolean.TRUE.equals(fieldConfig.getIsRequired())) {
-                genConfigMap.put("hasRequiredField", true);
+                genConfig.setHasRequiredField(true);
+            }
+            // 数据类型
+            if ("BigDecimal".equals(fieldType)) {
+                genConfig.setHasBigDecimalField(true);
+            }
+            if (TIME_PACKAGE_CLASS.contains(fieldType)) {
+                genConfig.setHasTimeField(true);
             }
             QueryTypeEnum queryType = fieldConfig.getQueryType();
             if (null != queryType && StrUtil.equalsAny(queryType.name(), QueryTypeEnum.IN.name(), QueryTypeEnum.NOT_IN
                 .name(), QueryTypeEnum.BETWEEN.name())) {
-                genConfigMap.put("hasListQueryField", true);
+                genConfig.setHasListField(true);
+            }
+            // 字典码
+            if (StrUtil.isNotBlank(fieldConfig.getDictCode())) {
+                genConfig.setHasDictField(true);
+                dictCodeSet.add(fieldConfig.getDictCode());
             }
         }
-        String subPackageName = templateConfig.getPackageName();
-        genConfigMap.put("subPackageName", subPackageName);
+        genConfig.setDictCodes(dictCodeSet);
     }
 }

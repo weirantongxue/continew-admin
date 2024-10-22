@@ -19,11 +19,11 @@ package top.continew.admin.system.service.impl;
 import cn.crane4j.annotation.AutoOperate;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Opt;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +33,6 @@ import top.continew.admin.common.enums.DisEnableStatusEnum;
 import top.continew.admin.system.mapper.LogMapper;
 import top.continew.admin.system.model.entity.LogDO;
 import top.continew.admin.system.model.query.LogQuery;
-import top.continew.admin.system.model.resp.DashboardAccessTrendResp;
-import top.continew.admin.system.model.resp.DashboardPopularModuleResp;
-import top.continew.admin.system.model.resp.DashboardTotalResp;
 import top.continew.admin.system.model.resp.log.LogDetailResp;
 import top.continew.admin.system.model.resp.log.LogResp;
 import top.continew.admin.system.model.resp.log.LoginLogExportResp;
@@ -49,7 +46,6 @@ import top.continew.starter.file.excel.util.ExcelUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统日志业务实现
@@ -67,7 +63,9 @@ public class LogServiceImpl implements LogService {
     @Override
     public PageResp<LogResp> page(LogQuery query, PageQuery pageQuery) {
         QueryWrapper<LogDO> queryWrapper = this.buildQueryWrapper(query);
-        IPage<LogResp> page = baseMapper.selectLogPage(pageQuery.toPage(), queryWrapper);
+        this.sort(queryWrapper, pageQuery);
+        IPage<LogResp> page = baseMapper.selectLogPage(new Page<>(pageQuery.getPage(), pageQuery
+            .getSize()), queryWrapper);
         return PageResp.build(page);
     }
 
@@ -92,26 +90,6 @@ public class LogServiceImpl implements LogService {
         ExcelUtils.export(list, "导出操作日志数据", OperationLogExportResp.class, response);
     }
 
-    @Override
-    public DashboardTotalResp getDashboardTotal() {
-        return baseMapper.selectDashboardTotal();
-    }
-
-    @Override
-    public List<DashboardAccessTrendResp> listDashboardAccessTrend(Integer days) {
-        return baseMapper.selectListDashboardAccessTrend(days);
-    }
-
-    @Override
-    public List<DashboardPopularModuleResp> listDashboardPopularModule() {
-        return baseMapper.selectListDashboardPopularModule();
-    }
-
-    @Override
-    public List<Map<String, Object>> listDashboardGeoDistribution() {
-        return baseMapper.selectListDashboardGeoDistribution();
-    }
-
     /**
      * 查询列表
      *
@@ -132,12 +110,12 @@ public class LogServiceImpl implements LogService {
      * @param sortQuery    排序查询条件
      */
     private void sort(QueryWrapper<LogDO> queryWrapper, SortQuery sortQuery) {
-        Sort sort = Opt.ofNullable(sortQuery).orElseGet(SortQuery::new).getSort();
-        for (Sort.Order order : sort) {
-            if (null != order) {
-                String property = order.getProperty();
-                queryWrapper.orderBy(true, order.isAscending(), CharSequenceUtil.toUnderlineCase(property));
-            }
+        if (sortQuery == null || sortQuery.getSort().isUnsorted()) {
+            return;
+        }
+        for (Sort.Order order : sortQuery.getSort()) {
+            String property = order.getProperty();
+            queryWrapper.orderBy(true, order.isAscending(), CharSequenceUtil.toUnderlineCase(property));
         }
     }
 

@@ -1,10 +1,10 @@
 package ${packageName}.${subPackageName};
 
 import java.io.Serial;
-<#if hasLocalDateTime>
-import java.time.LocalDateTime;
+<#if hasTimeField>
+import java.time.*;
 </#if>
-<#if hasBigDecimal>
+<#if hasBigDecimalField>
 import java.math.BigDecimal;
 </#if>
 
@@ -21,7 +21,7 @@ import top.continew.starter.extension.crud.model.resp.BaseDetailResp;
  * ${businessName}详情信息
  *
  * @author ${author}
- * @since ${date}
+ * @since ${datetime}
  */
 @Data
 @ExcelIgnoreUnannotated

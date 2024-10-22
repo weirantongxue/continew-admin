@@ -40,6 +40,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +55,11 @@ import org.springframework.web.multipart.MultipartFile;
 import top.continew.admin.auth.service.OnlineUserService;
 import top.continew.admin.common.constant.CacheConstants;
 import top.continew.admin.common.constant.SysConstants;
+import top.continew.admin.common.context.UserContext;
+import top.continew.admin.common.context.UserContextHolder;
 import top.continew.admin.common.enums.DisEnableStatusEnum;
 import top.continew.admin.common.enums.GenderEnum;
 import top.continew.admin.common.util.SecureUtils;
-import top.continew.admin.common.util.helper.LoginHelper;
 import top.continew.admin.system.mapper.UserMapper;
 import top.continew.admin.system.model.entity.DeptDO;
 import top.continew.admin.system.model.entity.RoleDO;
@@ -101,11 +103,11 @@ import static top.continew.admin.system.enums.PasswordPolicyEnum.*;
 @RequiredArgsConstructor
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserResp, UserDetailResp, UserQuery, UserReq> implements UserService, CommonUserService {
 
-    private final OnlineUserService onlineUserService;
-    private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
-    private final OptionService optionService;
     private final UserPasswordHistoryService userPasswordHistoryService;
+    private final OnlineUserService onlineUserService;
+    private final OptionService optionService;
+    private final UserRoleService userRoleService;
     private final RoleService roleService;
 
     @Resource
@@ -116,7 +118,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
     @Override
     public PageResp<UserResp> page(UserQuery query, PageQuery pageQuery) {
         QueryWrapper<UserDO> queryWrapper = this.buildQueryWrapper(query);
-        IPage<UserDetailResp> page = baseMapper.selectUserPage(pageQuery.toPage(), queryWrapper);
+        super.sort(queryWrapper, pageQuery);
+        IPage<UserDetailResp> page = baseMapper.selectUserPage(new Page<>(pageQuery.getPage(), pageQuery
+            .getSize()), queryWrapper);
         PageResp<UserResp> pageResp = PageResp.build(page, super.getListClass());
         pageResp.getList().forEach(this::fill);
         return pageResp;
@@ -282,7 +286,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
     @Transactional(rollbackFor = Exception.class)
     public void doImportUser(List<UserDO> insertList, List<UserDO> updateList, List<UserRoleDO> userRoleDOList) {
         if (CollUtil.isNotEmpty(insertList)) {
-            baseMapper.insertBatch(insertList);
+            baseMapper.insert(insertList);
         }
         if (CollUtil.isNotEmpty(updateList)) {
             this.updateBatchById(updateList);
@@ -305,7 +309,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         String phone = req.getPhone();
         CheckUtils.throwIf(StrUtil.isNotBlank(phone) && this.isPhoneExists(phone, id), errorMsgTemplate, phone);
         DisEnableStatusEnum newStatus = req.getStatus();
-        CheckUtils.throwIf(DisEnableStatusEnum.DISABLE.equals(newStatus) && ObjectUtil.equal(id, LoginHelper
+        CheckUtils.throwIf(DisEnableStatusEnum.DISABLE.equals(newStatus) && ObjectUtil.equal(id, UserContextHolder
             .getUserId()), "不允许禁用当前用户");
         UserDO oldUser = super.getById(id);
         if (Boolean.TRUE.equals(oldUser.getIsSystem())) {
@@ -321,9 +325,19 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         baseMapper.updateById(newUser);
         // 保存用户和角色关联
         boolean isSaveUserRoleSuccess = userRoleService.add(req.getRoleIds(), id);
-        // 如果功能权限或数据权限有变更，则清除关联的在线用户（重新登录以获取最新角色权限）
-        if (DisEnableStatusEnum.DISABLE.equals(newStatus) || isSaveUserRoleSuccess) {
-            onlineUserService.cleanByUserId(id);
+        // 如果禁用用户，则踢出在线用户
+        if (DisEnableStatusEnum.DISABLE.equals(newStatus)) {
+            onlineUserService.kickOut(id);
+            return;
+        }
+        // 如果角色有变更，则更新在线用户权限信息
+        if (isSaveUserRoleSuccess) {
+            UserContext userContext = UserContextHolder.getContext(id);
+            if (null != userContext) {
+                userContext.setRoles(roleService.listByUserId(id));
+                userContext.setPermissions(roleService.listPermissionByUserId(id));
+                UserContextHolder.setContext(userContext);
+            }
         }
     }
 
@@ -331,7 +345,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
     @Transactional(rollbackFor = Exception.class)
     @CacheInvalidate(key = "#ids", name = CacheConstants.USER_KEY_PREFIX, multi = true)
     public void delete(List<Long> ids) {
-        CheckUtils.throwIf(CollUtil.contains(ids, LoginHelper.getUserId()), "不允许删除当前用户");
+        CheckUtils.throwIf(CollUtil.contains(ids, UserContextHolder.getUserId()), "不允许删除当前用户");
         List<UserDO> list = baseMapper.lambdaQuery()
             .select(UserDO::getNickname, UserDO::getIsSystem)
             .in(UserDO::getId, ids)
@@ -349,10 +363,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
 
     @Override
     public void resetPassword(UserPasswordResetReq req, Long id) {
-        UserDO user = super.getById(id);
-        user.setPassword(req.getNewPassword());
-        user.setPwdResetTime(LocalDateTime.now());
-        baseMapper.updateById(user);
+        super.getById(id);
+        baseMapper.lambdaUpdate()
+            .set(UserDO::getPassword, req.getNewPassword())
+            .set(UserDO::getPwdResetTime, LocalDateTime.now())
+            .eq(UserDO::getId, id)
+            .update();
     }
 
     @Override
@@ -397,9 +413,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         // 校验密码合法性
         int passwordRepetitionTimes = this.checkPassword(newPassword, user);
         // 更新密码和密码重置时间
-        user.setPassword(newPassword);
-        user.setPwdResetTime(LocalDateTime.now());
-        baseMapper.updateById(user);
+        baseMapper.lambdaUpdate()
+            .set(UserDO::getPassword, newPassword)
+            .set(UserDO::getPwdResetTime, LocalDateTime.now())
+            .eq(UserDO::getId, id)
+            .update();
         // 保存历史密码
         userPasswordHistoryService.add(id, password, passwordRepetitionTimes);
         // 修改后登出

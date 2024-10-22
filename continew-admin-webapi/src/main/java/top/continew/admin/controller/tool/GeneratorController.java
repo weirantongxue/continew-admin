@@ -32,7 +32,9 @@ import top.continew.admin.generator.model.req.GenConfigReq;
 import top.continew.admin.generator.model.resp.GeneratePreviewResp;
 import top.continew.admin.generator.model.resp.TableResp;
 import top.continew.admin.generator.service.GeneratorService;
+import top.continew.admin.system.service.DictService;
 import top.continew.starter.extension.crud.model.query.PageQuery;
+import top.continew.starter.extension.crud.model.resp.LabelValueResp;
 import top.continew.starter.extension.crud.model.resp.PageResp;
 
 import java.sql.SQLException;
@@ -52,12 +54,21 @@ import java.util.List;
 public class GeneratorController {
 
     private final GeneratorService baseService;
+    private final DictService dictService;
 
     @Operation(summary = "分页查询数据表", description = "分页查询数据表")
     @SaCheckPermission("tool:generator:list")
     @GetMapping("/table")
     public PageResp<TableResp> pageTable(TableQuery query, @Validated PageQuery pageQuery) throws SQLException {
         return baseService.pageTable(query, pageQuery);
+    }
+
+    @Operation(summary = "查询生成配置信息", description = "查询生成配置信息")
+    @Parameter(name = "tableName", description = "表名称", required = true, example = "sys_user", in = ParameterIn.PATH)
+    @SaCheckPermission("tool:generator:list")
+    @GetMapping("/config/{tableName}")
+    public GenConfigDO getGenConfig(@PathVariable String tableName) throws SQLException {
+        return baseService.getGenConfig(tableName);
     }
 
     @Operation(summary = "查询字段配置列表", description = "查询字段配置列表")
@@ -68,14 +79,6 @@ public class GeneratorController {
     public List<FieldConfigDO> listFieldConfig(@PathVariable String tableName,
                                                @RequestParam(required = false, defaultValue = "false") Boolean requireSync) {
         return baseService.listFieldConfig(tableName, requireSync);
-    }
-
-    @Operation(summary = "查询生成配置信息", description = "查询生成配置信息")
-    @Parameter(name = "tableName", description = "表名称", required = true, example = "sys_user", in = ParameterIn.PATH)
-    @SaCheckPermission("tool:generator:list")
-    @GetMapping("/config/{tableName}")
-    public GenConfigDO getGenConfig(@PathVariable String tableName) throws SQLException {
-        return baseService.getGenConfig(tableName);
     }
 
     @Operation(summary = "保存配置信息", description = "保存配置信息")
@@ -100,5 +103,14 @@ public class GeneratorController {
     @PostMapping("/{tableNames}")
     public void generate(@PathVariable List<String> tableNames, HttpServletResponse response) {
         baseService.generate(tableNames, response);
+    }
+
+    @Operation(summary = "查询字典", description = "查询字典列表")
+    @SaCheckPermission("tool:generator:list")
+    @GetMapping("/dict")
+    public List<LabelValueResp> listDict() {
+        List<LabelValueResp> dictList = dictService.listDict(null, null);
+        dictList.addAll(dictService.listEnumDict());
+        return dictList;
     }
 }

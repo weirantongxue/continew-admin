@@ -41,42 +41,71 @@
         ${ew.customSqlSegment}
     </select>
 
-    <select id="selectDashboardTotal" resultType="top.continew.admin.system.model.resp.DashboardTotalResp">
+    <select id="selectDashboardOverviewPv" resultType="top.continew.admin.system.model.resp.dashboard.DashboardOverviewCommonResp">
         SELECT
-            (SELECT COUNT(*) FROM sys_log) AS pvCount,
-            (SELECT COUNT(DISTINCT ip) FROM sys_log) AS ipCount,
-            (SELECT COUNT(*) FROM sys_log WHERE DATE(create_time) = CURRENT_DATE) AS todayPvCount,
-            (SELECT COUNT(*) FROM sys_log WHERE DATE(create_time) = CURRENT_DATE - 1) AS yesterdayPvCount
+            (SELECT COUNT(*) FROM sys_log) AS total,
+            (SELECT COUNT(*) FROM sys_log WHERE DATE(create_time) = CURRENT_DATE) AS today,
+            (SELECT COUNT(*) FROM sys_log WHERE DATE(create_time) = CURRENT_DATE - 1) AS yesterday
+    </select>
+
+    <select id="selectDashboardOverviewIp" resultType="top.continew.admin.system.model.resp.dashboard.DashboardOverviewCommonResp">
+        SELECT
+            (SELECT COUNT(DISTINCT ip) FROM sys_log) AS total,
+            (SELECT COUNT(DISTINCT ip) FROM sys_log WHERE DATE(create_time) = CURRENT_DATE) AS today,
+            (SELECT COUNT(DISTINCT ip) FROM sys_log WHERE DATE(create_time) = CURRENT_DATE - 1) AS yesterday
+    </select>
+
+    <select id="selectListDashboardAnalysisPv"
+            resultType="top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp">
+        SELECT
+            DATE_FORMAT(create_time, '%Y-%m') AS name,
+            COUNT(*) AS value
+        FROM sys_log
+        WHERE DATE_FORMAT(create_time, '%Y-%m' ) IN
+        <foreach collection="months" item="month" separator="," open="(" close=")">
+            #{month}
+        </foreach>
+        GROUP BY name
+        ORDER BY name
+    </select>
+
+    <select id="selectListDashboardAnalysisIp"
+            resultType="top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp">
+        SELECT
+            DATE_FORMAT(create_time, '%Y-%m') AS name,
+            COUNT(DISTINCT ip) AS value
+        FROM sys_log
+        WHERE DATE_FORMAT(create_time, '%Y-%m' ) IN
+        <foreach collection="months" item="month" separator="," open="(" close=")">
+            #{month}
+        </foreach>
+        GROUP BY name
+        ORDER BY name
     </select>
 
     <select id="selectListDashboardAccessTrend"
-            resultType="top.continew.admin.system.model.resp.DashboardAccessTrendResp">
+            resultType="top.continew.admin.system.model.resp.dashboard.DashboardAccessTrendResp">
         SELECT
             DATE(create_time) AS date,
             COUNT(*) AS pvCount,
             COUNT(DISTINCT ip) AS ipCount
         FROM sys_log
-        WHERE DATE(create_time) != CURRENT_DATE
-        GROUP BY DATE(create_time)
-        ORDER BY DATE(create_time) DESC
-        LIMIT #{days}
+        WHERE create_time BETWEEN #{startTime} AND #{endTime}
+        GROUP BY date
+        ORDER BY date
     </select>
 
-    <select id="selectListDashboardPopularModule"
-            resultType="top.continew.admin.system.model.resp.DashboardPopularModuleResp">
+    <select id="selectListDashboardAnalysisTimeslot"
+            resultType="top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp">
         SELECT
-            module,
-            COUNT(*) AS pvCount,
-            SUM(CASE WHEN DATE(create_time) = CURRENT_DATE THEN 1 ELSE 0 END) AS todayPvCount,
-            SUM(CASE WHEN DATE(create_time) = CURRENT_DATE - 1 THEN 1 ELSE 0 END) AS yesterdayPvCount
+            LPAD(CONCAT(FLOOR(HOUR(create_time) / 2) * 2, ':00'), 5, '0') AS name,
+            COUNT(*) AS value
         FROM sys_log
-        WHERE module != '验证码' AND module != '登录'
-        GROUP BY module
-        ORDER BY pvCount DESC
-        LIMIT 10
+        GROUP BY name
+        ORDER BY name
     </select>
 
-    <select id="selectListDashboardGeoDistribution" resultType="java.util.Map">
+    <select id="selectListDashboardAnalysisGeo" resultType="top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp">
         SELECT
             CASE
                 WHEN POSITION(' ' IN address) > 0 THEN SUBSTRING(address FROM 1 FOR POSITION(' ' IN address) - 1)
@@ -86,6 +115,42 @@
         FROM sys_log
         GROUP BY name
         ORDER BY value DESC
-        LIMIT 10
+        LIMIT #{top}
+    </select>
+
+    <select id="selectListDashboardAnalysisModule"
+            resultType="top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp">
+        SELECT
+            module AS name,
+            COUNT(*) AS value
+        FROM sys_log
+        WHERE module != '验证码' AND module != '登录'
+        GROUP BY name
+        ORDER BY value DESC
+        LIMIT #{top}
+    </select>
+
+    <select id="selectListDashboardAnalysisOs"
+            resultType="top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp">
+        SELECT
+            os AS name,
+            COUNT(*) AS value
+        FROM sys_log
+        WHERE os IS NOT NULL
+        GROUP BY name
+        ORDER BY value DESC
+        LIMIT #{top}
+    </select>
+
+    <select id="selectListDashboardAnalysisBrowser"
+            resultType="top.continew.admin.system.model.resp.dashboard.DashboardChartCommonResp">
+        SELECT
+            SUBSTRING_INDEX(browser, ' ', 1) AS name,
+            COUNT(*) AS value
+        FROM sys_log
+        WHERE browser IS NOT NULL
+        GROUP BY name
+        ORDER BY value DESC
+        LIMIT #{top}
     </select>
 </mapper>

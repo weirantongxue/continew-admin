@@ -14,56 +14,61 @@
  * limitations under the License.
  */
 
-package top.continew.admin.system.model.resp;
+package top.continew.admin.system.model.resp.dashboard;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
- * 仪表盘-总计信息
+ * 仪表盘-通用总览信息
  *
  * @author Charles7c
- * @since 2023/9/8 21:32
+ * @since 2024/10/19 12:19
  */
 @Data
-@Schema(description = "仪表盘-总计信息")
-public class DashboardTotalResp implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(description = "仪表盘-通用总览信息")
+public class DashboardOverviewCommonResp implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 浏览量（PV）
+     * 总数
      */
-    @Schema(description = "浏览量（PV）", example = "88888")
-    private Long pvCount;
+    @Schema(description = "总数", example = "888888")
+    private Long total;
 
     /**
-     * IP 数
+     * 今日数量
      */
-    @Schema(description = "IP 数", example = "66666")
-    private Long ipCount;
+    @Schema(description = "今日数量", example = "888")
+    private Long today;
 
     /**
-     * 今日浏览量（PV）
-     */
-    @Schema(description = "今日浏览量（PV）", example = "1234")
-    private Long todayPvCount;
-
-    /**
-     * 较昨日新增 PV（百分比）
+     * 较昨日新增（百分比）
      */
     @Schema(description = "较昨日新增（百分比）", example = "23.4")
-    private BigDecimal newPvFromYesterday;
+    private BigDecimal growth;
 
     /**
-     * 昨日浏览量（PV）
+     * 图表数据
+     */
+    @Schema(description = "图表数据")
+    private List<DashboardChartCommonResp> dataList;
+
+    /**
+     * 昨日数量
      */
     @JsonIgnore
-    private Long yesterdayPvCount;
+    private Long yesterday;
 }

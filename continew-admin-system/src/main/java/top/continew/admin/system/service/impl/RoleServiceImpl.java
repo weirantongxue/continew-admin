@@ -30,8 +30,10 @@ import top.continew.admin.auth.service.OnlineUserService;
 import top.continew.admin.common.constant.CacheConstants;
 import top.continew.admin.common.constant.ContainerConstants;
 import top.continew.admin.common.constant.SysConstants;
+import top.continew.admin.common.context.RoleContext;
+import top.continew.admin.common.context.UserContext;
+import top.continew.admin.common.context.UserContextHolder;
 import top.continew.admin.common.enums.DataScopeEnum;
-import top.continew.admin.common.model.dto.RoleDTO;
 import top.continew.admin.system.mapper.RoleMapper;
 import top.continew.admin.system.model.entity.RoleDO;
 import top.continew.admin.system.model.query.RoleQuery;
@@ -57,10 +59,10 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleResp, RoleDetailResp, RoleQuery, RoleReq> implements RoleService {
 
     private final MenuService menuService;
-    private final OnlineUserService onlineUserService;
     private final RoleMenuService roleMenuService;
     private final RoleDeptService roleDeptService;
     private final UserRoleService userRoleService;
+    private final OnlineUserService onlineUserService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -92,16 +94,24 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
         }
         // 更新信息
         super.update(req, id);
-        // 更新关联信息
-        if (!SysConstants.ADMIN_ROLE_CODE.equals(oldRole.getCode())) {
-            // 保存角色和菜单关联
-            boolean isSaveMenuSuccess = roleMenuService.add(req.getMenuIds(), id);
-            // 保存角色和部门关联
-            boolean isSaveDeptSuccess = roleDeptService.add(req.getDeptIds(), id);
-            // 如果功能权限或数据权限有变更，则清除关联的在线用户（重新登录以获取最新角色权限）
-            if (ObjectUtil.notEqual(req.getDataScope(), oldDataScope) || isSaveMenuSuccess || isSaveDeptSuccess) {
-                onlineUserService.cleanByRoleId(id);
-            }
+        if (SysConstants.ADMIN_ROLE_CODE.equals(req.getCode())) {
+            return;
+        }
+        // 保存角色和菜单关联
+        boolean isSaveMenuSuccess = roleMenuService.add(req.getMenuIds(), id);
+        // 保存角色和部门关联
+        boolean isSaveDeptSuccess = roleDeptService.add(req.getDeptIds(), id);
+        // 如果功能权限或数据权限有变更，则更新在线用户权限信息
+        if (isSaveMenuSuccess || isSaveDeptSuccess || ObjectUtil.notEqual(req.getDataScope(), oldDataScope)) {
+            List<Long> userIdList = userRoleService.listUserIdByRoleId(id);
+            userIdList.parallelStream().forEach(userId -> {
+                UserContext userContext = UserContextHolder.getContext(userId);
+                if (null != userContext) {
+                    userContext.setRoles(this.listByUserId(userId));
+                    userContext.setPermissions(this.listPermissionByUserId(userId));
+                    UserContextHolder.setContext(userContext);
+                }
+            });
         }
     }
 
@@ -137,6 +147,16 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     }
 
     @Override
+    public Set<String> listPermissionByUserId(Long userId) {
+        Set<String> roleCodeSet = this.listCodeByUserId(userId);
+        // 超级管理员赋予全部权限
+        if (roleCodeSet.contains(SysConstants.ADMIN_ROLE_CODE)) {
+            return CollUtil.newHashSet(SysConstants.ALL_PERMISSION);
+        }
+        return menuService.listPermissionByUserId(userId);
+    }
+
+    @Override
     @ContainerMethod(namespace = ContainerConstants.USER_ROLE_NAME_LIST, type = MappingType.ORDER_OF_KEYS)
     public List<String> listNameByIds(List<Long> ids) {
         List<RoleDO> roleList = baseMapper.lambdaQuery().select(RoleDO::getName).in(RoleDO::getId, ids).list();
@@ -151,10 +171,10 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     }
 
     @Override
-    public Set<RoleDTO> listByUserId(Long userId) {
+    public Set<RoleContext> listByUserId(Long userId) {
         List<Long> roleIdList = userRoleService.listRoleIdByUserId(userId);
         List<RoleDO> roleList = baseMapper.lambdaQuery().in(RoleDO::getId, roleIdList).list();
-        return new HashSet<>(BeanUtil.copyToList(roleList, RoleDTO.class));
+        return new HashSet<>(BeanUtil.copyToList(roleList, RoleContext.class));
     }
 
     @Override

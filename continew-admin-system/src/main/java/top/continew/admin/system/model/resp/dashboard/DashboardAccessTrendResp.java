@@ -14,38 +14,46 @@
  * limitations under the License.
  */
 
-package top.continew.admin.common.model.dto;
+package top.continew.admin.system.model.resp.dashboard;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import top.continew.admin.common.enums.DataScopeEnum;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 角色信息
+ * 仪表盘-访问趋势信息
  *
  * @author Charles7c
- * @since 2023/3/7 22:08
+ * @since 2023/9/9 20:20
  */
 @Data
-public class RoleDTO implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(description = "仪表盘-访问趋势信息")
+public class DashboardAccessTrendResp implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * ID
+     * 日期
      */
-    private Long id;
+    @Schema(description = "日期", example = "2023-08-08")
+    private String date;
 
     /**
-     * 角色编码
+     * 浏览量（PV）
      */
-    private String code;
+    @Schema(description = "浏览量（PV）", example = "1000")
+    private Long pvCount;
 
     /**
-     * 数据权限
+     * IP 数
      */
-    private DataScopeEnum dataScope;
+    @Schema(description = "IP 数", example = "500")
+    private Long ipCount;
 }

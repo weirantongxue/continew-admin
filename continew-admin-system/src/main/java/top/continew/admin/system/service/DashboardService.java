@@ -16,7 +16,7 @@
 
 package top.continew.admin.system.service;
 
-import top.continew.admin.system.model.resp.*;
+import top.continew.admin.system.model.resp.dashboard.*;
 
 import java.util.List;
 
@@ -29,11 +29,25 @@ import java.util.List;
 public interface DashboardService {
 
     /**
-     * 查询总计信息
+     * 查询公告列表
      *
-     * @return 总计信息
+     * @return 公告列表
      */
-    DashboardTotalResp getTotal();
+    List<DashboardNoticeResp> listNotice();
+
+    /**
+     * 查询 PV 总览
+     *
+     * @return PV 总览
+     */
+    DashboardOverviewCommonResp getOverviewPv();
+
+    /**
+     * 查询 IP 总览
+     *
+     * @return IP 总览
+     */
+    DashboardOverviewCommonResp getOverviewIp();
 
     /**
      * 查询访问趋势信息
@@ -44,23 +58,37 @@ public interface DashboardService {
     List<DashboardAccessTrendResp> listAccessTrend(Integer days);
 
     /**
-     * 查询热门模块列表
+     * 查询访问时段分析信息
      *
-     * @return 热门模块列表
+     * @return 访问时段分析信息
      */
-    List<DashboardPopularModuleResp> listPopularModule();
+    List<DashboardChartCommonResp> getAnalysisTimeslot();
 
     /**
-     * 查询访客地域分布信息
+     * 查询地域分析信息
      *
-     * @return 访客地域分布信息
+     * @return 地域分析信息
      */
-    DashboardGeoDistributionResp getGeoDistribution();
+    List<DashboardChartCommonResp> getAnalysisGeo();
 
     /**
-     * 查询公告列表
+     * 查询模块分析信息
      *
-     * @return 公告列表
+     * @return 模块分析信息
      */
-    List<DashboardNoticeResp> listNotice();
+    List<DashboardChartCommonResp> getAnalysisModule();
+
+    /**
+     * 查询终端分析信息
+     *
+     * @return 终端分析信息
+     */
+    List<DashboardChartCommonResp> getAnalysisOs();
+
+    /**
+     * 查询浏览器分析信息
+     *
+     * @return 浏览器分析信息
+     */
+    List<DashboardChartCommonResp> getAnalysisBrowser();
 }
