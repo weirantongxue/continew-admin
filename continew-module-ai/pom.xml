@@ -9,18 +9,18 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>continew-admin-ai</artifactId>
+    <artifactId>continew-module-ai</artifactId>
     <description>AI相关</description>
 
     <dependencies>
         <!-- 公共模块（存放公共工具类，公共配置等） -->
         <dependency>
             <groupId>top.continew</groupId>
-            <artifactId>continew-admin-common</artifactId>
+            <artifactId>continew-common</artifactId>
         </dependency>
         <dependency>
             <groupId>top.continew</groupId>
-            <artifactId>continew-admin-system</artifactId>
+            <artifactId>continew-module-system</artifactId>
         </dependency>
         <dependency>
             <groupId>com.unfbx</groupId>

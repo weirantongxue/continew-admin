@@ -29,7 +29,7 @@
         <module>continew-plugin</module>
         <module>continew-common</module>
         <module>continew-extension</module>
-        <module>continew-admin-ai</module>
+        <module>continew-module-ai</module>
 
     </modules>
 
@@ -84,7 +84,7 @@
             </dependency>
             <dependency>
                 <groupId>top.continew</groupId>
-                <artifactId>continew-admin-ai</artifactId>
+                <artifactId>continew-module-ai</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

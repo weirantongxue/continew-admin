@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package top.continew.admin.ai.service;
+package top.continew.admin.ai.strategy;
 
-import top.continew.starter.extension.crud.service.BaseService;
-import top.continew.admin.ai.model.query.ModelQuery;
-import top.continew.admin.ai.model.req.ModelReq;
-import top.continew.admin.ai.model.resp.ModelDetailResp;
-import top.continew.admin.ai.model.resp.ModelResp;
+import reactor.core.publisher.Flux;
+import top.continew.admin.ai.model.req.MessageRequest;
 
 /**
- * AI模型业务接口
- *
- * @author weiran
- * @since 2024/08/04 23:35
+ * Created by WeiRan on 2021.12.10 15:11
  */
-public interface ModelService extends BaseService<ModelResp, ModelDetailResp, ModelQuery, ModelReq> {}
+public interface ModelStrategy {
+    Flux<String> completions(MessageRequest messageCreateValidate);
+
+}
