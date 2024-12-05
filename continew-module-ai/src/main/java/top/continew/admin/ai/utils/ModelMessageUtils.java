@@ -16,7 +16,7 @@
 
 package top.continew.admin.ai.utils;
 
-import com.unfbx.chatgpt.entity.chat.ChatCompletion;
+import top.continew.admin.ai.model.ChatCompletion;
 import top.continew.admin.ai.model.req.MessageRequest;
 
 /**
@@ -28,10 +28,10 @@ public class ModelMessageUtils {
         return ChatCompletion.builder()
             .model("glm-4-flash")
             .messages(messageRequest.getMessages())
-            .maxTokens(3000)
+            .max_tokens(3000)
             .stream(true)
-            .temperature(0.2)
-            .topP(0.2)
+            .temperature(0.2F)
+            .top_p(0.2F)
             .build();
     }
 

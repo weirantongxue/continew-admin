@@ -22,10 +22,5 @@
             <groupId>top.continew</groupId>
             <artifactId>continew-module-system</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.unfbx</groupId>
-            <artifactId>chatgpt-java</artifactId>
-            <version>1.1.5</version>
-        </dependency>
     </dependencies>
 </project>
