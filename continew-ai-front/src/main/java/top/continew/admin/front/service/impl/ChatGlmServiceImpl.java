@@ -73,8 +73,8 @@ public class ChatGlmServiceImpl implements ChatGlmService {
 
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(userId, messageId, chatMessageService, message, timer, loginUser
                 .getDeptId());
-            String authToken = ApiTokenUtils.generateClientToken(modelDetailResp.getApiKey());
-            StreamUtils.streamCompletion(modelDetailResp.getUrl(), authToken, gptEventSourceListener, ChatMessageUtils
+            //String authToken = ApiTokenUtils.generateClientToken(modelDetailResp.getApiKey());
+            StreamUtils.streamCompletion(modelDetailResp.getUrl(), modelDetailResp.getApiKey(), gptEventSourceListener, ChatMessageUtils
                 .convertModelRequest(messageCreateValidate, modelDetailResp, modelScriptDetailResp));
         } catch (Exception e) {
             log.error("Glm6B请求失败");

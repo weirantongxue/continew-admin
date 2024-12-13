@@ -32,14 +32,14 @@ import okhttp3.sse.EventSources;
 public class StreamUtils {
 
     public static void streamCompletion(String url,
-                                        String authToken,
+                                        String apikey,
                                         EventSourceListener eventSourceListener,
                                         String requestBody) {
         try {
             RequestBody formBody = RequestBody.create(requestBody, MediaType.parse("application/json; charset=utf-8"));
             Request.Builder requestBuilder = new Request.Builder();
-            if (StrUtil.isNotBlank(authToken)) {
-                requestBuilder.addHeader("Authorization", authToken);
+            if (StrUtil.isNotBlank(apikey)) {
+                requestBuilder.addHeader("Authorization", "Bearer " + apikey);
             }
             Request request = requestBuilder.url(url).post(formBody).build();
             EventSource.Factory factory = EventSources.createFactory(OkHttpUtils.getInstance());

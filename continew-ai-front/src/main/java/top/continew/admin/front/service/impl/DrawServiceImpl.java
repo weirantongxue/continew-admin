@@ -91,14 +91,7 @@ public class DrawServiceImpl implements DrawService {
         if (null != modelScriptVo && StringUtils.isNotBlank(modelScriptVo.getPrompt())) {
             preset = modelScriptVo.getPrompt();
         }
-
-        if ("chuzhanAi".equals(modelResp.getName())) {
-            return chuzhanAi(drawReq, modelResp);
-        }
-        if ("cogview-3".equals(modelResp.getName())) {
-            return cogview(drawReq, modelResp, loginUser.getDeptId(), loginUser.getId(), preset);
-        }
-        return R.fail("未匹配到对应模型,请联系管理员.");
+         return cogview(drawReq, modelResp, loginUser.getDeptId(), loginUser.getId(), preset);
     }
 
     private R<DrawTaskVo> cogview(DrawReq drawReq, ModelDetailResp modelResp, Long deptId, Long userId, String preset) {
@@ -107,13 +100,13 @@ public class DrawServiceImpl implements DrawService {
             prompt = preset + "\n" + prompt;
         }
         DrawTaskVo drawTaskVo = new DrawTaskVo();
-        String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
+       // String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("model", modelResp.getName());
         jsonObject.put("prompt", prompt);
 
         HttpRequest request = HttpRequest.post(modelResp.getUrl())
-            .header("Authorization", authToken)
+            .header("Authorization", "Bearer " + modelResp.getApiKey())
             .timeout(15000)
             .body(JSONObject.toJSONString(jsonObject));
         String result = request.execute().body();
@@ -168,34 +161,6 @@ public class DrawServiceImpl implements DrawService {
         return R.success(drawTaskVo);
     }
 
-    private R<DrawTaskVo> chuzhanAi(DrawReq drawReq, ModelDetailResp modelResp) {
-        DrawTaskVo drawTaskVo = new DrawTaskVo();
-        String nonce = IdUtil.fastSimpleUUID();
-        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(drawReq));
-        jsonObject.put("callback", "http://101.201.33.35:8000/api/ai/draw/drawCallback");
-        jsonObject.put("nonce", nonce);
-        HttpRequest request = HttpRequest.post("https://ai.huashi6.com/aiapi/v1/draw")
-            .header("Auth-Token", "lHOYOgNDXKssyTQTAqu0DyXrdMpPwx6z")
-            .body(jsonObject.toJSONString());
-        String result = request.execute().body();
-        log.info("请求文生图返回结果:{}", JSONObject.toJSONString(result));
-        JSONObject res = JSONObject.parseObject(result);
-        if (res.containsKey("code") && 0 == res.getInteger("code")) {
-            String paintingSign = res.getJSONObject("data").getString("paintingSign");
-            if (StrUtil.isNotBlank(paintingSign)) {
-                DrawTaskDO drawTaskDO = new DrawTaskDO();
-                drawTaskDO.setTaskId(paintingSign);
-                drawTaskDO.setPrompt(drawReq.getPrompt());
-                drawTaskDO.setNonce(nonce);
-                drawTaskMapper.insert(drawTaskDO);
-                drawTaskVo.setTaskId(paintingSign);
-                drawTaskVo.setResType("async");
-                return R.success(drawTaskVo);
-            }
-            return R.fail("模型服务异常请联系管理员");
-        }
-        return R.fail("模型服务异常请联系管理员");
-    }
 
     @Override
     public R<Object> checkDrawTask(String taskId) {
