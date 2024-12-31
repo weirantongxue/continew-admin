@@ -21,13 +21,13 @@ import org.hibernate.validator.constraints.Length;
 import top.continew.starter.extension.crud.model.req.BaseReq;
 
 /**
- * 创建或修改${businessName}信息
+ * 创建或修改${businessName}参数
  *
  * @author ${author}
  * @since ${datetime}
  */
 @Data
-@Schema(description = "创建或修改${businessName}信息")
+@Schema(description = "创建或修改${businessName}参数")
 public class ${className} extends BaseReq {
 
     @Serial
@@ -48,7 +48,7 @@ public class ${className} extends BaseReq {
     </#if>
     </#if>
     <#if fieldConfig.fieldType = 'String' && fieldConfig.columnSize??>
-    @Length(max = ${fieldConfig.columnSize}, message = "${fieldConfig.comment}长度不能超过 {max} 个字符")
+    @Length(max = ${fieldConfig.columnSize?c}, message = "${fieldConfig.comment}长度不能超过 {max} 个字符")
     </#if>
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
     </#if>

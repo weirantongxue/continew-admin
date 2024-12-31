@@ -5,7 +5,7 @@ project:
   # 应用名称
   app-name: continew-admin
   # 版本
-  version: 3.3.0
+  version: 3.4.1
   # 描述
   description: 持续迭代优化的前后端分离中后台管理系统框架，开箱即用，持续提供舒适的开发体验。
   # 基本包
@@ -66,6 +66,13 @@ continew-starter.web:
     # 是否将原生异常错误信息填充到状态信息中
     origin-exception-using-detail-message: false
 
+--- ### 全局树结构配置（简单树，对应前端 UI）
+continew-starter.crud:
+  tree:
+    id-key: key
+    name-key: title
+    weight-key: sort
+
 --- ### 接口文档配置
 springdoc:
   # 设置对象型参数的展示形式（设为 true 表示将对象型参数平展开，即对象内的属性直接作为参数展示而不是嵌套在对象内，默认 false）
@@ -89,6 +96,15 @@ springdoc:
     - group: monitor
       display-name: 系统监控
       packages-to-scan: ${project.base-package}.controller.monitor
+    - group: schedule
+      display-name: 任务调度
+      packages-to-scan: ${project.base-package}.controller.schedule
+    - group: open
+      display-name: 能力开放
+      packages-to-scan: ${project.base-package}.controller.open
+    - group: code
+      display-name: 代码生成
+      packages-to-scan: ${project.base-package}.controller.code
   ## 组件配置
   components:
     # 鉴权配置
@@ -111,17 +127,17 @@ knife4j:
 
 --- ### Sa-Token 配置
 sa-token:
-  # token 名称（同时也是 cookie 名称）
+  # Token 名称（同时也是 cookie 名称）
   token-name: Authorization
-  # token 有效期（单位：秒，默认 30 天，-1 代表永不过期）
+  # Token 有效期（单位：秒，默认 30 天，-1 代表永不过期）
   timeout: 86400
-  # token 最低活跃频率（单位：秒，默认 -1，代表不限制，永不冻结。如果 token 超过此时间没有访问系统就会被冻结）
+  # Token 最低活跃频率（单位：秒，默认 -1，代表不限制，永不冻结。如果 token 超过此时间没有访问系统就会被冻结）
   active-timeout: 1800
   # 是否打开自动续签（如果此值为 true，框架会在每次直接或间接调用 getLoginId() 时进行一次过期检查与续签操作）
   auto-renew: true
   # 是否允许同一账号多地同时登录（为 true 时允许一起登录，为 false 时新登录挤掉旧登录）
   is-concurrent: true
-  # 在多人登录同一账号时，是否共用一个 token（为 true 时所有登录共用一个 token，为 false 时每次登录新建一个 token）
+  # 在多人登录同一账号时，是否共用一个 Token（为 true 时所有登录共用一个 Token，为 false 时每次登录新建一个 Token）
   is-share: false
   # 是否输出操作日志
   is-log: false

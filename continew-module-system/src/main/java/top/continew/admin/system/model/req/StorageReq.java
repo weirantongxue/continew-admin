@@ -25,19 +25,19 @@ import org.hibernate.validator.constraints.Length;
 import top.continew.admin.common.constant.RegexConstants;
 import top.continew.admin.common.enums.DisEnableStatusEnum;
 import top.continew.admin.system.enums.StorageTypeEnum;
-import top.continew.admin.system.util.ValidateGroup;
+import top.continew.admin.system.validation.ValidationGroup;
 import top.continew.starter.extension.crud.model.req.BaseReq;
 
 import java.io.Serial;
 
 /**
- * 存储请求信息
+ * 存储请求参数
  *
  * @author Charles7c
  * @since 2023/12/26 22:09
  */
 @Data
-@Schema(description = "存储请求信息")
+@Schema(description = "存储请求参数")
 public class StorageReq extends BaseReq {
 
     @Serial
@@ -71,14 +71,14 @@ public class StorageReq extends BaseReq {
      */
     @Schema(description = "访问密钥", example = "")
     @Length(max = 255, message = "访问密钥长度不能超过 {max} 个字符")
-    @NotBlank(message = "访问密钥不能为空", groups = ValidateGroup.Storage.S3.class)
+    @NotBlank(message = "访问密钥不能为空", groups = ValidationGroup.Storage.S3.class)
     private String accessKey;
 
     /**
      * 私有密钥
      */
     @Schema(description = "私有密钥", example = "")
-    @NotBlank(message = "私有密钥不能为空", groups = ValidateGroup.Storage.S3.class)
+    @NotBlank(message = "私有密钥不能为空", groups = ValidationGroup.Storage.S3.class)
     private String secretKey;
 
     /**
@@ -86,7 +86,7 @@ public class StorageReq extends BaseReq {
      */
     @Schema(description = "终端节点", example = "")
     @Length(max = 255, message = "终端节点长度不能超过 {max} 个字符")
-    @NotBlank(message = "终端节点不能为空", groups = ValidateGroup.Storage.S3.class)
+    @NotBlank(message = "终端节点不能为空", groups = ValidationGroup.Storage.S3.class)
     private String endpoint;
 
     /**
@@ -94,8 +94,8 @@ public class StorageReq extends BaseReq {
      */
     @Schema(description = "桶名称", example = "C:/continew-admin/data/file/")
     @Length(max = 255, message = "桶名称长度不能超过 {max} 个字符")
-    @NotBlank(message = "桶名称不能为空", groups = ValidateGroup.Storage.S3.class)
-    @NotBlank(message = "存储路径不能为空", groups = ValidateGroup.Storage.Local.class)
+    @NotBlank(message = "桶名称不能为空", groups = ValidationGroup.Storage.S3.class)
+    @NotBlank(message = "存储路径不能为空", groups = ValidationGroup.Storage.Local.class)
     private String bucketName;
 
     /**

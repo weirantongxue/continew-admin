@@ -19,13 +19,12 @@ package top.continew.admin.system.model.req.user;
 import cn.hutool.core.lang.RegexPool;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import top.continew.admin.common.constant.RegexConstants;
 import top.continew.starter.extension.crud.model.req.BaseReq;
-import top.continew.starter.extension.crud.util.ValidateGroup;
+import top.continew.starter.extension.crud.validation.CrudValidationGroup;
 
 import java.io.Serial;
 
@@ -59,13 +58,13 @@ public class UserImportRowReq extends BaseReq {
     /**
      * 密码
      */
-    @NotBlank(message = "密码不能为空", groups = ValidateGroup.Crud.Add.class)
+    @NotBlank(message = "密码不能为空", groups = CrudValidationGroup.Add.class)
     private String password;
 
     /**
      * 部门名称
      */
-    @NotNull(message = "所属部门不能为空")
+    @NotBlank(message = "所属部门不能为空")
     private String deptName;
 
     /**

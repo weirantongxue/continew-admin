@@ -33,8 +33,8 @@ import top.continew.admin.system.model.resp.MenuResp;
 import top.continew.admin.system.service.MenuService;
 import top.continew.starter.cache.redisson.util.RedisUtils;
 import top.continew.starter.core.constant.StringConstants;
-import top.continew.starter.core.util.validate.CheckUtils;
-import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.core.validation.CheckUtils;
+import top.continew.starter.extension.crud.service.BaseServiceImpl;
 
 import java.util.List;
 import java.util.Set;
@@ -105,7 +105,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, MenuDO, MenuRes
     public List<MenuResp> listByRoleCode(String roleCode) {
         List<MenuDO> menuList = baseMapper.selectListByRoleCode(roleCode);
         List<MenuResp> list = BeanUtil.copyToList(menuList, MenuResp.class);
-        list.forEach(this::fill);
+        list.forEach(super::fill);
         return list;
     }
 

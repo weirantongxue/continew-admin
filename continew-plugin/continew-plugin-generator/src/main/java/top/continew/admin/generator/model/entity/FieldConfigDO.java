@@ -16,7 +16,6 @@
 
 package top.continew.admin.generator.model.entity;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.meta.Column;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -83,7 +82,7 @@ public class FieldConfigDO implements Serializable {
      * 列大小
      */
     @Schema(description = "列大小", example = "255")
-    private String columnSize;
+    private Long columnSize;
 
     /**
      * 字段名称
@@ -165,7 +164,7 @@ public class FieldConfigDO implements Serializable {
         this.setTableName(column.getTableName());
         this.setColumnName(column.getName());
         this.setColumnType(column.getTypeName());
-        this.setColumnSize(Convert.toStr(column.getSize()));
+        this.setColumnSize(column.getSize());
         this.setComment(column.getComment());
         this.setIsRequired(!column.isPk() && !column.isNullable());
         this.setShowInList(true);
@@ -181,5 +180,9 @@ public class FieldConfigDO implements Serializable {
     public void setColumnType(String columnType) {
         String[] arr = StrUtil.splitToArray(columnType, StringConstants.SPACE);
         this.columnType = arr.length > 1 ? arr[0].toLowerCase() : columnType.toLowerCase();
+    }
+
+    public void setComment(String comment) {
+        this.comment = StrUtil.nullToDefault(comment, StringConstants.EMPTY);
     }
 }

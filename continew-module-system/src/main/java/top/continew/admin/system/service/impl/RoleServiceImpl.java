@@ -26,7 +26,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.continew.admin.auth.service.OnlineUserService;
 import top.continew.admin.common.constant.CacheConstants;
 import top.continew.admin.common.constant.ContainerConstants;
 import top.continew.admin.common.constant.SysConstants;
@@ -42,8 +41,8 @@ import top.continew.admin.system.model.resp.MenuResp;
 import top.continew.admin.system.model.resp.RoleDetailResp;
 import top.continew.admin.system.model.resp.RoleResp;
 import top.continew.admin.system.service.*;
-import top.continew.starter.core.util.validate.CheckUtils;
-import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.core.validation.CheckUtils;
+import top.continew.starter.extension.crud.service.BaseServiceImpl;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,7 +61,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     private final RoleMenuService roleMenuService;
     private final RoleDeptService roleDeptService;
     private final UserRoleService userRoleService;
-    private final OnlineUserService onlineUserService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -94,7 +92,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
         }
         // 更新信息
         super.update(req, id);
-        if (SysConstants.ADMIN_ROLE_CODE.equals(req.getCode())) {
+        if (SysConstants.SUPER_ROLE_CODE.equals(req.getCode())) {
             return;
         }
         // 保存角色和菜单关联
@@ -103,20 +101,12 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
         boolean isSaveDeptSuccess = roleDeptService.add(req.getDeptIds(), id);
         // 如果功能权限或数据权限有变更，则更新在线用户权限信息
         if (isSaveMenuSuccess || isSaveDeptSuccess || ObjectUtil.notEqual(req.getDataScope(), oldDataScope)) {
-            List<Long> userIdList = userRoleService.listUserIdByRoleId(id);
-            userIdList.parallelStream().forEach(userId -> {
-                UserContext userContext = UserContextHolder.getContext(userId);
-                if (null != userContext) {
-                    userContext.setRoles(this.listByUserId(userId));
-                    userContext.setPermissions(this.listPermissionByUserId(userId));
-                    UserContextHolder.setContext(userContext);
-                }
-            });
+            this.updateUserContext(id);
         }
     }
 
     @Override
-    protected void beforeDelete(List<Long> ids) {
+    public void beforeDelete(List<Long> ids) {
         List<RoleDO> list = baseMapper.lambdaQuery()
             .select(RoleDO::getName, RoleDO::getIsSystem)
             .in(RoleDO::getId, ids)
@@ -132,11 +122,20 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     }
 
     @Override
-    protected void fill(Object obj) {
+    public void assignToUsers(Long id, List<Long> userIds) {
+        super.getById(id);
+        // 保存用户和角色关联
+        userRoleService.assignRoleToUsers(id, userIds);
+        // 更新用户上下文
+        this.updateUserContext(id);
+    }
+
+    @Override
+    public void fill(Object obj) {
         super.fill(obj);
         if (obj instanceof RoleDetailResp detail) {
             Long roleId = detail.getId();
-            if (SysConstants.ADMIN_ROLE_CODE.equals(detail.getCode())) {
+            if (SysConstants.SUPER_ROLE_CODE.equals(detail.getCode())) {
                 List<MenuResp> list = menuService.listAll();
                 List<Long> menuIds = list.stream().map(MenuResp::getId).toList();
                 detail.setMenuIds(menuIds);
@@ -150,7 +149,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     public Set<String> listPermissionByUserId(Long userId) {
         Set<String> roleCodeSet = this.listCodeByUserId(userId);
         // 超级管理员赋予全部权限
-        if (roleCodeSet.contains(SysConstants.ADMIN_ROLE_CODE)) {
+        if (roleCodeSet.contains(SysConstants.SUPER_ROLE_CODE)) {
             return CollUtil.newHashSet(SysConstants.ALL_PERMISSION);
         }
         return menuService.listPermissionByUserId(userId);
@@ -159,6 +158,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     @Override
     @ContainerMethod(namespace = ContainerConstants.USER_ROLE_NAME_LIST, type = MappingType.ORDER_OF_KEYS)
     public List<String> listNameByIds(List<Long> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return Collections.emptyList();
+        }
         List<RoleDO> roleList = baseMapper.lambdaQuery().select(RoleDO::getName).in(RoleDO::getId, ids).list();
         return roleList.stream().map(RoleDO::getName).toList();
     }
@@ -166,6 +168,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     @Override
     public Set<String> listCodeByUserId(Long userId) {
         List<Long> roleIdList = userRoleService.listRoleIdByUserId(userId);
+        if (CollUtil.isEmpty(roleIdList)) {
+            return Collections.emptySet();
+        }
         List<RoleDO> roleList = baseMapper.lambdaQuery().select(RoleDO::getCode).in(RoleDO::getId, roleIdList).list();
         return roleList.stream().map(RoleDO::getCode).collect(Collectors.toSet());
     }
@@ -173,6 +178,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
     @Override
     public Set<RoleContext> listByUserId(Long userId) {
         List<Long> roleIdList = userRoleService.listRoleIdByUserId(userId);
+        if (CollUtil.isEmpty(roleIdList)) {
+            return Collections.emptySet();
+        }
         List<RoleDO> roleList = baseMapper.lambdaQuery().in(RoleDO::getId, roleIdList).list();
         return new HashSet<>(BeanUtil.copyToList(roleList, RoleContext.class));
     }
@@ -218,5 +226,22 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, RoleDO, RoleRes
      */
     private boolean isCodeExists(String code, Long id) {
         return baseMapper.lambdaQuery().eq(RoleDO::getCode, code).ne(null != id, RoleDO::getId, id).exists();
+    }
+
+    /**
+     * 更新用户上下文
+     *
+     * @param roleId 角色 ID
+     */
+    private void updateUserContext(Long roleId) {
+        List<Long> userIdList = userRoleService.listUserIdByRoleId(roleId);
+        userIdList.parallelStream().forEach(userId -> {
+            UserContext userContext = UserContextHolder.getContext(userId);
+            if (null != userContext) {
+                userContext.setRoles(this.listByUserId(userId));
+                userContext.setPermissions(this.listPermissionByUserId(userId));
+                UserContextHolder.setContext(userContext);
+            }
+        });
     }
 }

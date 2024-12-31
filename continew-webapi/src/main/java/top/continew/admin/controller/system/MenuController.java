@@ -19,22 +19,20 @@ package top.continew.admin.controller.system;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import top.continew.admin.common.base.BaseController;
 import top.continew.admin.system.model.query.MenuQuery;
 import top.continew.admin.system.model.req.MenuReq;
 import top.continew.admin.system.model.resp.MenuResp;
 import top.continew.admin.system.service.MenuService;
 import top.continew.starter.core.constant.StringConstants;
 import top.continew.starter.core.util.URLUtils;
-import top.continew.starter.core.util.validate.ValidationUtils;
+import top.continew.starter.core.validation.ValidationUtils;
+import top.continew.starter.extension.crud.annotation.CrudApi;
 import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.continew.starter.extension.crud.controller.BaseController;
 import top.continew.starter.extension.crud.enums.Api;
-import top.continew.starter.extension.crud.model.resp.BaseIdResp;
-import top.continew.starter.extension.crud.util.ValidateGroup;
+
+import java.lang.reflect.Method;
 
 /**
  * 菜单管理 API
@@ -44,27 +42,17 @@ import top.continew.starter.extension.crud.util.ValidateGroup;
  */
 @Tag(name = "菜单管理 API")
 @RestController
-@CrudRequestMapping(value = "/system/menu", api = {Api.TREE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE})
+@CrudRequestMapping(value = "/system/menu", api = {Api.TREE, Api.DETAIL, Api.ADD, Api.UPDATE, Api.DELETE})
 public class MenuController extends BaseController<MenuService, MenuResp, MenuResp, MenuQuery, MenuReq> {
 
     @Override
-    public BaseIdResp<Long> add(@Validated(ValidateGroup.Crud.Add.class) @RequestBody MenuReq req) {
-        this.checkPath(req);
-        return super.add(req);
-    }
-
-    @Override
-    public void update(@Validated(ValidateGroup.Crud.Update.class) @RequestBody MenuReq req, @PathVariable Long id) {
-        this.checkPath(req);
-        super.update(req, id);
-    }
-
-    /**
-     * 检查路由地址格式
-     *
-     * @param req 创建或修改信息
-     */
-    private void checkPath(MenuReq req) {
+    public void preHandle(CrudApi crudApi, Object[] args, Method targetMethod, Class<?> targetClass) throws Exception {
+        super.preHandle(crudApi, args, targetMethod, targetClass);
+        Api api = crudApi.value();
+        if (!(Api.ADD.equals(api) || Api.UPDATE.equals(api))) {
+            return;
+        }
+        MenuReq req = (MenuReq)args[0];
         Boolean isExternal = ObjectUtil.defaultIfNull(req.getIsExternal(), false);
         String path = req.getPath();
         ValidationUtils.throwIf(Boolean.TRUE.equals(isExternal) && !URLUtils

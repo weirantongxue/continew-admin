@@ -16,6 +16,7 @@
 
 package top.continew.admin.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alicp.jetcache.anno.Cached;
@@ -33,9 +34,9 @@ import top.continew.starter.cache.redisson.util.RedisUtils;
 import top.continew.starter.core.autoconfigure.project.ProjectProperties;
 import top.continew.starter.core.constant.StringConstants;
 import top.continew.starter.core.enums.BaseEnum;
-import top.continew.starter.core.util.validate.CheckUtils;
+import top.continew.starter.core.validation.CheckUtils;
 import top.continew.starter.extension.crud.model.resp.LabelValueResp;
-import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.BaseServiceImpl;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,14 +56,14 @@ public class DictItemServiceImpl extends BaseServiceImpl<DictItemMapper, DictIte
     private static final Map<String, List<LabelValueResp>> ENUM_DICT_CACHE = new ConcurrentHashMap<>();
 
     @Override
-    protected void beforeAdd(DictItemReq req) {
+    public void beforeAdd(DictItemReq req) {
         String value = req.getValue();
         CheckUtils.throwIf(this.isValueExists(value, null, req.getDictId()), "新增失败，字典值 [{}] 已存在", value);
         RedisUtils.deleteByPattern(CacheConstants.DICT_KEY_PREFIX + StringConstants.ASTERISK);
     }
 
     @Override
-    protected void beforeUpdate(DictItemReq req, Long id) {
+    public void beforeUpdate(DictItemReq req, Long id) {
         String value = req.getValue();
         CheckUtils.throwIf(this.isValueExists(value, id, req.getDictId()), "修改失败，字典值 [{}] 已存在", value);
         RedisUtils.deleteByPattern(CacheConstants.DICT_KEY_PREFIX + StringConstants.ASTERISK);
@@ -77,6 +78,9 @@ public class DictItemServiceImpl extends BaseServiceImpl<DictItemMapper, DictIte
 
     @Override
     public void deleteByDictIds(List<Long> dictIds) {
+        if (CollUtil.isEmpty(dictIds)) {
+            return;
+        }
         baseMapper.lambdaUpdate().in(DictItemDO::getDictId, dictIds).remove();
         RedisUtils.deleteByPattern(CacheConstants.DICT_KEY_PREFIX + StringConstants.ASTERISK);
     }

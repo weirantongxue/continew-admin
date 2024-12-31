@@ -21,17 +21,16 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 /**
- * 账号登录信息
+ * 账号登录参数
  *
  * @author Charles7c
  * @since 2022/12/21 20:43
  */
 @Data
-@Schema(description = "账号登录信息")
-public class AccountLoginReq implements Serializable {
+@Schema(description = "账号登录参数")
+public class AccountLoginReq extends LoginReq {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -54,13 +53,11 @@ public class AccountLoginReq implements Serializable {
      * 验证码
      */
     @Schema(description = "验证码", example = "ABCD")
-    @NotBlank(message = "验证码不能为空")
     private String captcha;
 
     /**
      * 验证码标识
      */
     @Schema(description = "验证码标识", example = "090b9a2c-1691-4fca-99db-e4ed0cff362f")
-    @NotBlank(message = "验证码标识不能为空")
     private String uuid;
 }

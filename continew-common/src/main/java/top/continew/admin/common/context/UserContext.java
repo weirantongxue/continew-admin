@@ -80,6 +80,16 @@ public class UserContext implements Serializable {
      */
     private Set<RoleContext> roles;
 
+    /**
+     * 客户端类型
+     */
+    private String clientType;
+
+    /**
+     * 客户端 ID
+     */
+    private String clientId;
+
     public UserContext(Set<String> permissions, Set<RoleContext> roles, Integer passwordExpirationDays) {
         this.permissions = permissions;
         this.setRoles(roles);
@@ -100,7 +110,7 @@ public class UserContext implements Serializable {
         if (CollUtil.isEmpty(roleCodes)) {
             return false;
         }
-        return roleCodes.contains(SysConstants.ADMIN_ROLE_CODE);
+        return roleCodes.contains(SysConstants.SUPER_ROLE_CODE);
     }
 
     /**

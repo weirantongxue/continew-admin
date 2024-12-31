@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
  * @since 2022/12/21 20:42
  */
 @Data
-@DictField(labelKey = "nickname")
+@DictField(labelKey = "nickname", extraKeys = {"username"})
 @TableName("sys_user")
 public class UserDO extends BaseDO {
 

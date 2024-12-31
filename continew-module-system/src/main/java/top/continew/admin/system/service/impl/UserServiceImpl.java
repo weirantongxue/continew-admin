@@ -61,6 +61,7 @@ import top.continew.admin.common.context.UserContextHolder;
 import top.continew.admin.common.enums.DisEnableStatusEnum;
 import top.continew.admin.common.enums.GenderEnum;
 import top.continew.admin.common.util.SecureUtils;
+import top.continew.admin.system.enums.OptionCategoryEnum;
 import top.continew.admin.system.mapper.UserMapper;
 import top.continew.admin.system.model.entity.DeptDO;
 import top.continew.admin.system.model.entity.RoleDO;
@@ -76,12 +77,12 @@ import top.continew.admin.system.service.*;
 import top.continew.starter.cache.redisson.util.RedisUtils;
 import top.continew.starter.core.constant.StringConstants;
 import top.continew.starter.core.exception.BusinessException;
-import top.continew.starter.core.util.validate.CheckUtils;
+import top.continew.starter.core.validation.CheckUtils;
 import top.continew.starter.extension.crud.model.query.PageQuery;
 import top.continew.starter.extension.crud.model.query.SortQuery;
 import top.continew.starter.extension.crud.model.resp.PageResp;
+import top.continew.starter.extension.crud.service.BaseServiceImpl;
 import top.continew.starter.extension.crud.service.CommonUserService;
-import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
 import top.continew.starter.web.util.FileUploadUtils;
 
 import java.io.IOException;
@@ -144,7 +145,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         Long userId = user.getId();
         baseMapper.lambdaUpdate().set(UserDO::getPwdResetTime, LocalDateTime.now()).eq(UserDO::getId, userId).update();
         // 保存用户和角色关联
-        userRoleService.add(req.getRoleIds(), userId);
+        userRoleService.assignRolesToUser(req.getRoleIds(), userId);
     }
 
     @Override
@@ -174,7 +175,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         newUser.setId(id);
         baseMapper.updateById(newUser);
         // 保存用户和角色关联
-        boolean isSaveUserRoleSuccess = userRoleService.add(req.getRoleIds(), id);
+        boolean isSaveUserRoleSuccess = userRoleService.assignRolesToUser(req.getRoleIds(), id);
         // 如果禁用用户，则踢出在线用户
         if (DisEnableStatusEnum.DISABLE.equals(newStatus)) {
             onlineUserService.kickOut(id);
@@ -182,12 +183,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         }
         // 如果角色有变更，则更新在线用户权限信息
         if (isSaveUserRoleSuccess) {
-            UserContext userContext = UserContextHolder.getContext(id);
-            if (null != userContext) {
-                userContext.setRoles(roleService.listByUserId(id));
-                userContext.setPermissions(roleService.listPermissionByUserId(id));
-                UserContextHolder.setContext(userContext);
-            }
+            this.updateContext(id);
         }
     }
 
@@ -209,13 +205,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         userPasswordHistoryService.deleteByUserIds(ids);
         // 删除用户
         super.delete(ids);
-    }
-
-    @Override
-    public Long add(UserDO user) {
-        user.setStatus(DisEnableStatusEnum.ENABLE);
-        baseMapper.insert(user);
-        return user.getId();
+        // 踢出在线用户
+        ids.forEach(onlineUserService::kickOut);
     }
 
     @Override
@@ -362,19 +353,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         return new UserImportResp(insertList.size() + updateList.size(), insertList.size(), updateList.size());
     }
 
-    public void doImportUser(List<UserDO> insertList, List<UserDO> updateList, List<UserRoleDO> userRoleDOList) {
-        if (CollUtil.isNotEmpty(insertList)) {
-            baseMapper.insert(insertList);
-        }
-        if (CollUtil.isNotEmpty(updateList)) {
-            this.updateBatchById(updateList);
-            userRoleService.deleteByUserIds(updateList.stream().map(UserDO::getId).toList());
-        }
-        if (CollUtil.isNotEmpty(userRoleDOList)) {
-            userRoleService.saveBatch(userRoleDOList);
-        }
-    }
-
     @Override
     public void resetPassword(UserPasswordResetReq req, Long id) {
         super.getById(id);
@@ -388,8 +366,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
     @Override
     public void updateRole(UserRoleUpdateReq updateReq, Long id) {
         super.getById(id);
+        List<Long> roleIds = updateReq.getRoleIds();
         // 保存用户和角色关联
-        userRoleService.add(updateReq.getRoleIds(), id);
+        userRoleService.assignRolesToUser(roleIds, id);
+        // 更新用户上下文
+        this.updateContext(id);
     }
 
     @Override
@@ -475,6 +456,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
 
     @Override
     public Long countByDeptIds(List<Long> deptIds) {
+        if (CollUtil.isEmpty(deptIds)) {
+            return 0L;
+        }
         return baseMapper.lambdaQuery().in(UserDO::getDeptId, deptIds).count();
     }
 
@@ -520,6 +504,26 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
                 q.in("t1.dept_id", deptIdList);
             })
             .in(CollUtil.isNotEmpty(userIdList), "t1.id", userIdList);
+    }
+
+    /**
+     * 导入用户
+     *
+     * @param insertList     新增用户
+     * @param updateList     修改用户
+     * @param userRoleDOList 用户角色关联
+     */
+    private void doImportUser(List<UserDO> insertList, List<UserDO> updateList, List<UserRoleDO> userRoleDOList) {
+        if (CollUtil.isNotEmpty(insertList)) {
+            baseMapper.insert(insertList);
+        }
+        if (CollUtil.isNotEmpty(updateList)) {
+            this.updateBatchById(updateList);
+            userRoleService.deleteByUserIds(updateList.stream().map(UserDO::getId).toList());
+        }
+        if (CollUtil.isNotEmpty(userRoleDOList)) {
+            userRoleService.saveBatch(userRoleDOList);
+        }
     }
 
     /**
@@ -630,7 +634,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
      * @return 密码允许重复使用次数
      */
     private int checkPassword(String password, UserDO user) {
-        Map<String, String> passwordPolicy = optionService.getByCategory(CATEGORY);
+        Map<String, String> passwordPolicy = optionService.getByCategory(OptionCategoryEnum.PASSWORD);
         // 密码最小长度
         PASSWORD_MIN_LENGTH.validate(password, MapUtil.getInt(passwordPolicy, PASSWORD_MIN_LENGTH.name()), user);
         // 密码是否必须包含特殊字符
@@ -680,9 +684,29 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserDO, UserRes
         return null != count && count > 0;
     }
 
+    /**
+     * 根据用户名获取用户列表
+     *
+     * @param usernames 用户名列表
+     * @return 用户列表
+     */
     private List<UserDO> listByUsernames(List<String> usernames) {
         return this.list(Wrappers.<UserDO>lambdaQuery()
             .in(UserDO::getUsername, usernames)
             .select(UserDO::getId, UserDO::getUsername));
+    }
+
+    /**
+     * 更新用户上下文信息
+     *
+     * @param id ID
+     */
+    private void updateContext(Long id) {
+        UserContext userContext = UserContextHolder.getContext(id);
+        if (null != userContext) {
+            userContext.setRoles(roleService.listByUserId(id));
+            userContext.setPermissions(roleService.listPermissionByUserId(id));
+            UserContextHolder.setContext(userContext);
+        }
     }
 }

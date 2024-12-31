@@ -100,6 +100,11 @@ generator:
     Mapper:
       templatePath: backend/Mapper.ftl
       packageName: mapper
+    MapperXml:
+      templatePath: backend/MapperXml.ftl
+      packageName: mapper
+      extension: .xml
+      suffix: Mapper
     Service:
       templatePath: backend/Service.ftl
       packageName: service
@@ -129,3 +134,8 @@ generator:
       packageName: src/views
       extension: .vue
       backend: false
+    Menu:
+      template-path: backend/Menu.ftl
+      packageName: sql
+      extension: .sql
+      backend: true

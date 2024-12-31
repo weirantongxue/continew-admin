@@ -4,8 +4,8 @@
     :title="title"
     :mask-closable="false"
     :esc-to-close="false"
-    :modal-style="{ maxWidth: '520px' }"
-    width="90%"
+    :width="width >= 600 ? 600 : '100%'"
+    draggable
     @before-ok="save"
     @close="reset"
   >
@@ -15,34 +15,37 @@
 
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
+import { useWindowSize } from '@vueuse/core'
 import { get${classNamePrefix}, add${classNamePrefix}, update${classNamePrefix} } from '@/apis/${apiModuleName}/${apiName}'
 import { type Columns, GiForm, type Options } from '@/components/GiForm'
-import { useForm } from '@/hooks'
+import { useResetReactive } from '@/hooks'
 import { useDict } from '@/hooks/app'
 
 const emit = defineEmits<{
   (e: 'save-success'): void
 }>()
 
+const { width } = useWindowSize()
+
 const dataId = ref('')
+const visible = ref(false)
 const isUpdate = computed(() => !!dataId.value)
 const title = computed(() => (isUpdate.value ? '修改${businessName}' : '新增${businessName}'))
 const formRef = ref<InstanceType<typeof GiForm>>()
-
 <#if hasDictField>
 const { <#list dictCodes as dictCode>${dictCode}<#if dictCode_has_next>,</#if></#list> } = useDict(<#list dictCodes as dictCode>'${dictCode}'<#if dictCode_has_next>,</#if></#list>)
 </#if>
 
 const options: Options = {
-  form: {},
-  btns: { hide: true }
+  form: { size: 'large' },
+  btns: { hide: true },
 }
 
-const { form, resetForm } = useForm({
+const [form, resetForm] = useResetReactive({
   // todo 待补充
 })
 
-const columns = computed<Columns<typeof form>>(() => [
+const columns: Columns = reactive<Columns>([
 <#list fieldConfigs as fieldConfig>
   <#if fieldConfig.showInForm>
   {
@@ -52,9 +55,17 @@ const columns = computed<Columns<typeof form>>(() => [
     type: 'input',
     <#elseif fieldConfig.formType = 'TEXT_AREA'>
     type: 'textarea',
+    props: {
+      autoSize: true
+    },
     <#elseif fieldConfig.formType = 'DATE'>
     type: 'date-picker',
     <#elseif fieldConfig.formType = 'DATE_TIME'>
+    type: 'date-picker',
+    props: {
+      showTime: true,
+    },
+    <#elseif fieldConfig.formType = 'TIME'>
     type: 'time-picker',
     <#elseif fieldConfig.formType = 'INPUT_NUMBER'>
     type: 'input-number', 
@@ -63,13 +74,13 @@ const columns = computed<Columns<typeof form>>(() => [
     <#elseif fieldConfig.formType = 'SWITCH'>
     type: 'switch',
     <#elseif fieldConfig.formType = 'CHECK_BOX'>
-    type: 'check-group',
+    type: 'checkbox-group',
    	<#elseif fieldConfig.formType = 'TREE_SELECT'>
     type: 'tree-select',
     <#elseif fieldConfig.formType = 'SELECT'>
     type: 'select', 
     <#elseif fieldConfig.formType = 'RADIO'>
-    type: 'radio-group'
+    type: 'radio-group',
     </#if>
     <#if fieldConfig.dictCode?? && fieldConfig.dictCode != ''>
     options: ${fieldConfig.dictCode},
@@ -86,23 +97,6 @@ const columns = computed<Columns<typeof form>>(() => [
 const reset = () => {
   formRef.value?.formRef?.resetFields()
   resetForm()
-}
-
-const visible = ref(false)
-// 新增
-const onAdd = () => {
-  reset()
-  dataId.value = ''
-  visible.value = true
-}
-
-// 修改
-const onUpdate = async (id: string) => {
-  reset()
-  dataId.value = id
-  const res = await get${classNamePrefix}(id)
-  Object.assign(form, res.data)
-  visible.value = true
 }
 
 // 保存
@@ -124,5 +118,23 @@ const save = async () => {
   }
 }
 
+// 新增
+const onAdd = async () => {
+  reset()
+  dataId.value = ''
+  visible.value = true
+}
+
+// 修改
+const onUpdate = async (id: string) => {
+  reset()
+  dataId.value = id
+  const { data } = await get${classNamePrefix}(id)
+  Object.assign(form, data)
+  visible.value = true
+}
+
 defineExpose({ onAdd, onUpdate })
 </script>
+
+<style scoped lang="scss"></style>

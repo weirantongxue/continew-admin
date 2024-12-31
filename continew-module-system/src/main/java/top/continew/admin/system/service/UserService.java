@@ -40,14 +40,6 @@ import java.util.List;
 public interface UserService extends BaseService<UserResp, UserDetailResp, UserQuery, UserReq>, IService<UserDO> {
 
     /**
-     * 新增
-     *
-     * @param user 用户信息
-     * @return ID
-     */
-    Long add(UserDO user);
-
-    /**
      * 下载导入模板
      *
      * @param response 响应对象

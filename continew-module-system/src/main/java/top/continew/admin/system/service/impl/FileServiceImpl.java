@@ -43,8 +43,8 @@ import top.continew.admin.system.service.StorageService;
 import top.continew.starter.core.constant.StringConstants;
 import top.continew.starter.core.util.StrUtils;
 import top.continew.starter.core.util.URLUtils;
-import top.continew.starter.core.util.validate.CheckUtils;
-import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.core.validation.CheckUtils;
+import top.continew.starter.extension.crud.service.BaseServiceImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -73,7 +73,7 @@ public class FileServiceImpl extends BaseServiceImpl<FileMapper, FileDO, FileRes
         for (Map.Entry<Long, List<FileDO>> entry : fileListGroup.entrySet()) {
             StorageDO storage = storageService.getById(entry.getKey());
             for (FileDO file : entry.getValue()) {
-                FileInfo fileInfo = file.toFileInfo(storage.getCode());
+                FileInfo fileInfo = file.toFileInfo(storage);
                 fileStorageService.delete(fileInfo);
             }
         }
@@ -125,6 +125,9 @@ public class FileServiceImpl extends BaseServiceImpl<FileMapper, FileDO, FileRes
 
     @Override
     public Long countByStorageIds(List<Long> storageIds) {
+        if (CollUtil.isEmpty(storageIds)) {
+            return 0L;
+        }
         return baseMapper.lambdaQuery().in(FileDO::getStorageId, storageIds).count();
     }
 

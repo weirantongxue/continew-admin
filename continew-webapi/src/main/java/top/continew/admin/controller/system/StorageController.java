@@ -18,12 +18,12 @@ package top.continew.admin.controller.system;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RestController;
+import top.continew.admin.common.base.BaseController;
 import top.continew.admin.system.model.query.StorageQuery;
 import top.continew.admin.system.model.req.StorageReq;
 import top.continew.admin.system.model.resp.StorageResp;
 import top.continew.admin.system.service.StorageService;
 import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.continew.starter.extension.crud.controller.BaseController;
 import top.continew.starter.extension.crud.enums.Api;
 
 /**
@@ -34,6 +34,6 @@ import top.continew.starter.extension.crud.enums.Api;
  */
 @Tag(name = "存储管理 API")
 @RestController
-@CrudRequestMapping(value = "/system/storage", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE})
+@CrudRequestMapping(value = "/system/storage", api = {Api.PAGE, Api.DETAIL, Api.ADD, Api.UPDATE, Api.DELETE})
 public class StorageController extends BaseController<StorageService, StorageResp, StorageResp, StorageQuery, StorageReq> {
 }

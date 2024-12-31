@@ -18,14 +18,14 @@ package top.continew.admin.controller.system;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RestController;
+import top.continew.admin.common.base.BaseController;
 import top.continew.admin.system.model.query.DictItemQuery;
 import top.continew.admin.system.model.req.DictItemReq;
 import top.continew.admin.system.model.resp.DictItemResp;
 import top.continew.admin.system.service.DictItemService;
 import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.continew.starter.extension.crud.controller.BaseController;
 import top.continew.starter.extension.crud.enums.Api;
-import top.continew.starter.log.core.annotation.Log;
+import top.continew.starter.log.annotation.Log;
 
 /**
  * 字典项管理 API
@@ -36,6 +36,6 @@ import top.continew.starter.log.core.annotation.Log;
 @Log(module = "字典管理")
 @Tag(name = "字典项管理 API")
 @RestController
-@CrudRequestMapping(value = "/system/dict/item", api = {Api.PAGE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE})
+@CrudRequestMapping(value = "/system/dict/item", api = {Api.PAGE, Api.DETAIL, Api.ADD, Api.UPDATE, Api.DELETE})
 public class DictItemController extends BaseController<DictItemService, DictItemResp, DictItemResp, DictItemQuery, DictItemReq> {
 }

@@ -27,7 +27,7 @@ import top.continew.admin.common.constant.SysConstants;
 import top.continew.admin.system.mapper.UserRoleMapper;
 import top.continew.admin.system.model.entity.UserRoleDO;
 import top.continew.admin.system.service.UserRoleService;
-import top.continew.starter.core.util.validate.CheckUtils;
+import top.continew.starter.core.validation.CheckUtils;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean add(List<Long> roleIds, Long userId) {
+    public boolean assignRolesToUser(List<Long> roleIds, Long userId) {
         // 检查是否有变更
         List<Long> oldRoleIdList = baseMapper.lambdaQuery()
             .select(UserRoleDO::getRoleId)
@@ -57,6 +57,8 @@ public class UserRoleServiceImpl implements UserRoleService {
         if (CollUtil.isEmpty(CollUtil.disjunction(roleIds, oldRoleIdList))) {
             return false;
         }
+        CheckUtils.throwIf(SysConstants.SUPER_USER_ID.equals(userId) && !roleIds
+            .contains(SysConstants.SUPER_ROLE_ID), "不允许变更超管用户角色");
         // 删除原有关联
         baseMapper.lambdaUpdate().eq(UserRoleDO::getUserId, userId).remove();
         // 保存最新关联
@@ -65,21 +67,21 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public boolean bindUserIds(Long roleId, List<Long> userIds) {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean assignRoleToUsers(Long roleId, List<Long> userIds) {
         // 检查是否有变更
-        List<Long> oldRoleIdList = baseMapper.lambdaQuery()
+        List<Long> oldUserIdList = baseMapper.lambdaQuery()
             .select(UserRoleDO::getUserId)
             .eq(UserRoleDO::getRoleId, roleId)
             .list()
             .stream()
-            .map(UserRoleDO::getRoleId)
+            .map(UserRoleDO::getUserId)
             .toList();
-        if (CollUtil.isEmpty(CollUtil.disjunction(userIds, oldRoleIdList))) {
+        if (CollUtil.isEmpty(CollUtil.disjunction(userIds, oldUserIdList))) {
             return false;
         }
-        if (SysConstants.SUPER_ROLE_ID.equals(roleId) && !userIds.contains(SysConstants.SUPER_ADMIN_ID)) {
-            CheckUtils.throwIf(true, "不能移除管理员默认超管角色组");
-        }
+        CheckUtils.throwIf(SysConstants.SUPER_ROLE_ID.equals(roleId) && !userIds
+            .contains(SysConstants.SUPER_USER_ID), "不允许变更超管用户角色");
         // 删除原有关联
         baseMapper.lambdaUpdate().eq(UserRoleDO::getRoleId, roleId).remove();
         // 保存最新关联
@@ -89,6 +91,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public void deleteByUserIds(List<Long> userIds) {
+        if (CollUtil.isEmpty(userIds)) {
+            return;
+        }
         baseMapper.lambdaUpdate().in(UserRoleDO::getUserId, userIds).remove();
     }
 
@@ -122,6 +127,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public boolean isRoleIdExists(List<Long> roleIds) {
+        if (CollUtil.isEmpty(roleIds)) {
+            return false;
+        }
         return baseMapper.lambdaQuery().in(UserRoleDO::getRoleId, roleIds).exists();
     }
 }

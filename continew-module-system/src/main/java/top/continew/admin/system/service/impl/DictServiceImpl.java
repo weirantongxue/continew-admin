@@ -25,9 +25,9 @@ import top.continew.admin.system.model.req.DictReq;
 import top.continew.admin.system.model.resp.DictResp;
 import top.continew.admin.system.service.DictItemService;
 import top.continew.admin.system.service.DictService;
-import top.continew.starter.core.util.validate.CheckUtils;
+import top.continew.starter.core.validation.CheckUtils;
 import top.continew.starter.extension.crud.model.resp.LabelValueResp;
-import top.continew.starter.extension.crud.service.impl.BaseServiceImpl;
+import top.continew.starter.extension.crud.service.BaseServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class DictServiceImpl extends BaseServiceImpl<DictMapper, DictDO, DictRes
     private final DictItemService dictItemService;
 
     @Override
-    protected void beforeAdd(DictReq req) {
+    public void beforeAdd(DictReq req) {
         String name = req.getName();
         CheckUtils.throwIf(this.isNameExists(name, null), "新增失败，[{}] 已存在", name);
         String code = req.getCode();
@@ -53,7 +53,7 @@ public class DictServiceImpl extends BaseServiceImpl<DictMapper, DictDO, DictRes
     }
 
     @Override
-    protected void beforeUpdate(DictReq req, Long id) {
+    public void beforeUpdate(DictReq req, Long id) {
         String name = req.getName();
         CheckUtils.throwIf(this.isNameExists(name, id), "修改失败，[{}] 已存在", name);
         DictDO oldDict = super.getById(id);
@@ -61,7 +61,7 @@ public class DictServiceImpl extends BaseServiceImpl<DictMapper, DictDO, DictRes
     }
 
     @Override
-    protected void beforeDelete(List<Long> ids) {
+    public void beforeDelete(List<Long> ids) {
         List<DictDO> list = baseMapper.lambdaQuery()
             .select(DictDO::getName, DictDO::getIsSystem)
             .in(DictDO::getId, ids)

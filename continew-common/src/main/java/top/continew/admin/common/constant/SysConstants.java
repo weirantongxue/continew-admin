@@ -35,17 +35,9 @@ public class SysConstants {
     public static final Integer YES = 1;
 
     /**
-     * 管理员角色编码
+     * 超管用户 ID
      */
-    public static final String ADMIN_ROLE_CODE = "admin";
-    /**
-     * 超管角色组ID
-     */
-    public static final Long SUPER_ROLE_ID = 1L;
-    /**
-     * 超管账号ID
-     */
-    public static final Long SUPER_ADMIN_ID = 1L;
+    public static final Long SUPER_USER_ID = 1L;
 
     /**
      * 顶级部门 ID
@@ -58,17 +50,27 @@ public class SysConstants {
     public static final Long SUPER_PARENT_ID = 0L;
 
     /**
+     * 超管角色编码
+     */
+    public static final String SUPER_ROLE_CODE = "admin";
+
+    /**
+     * 超管角色 ID
+     */
+    public static final Long SUPER_ROLE_ID = 1L;
+
+    /**
      * 全部权限标识
      */
     public static final String ALL_PERMISSION = "*:*:*";
 
     /**
-     * 账号登录 URI
+     * 登录 URI
      */
-    public static final String LOGIN_URI = "/auth/account";
+    public static final String LOGIN_URI = "/auth/login";
 
     /**
-     * 退出 URI
+     * 登出 URI
      */
     public static final String LOGOUT_URI = "/auth/logout";
 

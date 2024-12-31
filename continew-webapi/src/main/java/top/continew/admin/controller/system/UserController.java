@@ -29,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.continew.admin.common.base.BaseController;
 import top.continew.admin.common.constant.RegexConstants;
 import top.continew.admin.common.util.SecureUtils;
 import top.continew.admin.system.model.query.UserQuery;
@@ -42,12 +43,11 @@ import top.continew.admin.system.model.resp.user.UserImportResp;
 import top.continew.admin.system.model.resp.user.UserResp;
 import top.continew.admin.system.service.UserService;
 import top.continew.starter.core.util.ExceptionUtils;
-import top.continew.starter.core.util.validate.ValidationUtils;
+import top.continew.starter.core.validation.ValidationUtils;
 import top.continew.starter.extension.crud.annotation.CrudRequestMapping;
-import top.continew.starter.extension.crud.controller.BaseController;
 import top.continew.starter.extension.crud.enums.Api;
 import top.continew.starter.extension.crud.model.resp.BaseIdResp;
-import top.continew.starter.extension.crud.util.ValidateGroup;
+import top.continew.starter.extension.crud.validation.CrudValidationGroup;
 
 import java.io.IOException;
 
@@ -61,14 +61,12 @@ import java.io.IOException;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@CrudRequestMapping(value = "/system/user", api = {Api.PAGE, Api.LIST, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE,
+@CrudRequestMapping(value = "/system/user", api = {Api.PAGE, Api.LIST, Api.DETAIL, Api.ADD, Api.UPDATE, Api.DELETE,
     Api.EXPORT})
 public class UserController extends BaseController<UserService, UserResp, UserDetailResp, UserQuery, UserReq> {
 
-    private final UserService userService;
-
     @Override
-    public BaseIdResp<Long> add(@Validated(ValidateGroup.Crud.Add.class) @RequestBody UserReq req) {
+    public BaseIdResp<Long> add(@Validated(CrudValidationGroup.Add.class) @RequestBody UserReq req) {
         String rawPassword = ExceptionUtils.exToNull(() -> SecureUtils.decryptByRsaPrivateKey(req.getPassword()));
         ValidationUtils.throwIfNull(rawPassword, "密码解密失败");
         ValidationUtils.throwIf(!ReUtil
@@ -81,7 +79,7 @@ public class UserController extends BaseController<UserService, UserResp, UserDe
     @SaCheckPermission("system:user:import")
     @GetMapping(value = "/import/template", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public void downloadImportTemplate(HttpServletResponse response) throws IOException {
-        userService.downloadImportTemplate(response);
+        baseService.downloadImportTemplate(response);
     }
 
     @Operation(summary = "解析导入数据", description = "解析导入数据")
@@ -89,14 +87,14 @@ public class UserController extends BaseController<UserService, UserResp, UserDe
     @PostMapping("/import/parse")
     public UserImportParseResp parseImport(@NotNull(message = "文件不能为空") MultipartFile file) {
         ValidationUtils.throwIf(file::isEmpty, "文件不能为空");
-        return userService.parseImport(file);
+        return baseService.parseImport(file);
     }
 
     @Operation(summary = "导入数据", description = "导入数据")
     @SaCheckPermission("system:user:import")
     @PostMapping(value = "/import")
     public UserImportResp importUser(@Validated @RequestBody UserImportReq req) {
-        return userService.importUser(req);
+        return baseService.importUser(req);
     }
 
     @Operation(summary = "重置密码", description = "重置用户登录密码")

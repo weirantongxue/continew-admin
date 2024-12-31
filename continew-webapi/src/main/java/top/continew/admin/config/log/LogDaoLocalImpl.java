@@ -28,6 +28,7 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Async;
+import top.continew.admin.auth.enums.AuthTypeEnum;
 import top.continew.admin.auth.model.req.AccountLoginReq;
 import top.continew.admin.common.constant.SysConstants;
 import top.continew.admin.system.enums.LogStatusEnum;
@@ -37,10 +38,10 @@ import top.continew.admin.system.service.UserService;
 import top.continew.starter.core.constant.StringConstants;
 import top.continew.starter.core.util.ExceptionUtils;
 import top.continew.starter.core.util.StrUtils;
-import top.continew.starter.log.core.dao.LogDao;
-import top.continew.starter.log.core.model.LogRecord;
-import top.continew.starter.log.core.model.LogRequest;
-import top.continew.starter.log.core.model.LogResponse;
+import top.continew.starter.log.dao.LogDao;
+import top.continew.starter.log.model.LogRecord;
+import top.continew.starter.log.model.LogRequest;
+import top.continew.starter.log.model.LogResponse;
 import top.continew.starter.web.autoconfigure.trace.TraceProperties;
 import top.continew.starter.web.model.R;
 
@@ -145,10 +146,13 @@ public class LogDaoLocalImpl implements LogDao {
         // 解析登录接口信息
         if (requestUri.startsWith(SysConstants.LOGIN_URI) && LogStatusEnum.SUCCESS.equals(logDO.getStatus())) {
             String requestBody = logRequest.getBody();
-            AccountLoginReq loginReq = JSONUtil.toBean(requestBody, AccountLoginReq.class);
-            logDO.setCreateUser(ExceptionUtils.exToNull(() -> userService.getByUsername(loginReq.getUsername())
-                .getId()));
-            return;
+            // 解析账号登录用户为操作人
+            if (requestBody.contains(AuthTypeEnum.ACCOUNT.getValue())) {
+                AccountLoginReq authReq = JSONUtil.toBean(requestBody, AccountLoginReq.class);
+                logDO.setCreateUser(ExceptionUtils.exToNull(() -> userService.getByUsername(authReq.getUsername())
+                    .getId()));
+                return;
+            }
         }
         // 解析 Token 信息
         Map<String, String> requestHeaders = logRequest.getHeaders();
