@@ -17,15 +17,18 @@
 package top.continew.admin.controller.ai;
 
 import cn.dev33.satoken.annotation.SaIgnore;
+import com.alibaba.fastjson2.JSONObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import top.continew.admin.ai.context.ModelContext;
 import top.continew.admin.ai.model.req.MessageRequest;
-import top.continew.starter.log.core.annotation.Log;
+import top.continew.starter.log.annotation.Log;
 
 /**
  * Created by WeiRan on 2024.11.09 00:47
@@ -40,8 +43,8 @@ public class ModelChatController {
 
     @SaIgnore
     @Operation(summary = "Ai对话", description = "Ai对话 SSE流式返回")
-    @PostMapping(value = "/v1/completions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> completions(@RequestBody MessageRequest messageRequest) {
+    @PostMapping(value = "/v1/completions")
+    public Flux<ServerSentEvent<JSONObject>> completions(@RequestBody MessageRequest messageRequest) {
         return modelContext.handlerInstance(messageRequest.getModel()).completions(messageRequest);
     }
 

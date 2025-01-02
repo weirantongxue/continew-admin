@@ -33,6 +33,7 @@ continew-starter.log:
     - OS
     - RESPONSE_HEADERS
     - RESPONSE_BODY
+  exclude-patterns: /model/chat/v1/completions
 ## 项目日志配置
 logging:
   config: classpath:logback-spring.xml

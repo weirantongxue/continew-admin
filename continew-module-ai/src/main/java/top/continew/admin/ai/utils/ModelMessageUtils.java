@@ -16,6 +16,8 @@
 
 package top.continew.admin.ai.utils;
 
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONObject;
 import top.continew.admin.ai.model.ChatCompletion;
 import top.continew.admin.ai.model.req.MessageRequest;
 
@@ -24,15 +26,35 @@ import top.continew.admin.ai.model.req.MessageRequest;
  */
 public class ModelMessageUtils {
 
+    /**
+     * 转换请求体
+     *
+     * @return ChatCompletion
+     */
     public static ChatCompletion convertModelCompletion(MessageRequest messageRequest) {
         return ChatCompletion.builder()
-            .model("glm-4-flash")
-            .messages(messageRequest.getMessages())
-            .max_tokens(3000)
-            .stream(true)
-            .temperature(0.2F)
-            .top_p(0.2F)
-            .build();
+                .model("glm-4-flash")
+                .messages(messageRequest.getMessages())
+                .max_tokens(3000)
+                .stream(true)
+                .temperature(0.2F)
+                .top_p(0.2F)
+                .build();
+    }
+
+    /**
+     * 转换给前端返回消息内容
+     *
+     * @return JSONObject
+     */
+    public static JSONObject convertModelChatResponse(String id, String content) {
+        JSONObject jsonObject = new JSONObject();
+        if ( StrUtil.isNotBlank(id) && StrUtil.isNotBlank(content) ) {
+            jsonObject.put("id", id);
+            jsonObject.put("content", content);
+            return jsonObject;
+        }
+        return jsonObject;
     }
 
 }

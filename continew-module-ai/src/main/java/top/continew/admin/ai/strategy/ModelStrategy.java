@@ -16,13 +16,16 @@
 
 package top.continew.admin.ai.strategy;
 
+import com.alibaba.fastjson2.JSONObject;
+import org.springframework.http.codec.ServerSentEvent;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import top.continew.admin.ai.model.req.MessageRequest;
 
 /**
  * Created by WeiRan on 2021.12.10 15:11
  */
 public interface ModelStrategy {
-    Flux<String> completions(MessageRequest messageCreateValidate);
+    Flux<ServerSentEvent<JSONObject>> completions(MessageRequest messageCreateValidate);
 
 }
