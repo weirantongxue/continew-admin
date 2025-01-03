@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package top.continew.admin.ai.strategy;
+package top.continew.admin.ai.model.chat;
 
-import com.alibaba.fastjson2.JSONObject;
-import org.springframework.http.codec.ServerSentEvent;
-import reactor.core.publisher.Flux;
-import top.continew.admin.ai.model.chat.req.MessageRequest;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
- * Created by WeiRan on 2021.12.10 15:11
+ * Created by WeiRan on 2024.11.09 01:28
  */
-public interface ModelStrategy {
-    Flux<ServerSentEvent<JSONObject>> completions(MessageRequest messageCreateValidate);
-
+@Data
+public class Message implements Serializable {
+    private String role;
+    private String content;
 }

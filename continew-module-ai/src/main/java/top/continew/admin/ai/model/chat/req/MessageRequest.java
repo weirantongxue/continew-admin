@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package top.continew.admin.ai.model.req;
+package top.continew.admin.ai.model.chat.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import top.continew.admin.ai.model.Message;
+import top.continew.admin.ai.model.chat.Message;
 
 import java.io.Serializable;
 import java.util.List;

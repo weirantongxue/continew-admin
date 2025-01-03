@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package top.continew.admin.ai.model.req;
+package top.continew.admin.ai.model.chat.resp;
 
 import lombok.Data;
+import top.continew.admin.ai.model.chat.ChatChoice;
+import top.continew.admin.ai.model.chat.Usage;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * Created by WeiRan on 2024.07.07 18:23
+ * Created by WeiRan on 2025.01.02 18:31
  */
 @Data
-public class ModelMessage implements Serializable {
-    private String role;
-    private String content;
-    private String name;
+public class ChatCompletionResponse implements Serializable {
+    private String id;
+    private String object;
+    private Long created;
+    private String model;
+    private String systemFingerprint;
+    private List<ChatChoice> choices;
+    private Usage usage;
 }

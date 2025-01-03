@@ -21,13 +21,11 @@ import com.alibaba.fastjson2.JSONObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import top.continew.admin.ai.context.ModelContext;
-import top.continew.admin.ai.model.req.MessageRequest;
+import top.continew.admin.ai.model.chat.req.MessageRequest;
 import top.continew.starter.log.annotation.Log;
 
 /**

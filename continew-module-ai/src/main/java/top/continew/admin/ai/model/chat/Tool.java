@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.continew.admin.ai.model;
+package top.continew.admin.ai.model.chat;
 
 import lombok.Data;
 
