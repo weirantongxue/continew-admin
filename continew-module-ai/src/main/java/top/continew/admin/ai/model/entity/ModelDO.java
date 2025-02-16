@@ -27,9 +27,9 @@ public class ModelDO extends BaseDO {
     private String name;
 
     /**
-     * 模型代号
+     * 基座模型
      */
-    private String modelCode;
+    private String modelName;
 
     /**
      * 模型类型,1:大语言模型,2:文生图

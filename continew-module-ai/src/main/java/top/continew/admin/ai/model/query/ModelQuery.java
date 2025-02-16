@@ -32,11 +32,11 @@ public class ModelQuery implements Serializable {
     private String name;
 
     /**
-     * 模型代号
+     * 基座模型
      */
-    @Schema(description = "模型代号")
+    @Schema(description = "基座模型")
     @Query(type = QueryType.EQ)
-    private String modelCode;
+    private String modelName;
 
     /**
      * 模型类型,1:大语言模型,2:文生图

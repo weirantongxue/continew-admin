@@ -35,12 +35,12 @@ public class ModelReq extends BaseReq {
     private String name;
 
     /**
-     * 模型代号
+     * 基座模型
      */
-    @Schema(description = "模型代号")
-    @NotBlank(message = "模型代号不能为空")
-    @Length(max = 255, message = "模型代号长度不能超过 {max} 个字符")
-    private String modelCode;
+    @Schema(description = "基座模型")
+    @NotBlank(message = "基座模型不能为空")
+    @Length(max = 255, message = "基座模型长度不能超过 {max} 个字符")
+    private String modelName;
 
     /**
      * 模型类型,1:大语言模型,2:文生图

@@ -42,41 +42,41 @@ public class GlmHandler implements ModelStrategy {
         WebClient webClient = WebClient.create();
         StringBuffer sb = new StringBuffer();
         return webClient.post()
-            .uri("https://open.bigmodel.cn/api/paas/v4/chat/completions") // 三方接口路径
-            .header("Authorization", "Bearer 9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b") // 替换为你的API密钥
-            .header("Accept", "text/event-stream") // 声明支持SSE
-            .bodyValue(ModelMessageUtils.convertModelCompletion(messageCreateValidate)) // 发送请求体
-            .retrieve()
-            .bodyToFlux(String.class) // 接收流式数据
-            .flatMap(data -> {
-                if ("[DONE]".equals(data)) {
-                    JSONObject jsonObject = new JSONObject();
-                    //消息入库
-                    System.out.println(sb);
-                    // 如果是结束标志
-                    return Flux.just(ServerSentEvent.builder(jsonObject)
-                        .event("done")
-                        .id(IdUtil.fastSimpleUUID())
-                        .build());
-                }
-                // 解析响应内容
-                try {
-                    ChatCompletionResponse response = JSONObject.parseObject(data, ChatCompletionResponse.class);
-                    String content = response.getChoices().get(0).getDelta().getContent();
-                    String taskId = response.getId();
-                    sb.append(content);
-                    return Flux.just(ServerSentEvent.builder(ModelMessageUtils
-                        .convertModelChatResponse(taskId, content)).event("add").id(IdUtil.fastSimpleUUID()).build());
-                } catch (Exception e) {
-                    // 如果解析失败
+                .uri("https://open.bigmodel.cn/api/paas/v4/chat/completions") // 三方接口路径
+                .header("Authorization", "Bearer 9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b") // 替换为你的API密钥
+                .header("Accept", "text/event-stream") // 声明支持SSE
+                .bodyValue(ModelMessageUtils.convertModelCompletion(messageCreateValidate)) // 发送请求体
+                .retrieve()
+                .bodyToFlux(String.class) // 接收流式数据
+                .flatMap(data -> {
+                    if ("[DONE]".equals(data)) {
+                        JSONObject jsonObject = new JSONObject();
+                        //消息入库
+                        System.out.println(sb);
+                        // 如果是结束标志
+                        return Flux.just(ServerSentEvent.builder(jsonObject)
+                                .event("done")
+                                .id(IdUtil.fastSimpleUUID())
+                                .build());
+                    }
+                    // 解析响应内容
+                    try {
+                        ChatCompletionResponse response = JSONObject.parseObject(data, ChatCompletionResponse.class);
+                        String content = response.getChoices().get(0).getDelta().getContent();
+                        String taskId = response.getId();
+                        sb.append(content);
+                        return Flux.just(ServerSentEvent.builder(ModelMessageUtils
+                                .convertModelChatResponse(taskId, content)).event("add").id(IdUtil.fastSimpleUUID()).build());
+                    } catch (Exception e) {
+                        // 如果解析失败
+                        return Flux.just(ServerSentEvent.builder(ModelMessageUtils.convertModelChatResponse(IdUtil
+                                .fastSimpleUUID(), "服务异常请联系管理员")).event("error").build());
+                    }
+                })
+                .onErrorResume(e -> {
+                    log.error("Error occurred:{} ", e.getMessage());
                     return Flux.just(ServerSentEvent.builder(ModelMessageUtils.convertModelChatResponse(IdUtil
-                        .fastSimpleUUID(), "服务异常请联系管理员")).event("error").build());
-                }
-            })
-            .onErrorResume(e -> {
-                log.error("Error occurred:{} ", e.getMessage());
-                return Flux.just(ServerSentEvent.builder(ModelMessageUtils.convertModelChatResponse(IdUtil
-                    .fastSimpleUUID(), "服务异常请联系管理员")).event("error").build());
-            });
+                            .fastSimpleUUID(), "服务异常请联系管理员")).event("error").build());
+                });
     }
 }

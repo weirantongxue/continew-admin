@@ -29,10 +29,10 @@ public class ModelResp extends BaseResp {
     private String name;
 
     /**
-     * 模型代号
+     * 基座模型
      */
-    @Schema(description = "模型代号")
-    private String modelCode;
+    @Schema(description = "基座模型")
+    private String modelName;
 
     /**
      * 模型类型,1:大语言模型,2:文生图
