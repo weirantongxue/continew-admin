@@ -19,6 +19,8 @@ package top.continew.admin.ai.handler;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -38,44 +40,58 @@ import top.continew.admin.ai.utils.ModelMessageUtils;
 public class GlmHandler implements ModelStrategy {
     @Override
     public Flux<ServerSentEvent<JSONObject>> completions(MessageRequest messageCreateValidate) {
-        WebClient webClient = WebClient.create();
-        StringBuffer sb = new StringBuffer();
+        // 使用单例的 WebClient（可在 Spring Bean 中定义）
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://open.bigmodel.cn/api/paas/v4/chat/completions")
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer 9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b") // API密钥（建议从配置文件读取）
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.TEXT_EVENT_STREAM_VALUE) // 声明支持SSE
+                .build();
+        StringBuilder contentBuilder = new StringBuilder();
+
         return webClient.post()
-            .uri("https://open.bigmodel.cn/api/paas/v4/chat/completions") // 三方接口路径
-            .header("Authorization", "Bearer 9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b") // 替换为你的API密钥
-            .header("Accept", "text/event-stream") // 声明支持SSE
-            .bodyValue(ModelMessageUtils.convertModelCompletion(messageCreateValidate)) // 发送请求体
-            .retrieve()
-            .bodyToFlux(String.class) // 接收流式数据
-            .flatMap(data -> {
-                if ("[DONE]".equals(data)) {
-                    JSONObject jsonObject = new JSONObject();
-                    //消息入库
-                    System.out.println(sb);
-                    // 如果是结束标志
-                    return Flux.just(ServerSentEvent.builder(jsonObject)
-                        .event("done")
-                        .id(IdUtil.fastSimpleUUID())
-                        .build());
-                }
-                // 解析响应内容
-                try {
-                    ChatCompletionResponse response = JSONObject.parseObject(data, ChatCompletionResponse.class);
-                    String content = response.getChoices().get(0).getDelta().getContent();
-                    String taskId = response.getId();
-                    sb.append(content);
-                    return Flux.just(ServerSentEvent.builder(ModelMessageUtils
-                        .convertModelChatResponse(taskId, content)).event("add").id(IdUtil.fastSimpleUUID()).build());
-                } catch (Exception e) {
-                    // 如果解析失败
-                    return Flux.just(ServerSentEvent.builder(ModelMessageUtils.convertModelChatResponse(IdUtil
-                        .fastSimpleUUID(), "服务异常请联系管理员")).event("error").build());
-                }
-            })
-            .onErrorResume(e -> {
-                log.error("Error occurred:{} ", e.getMessage());
-                return Flux.just(ServerSentEvent.builder(ModelMessageUtils.convertModelChatResponse(IdUtil
-                    .fastSimpleUUID(), "服务异常请联系管理员")).event("error").build());
-            });
+                .bodyValue(ModelMessageUtils.convertModelCompletion(messageCreateValidate)) // 发送请求体
+                .retrieve()
+                .bodyToFlux(String.class) // 接收流式数据
+                .flatMap(data -> {
+                    try {
+                        // 结束标志处理
+                        if ( "[DONE]".equals(data) ) {
+                            log.info("SSE 消息接收完成，完整消息: {}", contentBuilder);
+                            return Flux.just(ServerSentEvent.<JSONObject>builder()
+                                    .event("done")
+                                    .id(IdUtil.fastSimpleUUID())
+                                    .data(new JSONObject())
+                                    .build());
+                        }
+
+                        // 解析响应数据
+                        ChatCompletionResponse response = JSONObject.parseObject(data, ChatCompletionResponse.class);
+                        String content = response.getChoices().get(0).getDelta().getContent();
+                        String taskId = response.getId();
+                        contentBuilder.append(content);
+
+                        return Flux.just(ServerSentEvent.<JSONObject>builder()
+                                .event("add")
+                                .id(IdUtil.fastSimpleUUID())
+                                .data(ModelMessageUtils.convertModelChatResponse(taskId, content))
+                                .build());
+                    } catch (Exception e) {
+                        log.error("解析 SSE 响应失败: {}", data, e);
+                        return Flux.just(ServerSentEvent.<JSONObject>builder()
+                                .event("error")
+                                .id(IdUtil.fastSimpleUUID())
+                                .data(ModelMessageUtils.convertModelChatResponse(IdUtil.fastSimpleUUID(), "服务异常请联系管理员"))
+                                .build());
+                    }
+                })
+                .onErrorResume(e -> {
+                    log.error("SSE 请求处理异常", e);
+                    return Flux.just(ServerSentEvent.<JSONObject>builder()
+                            .event("error")
+                            .id(IdUtil.fastSimpleUUID())
+                            .data(ModelMessageUtils.convertModelChatResponse(IdUtil.fastSimpleUUID(), "服务异常请联系管理员"))
+                            .build());
+                });
     }
+
 }
