@@ -25,14 +25,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 任务信息
+ * 任务响应参数
  *
  * @author KAI
  * @author Charles7c
  * @since 2024/6/25 17:15
  */
 @Data
-@Schema(description = "任务信息")
+@Schema(description = "任务响应参数")
 public class JobResp implements Serializable {
 
     @Serial
@@ -81,16 +81,16 @@ public class JobResp implements Serializable {
     private Integer executorType;
 
     /**
-     * 任务类型
-     */
-    @Schema(description = "任务类型", example = "1")
-    private JobTaskTypeEnum taskType;
-
-    /**
      * 执行器名称
      */
     @Schema(description = "执行器名称", example = "test")
     private String executorInfo;
+
+    /**
+     * 任务类型
+     */
+    @Schema(description = "任务类型", example = "1")
+    private JobTaskTypeEnum taskType;
 
     /**
      * 任务参数

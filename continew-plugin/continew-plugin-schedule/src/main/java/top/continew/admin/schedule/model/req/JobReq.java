@@ -27,14 +27,14 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 创建或修改任务参数
+ * 任务创建或修改请求参数
  *
  * @author KAI
  * @author Charles7c
  * @since 2024/6/25 16:40
  */
 @Data
-@Schema(description = "创建或修改任务参数")
+@Schema(description = "任务创建或修改请求参数")
 public class JobReq implements Serializable {
 
     @Serial
@@ -65,7 +65,7 @@ public class JobReq implements Serializable {
      * 触发类型
      */
     @Schema(description = "触发类型", example = "2")
-    @NotNull(message = "触发类型非法")
+    @NotNull(message = "触发类型无效")
     private JobTriggerTypeEnum triggerType;
 
     /**
@@ -85,7 +85,7 @@ public class JobReq implements Serializable {
      * 任务类型
      */
     @Schema(description = "任务类型", example = "1")
-    @NotNull(message = "任务类型非法")
+    @NotNull(message = "任务类型无效")
     private JobTaskTypeEnum taskType;
 
     /**
@@ -111,14 +111,14 @@ public class JobReq implements Serializable {
      * 路由策略
      */
     @Schema(description = "路由策略", example = "4")
-    @NotNull(message = "路由策略非法")
+    @NotNull(message = "路由策略无效")
     private JobRouteStrategyEnum routeKey;
 
     /**
      * 阻塞策略
      */
     @Schema(description = "阻塞策略", example = "1")
-    @NotNull(message = "阻塞策略非法")
+    @NotNull(message = "阻塞策略无效")
     private JobBlockStrategyEnum blockStrategy;
 
     /**

@@ -25,14 +25,14 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 修改任务状态信息
+ * 任务状态修改请求参数
  *
  * @author KAI
  * @author Charles7c
  * @since 2024/6/27 9:24
  */
 @Data
-@Schema(description = "修改任务状态信息")
+@Schema(description = "任务状态修改请求参数")
 public class JobStatusReq implements Serializable {
 
     @Serial
@@ -42,12 +42,6 @@ public class JobStatusReq implements Serializable {
      * 任务状态
      */
     @Schema(description = "任务状态", example = "1")
-    @NotNull(message = "任务状态非法")
+    @NotNull(message = "任务状态无效")
     private JobStatusEnum jobStatus;
-
-    /**
-     * ID
-     */
-    @Schema(hidden = true)
-    private Long id;
 }

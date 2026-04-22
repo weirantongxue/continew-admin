@@ -16,19 +16,24 @@
 
 package top.continew.admin.schedule.service.impl;
 
+import com.aizuda.snailjob.client.job.core.openapi.SnailJobOpenApi;
+import com.aizuda.snailjob.common.core.enums.StatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import top.continew.admin.schedule.api.JobApi;
 import top.continew.admin.schedule.api.JobClient;
+import top.continew.admin.schedule.api.JobGroupApi;
+import top.continew.admin.schedule.enums.JobStatusEnum;
 import top.continew.admin.schedule.model.query.JobQuery;
 import top.continew.admin.schedule.model.req.JobReq;
 import top.continew.admin.schedule.model.req.JobStatusReq;
+import top.continew.admin.schedule.model.req.JobTriggerReq;
 import top.continew.admin.schedule.model.resp.JobResp;
 import top.continew.admin.schedule.service.JobService;
 import top.continew.starter.extension.crud.model.resp.PageResp;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 任务业务实现
@@ -43,16 +48,16 @@ public class JobServiceImpl implements JobService {
 
     private final JobClient jobClient;
     private final JobApi jobApi;
+    private final JobGroupApi jobGroupApi;
 
     @Override
     public PageResp<JobResp> page(JobQuery query) {
-        return jobClient.requestPage(() -> jobApi.page(query.getGroupName(), query.getJobName(), query
-            .getJobStatus() != null ? query.getJobStatus().getValue() : null, query.getPage(), query.getSize()));
+        return jobClient.requestPage(() -> jobApi.page(query));
     }
 
     @Override
-    public boolean add(JobReq req) {
-        return Boolean.TRUE.equals(jobClient.request(() -> jobApi.add(req)));
+    public boolean create(JobReq req) {
+        return Boolean.TRUE.equals(jobClient.request(() -> jobApi.create(req)));
     }
 
     @Override
@@ -63,22 +68,23 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public boolean updateStatus(JobStatusReq req, Long id) {
-        req.setId(id);
-        return Boolean.TRUE.equals(jobClient.request(() -> jobApi.updateStatus(req)));
+        return SnailJobOpenApi.updateJobStatus(id)
+            .setStatus(JobStatusEnum.DISABLED.equals(req.getJobStatus()) ? StatusEnum.NO : StatusEnum.YES)
+            .execute();
     }
 
     @Override
     public boolean delete(Long id) {
-        return Boolean.TRUE.equals(jobClient.request(() -> jobApi.delete(Collections.singleton(id))));
+        return SnailJobOpenApi.deleteJob(Set.of(id)).execute();
     }
 
     @Override
-    public boolean trigger(Long id) {
-        return Boolean.TRUE.equals(jobClient.request(() -> jobApi.trigger(id)));
+    public boolean trigger(JobTriggerReq req) {
+        return Boolean.TRUE.equals(jobClient.request(() -> jobApi.trigger(req)));
     }
 
     @Override
     public List<String> listGroup() {
-        return jobClient.request(jobApi::listGroup);
+        return jobClient.request(jobGroupApi::listGroup);
     }
 }

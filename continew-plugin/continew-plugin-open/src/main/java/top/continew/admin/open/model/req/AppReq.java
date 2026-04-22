@@ -22,21 +22,21 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import top.continew.admin.common.enums.DisEnableStatusEnum;
-import top.continew.starter.extension.crud.model.req.BaseReq;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 创建或修改应用参数
+ * 应用创建或修改请求参数
  *
  * @author chengzi
  * @author Charles7c
  * @since 2024/10/17 16:03
  */
 @Data
-@Schema(description = "创建或修改应用参数")
-public class AppReq extends BaseReq {
+@Schema(description = "应用创建或修改请求参数")
+public class AppReq implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

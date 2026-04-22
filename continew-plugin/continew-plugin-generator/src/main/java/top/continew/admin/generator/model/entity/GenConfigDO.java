@@ -76,7 +76,7 @@ public class GenConfigDO implements Serializable {
      */
     @Schema(description = "包名称", example = "top.continew.admin.system")
     @NotBlank(message = "包名称不能为空")
-    @Pattern(regexp = RegexConstants.PACKAGE_NAME, message = "包名称格式错误")
+    @Pattern(regexp = RegexConstants.PACKAGE_NAME, message = "包名称格式不正确")
     @Length(max = 60, message = "包名称不能超过 {max} 个字符")
     private String packageName;
 
@@ -141,9 +141,8 @@ public class GenConfigDO implements Serializable {
      */
     @Schema(description = "类名前缀", example = "User")
     public String getClassNamePrefix() {
-        String tableName = this.getTableName();
-        String rawClassName = StrUtils.blankToDefault(this.getTablePrefix(), tableName, prefix -> StrUtil
-            .removePrefix(tableName, prefix));
+        String rawClassName = StrUtils.blankToDefault(this.getTablePrefix(), this.getTableName(), prefix -> StrUtil
+            .removePrefix(this.getTableName(), prefix));
         return StrUtil.upperFirst(StrUtil.toCamelCase(rawClassName));
     }
 }

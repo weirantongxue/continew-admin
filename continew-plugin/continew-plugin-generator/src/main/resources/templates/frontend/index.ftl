@@ -1,5 +1,5 @@
 <template>
-  <div class="table-page">
+  <GiPageLayout>
     <GiTable
       title="${businessName}管理"
       row-key="id"
@@ -19,14 +19,18 @@
 	  <#if fieldConfig.formType == "SELECT"><#-- 下拉框 -->
         <a-select
           v-model="queryForm.${fieldConfig.fieldName}"
-          :options="${fieldConfig.columnName}_enum"
+          :options="${fieldConfig.dictCode!''}"
           placeholder="请选择${fieldConfig.comment}"
           allow-clear
           style="width: 150px"
           @change="search"
         />
 	  <#elseif fieldConfig.formType == "RADIO"><#-- 单选框 -->
-		<a-radio-group v-model="queryForm.${fieldConfig.fieldName}" :options="${fieldConfig.dictCode!'dictKey 或者自定义数组'}" @change="search"/>
+		<a-radio-group 
+          v-model="queryForm.${fieldConfig.fieldName}" 
+          :options="${fieldConfig.dictCode!'dictKey 或者自定义数组'}" 
+          @change="search"
+        />
 	  <#elseif fieldConfig.formType == "DATE"><#-- 日期框 -->
         <#if fieldConfig.queryType == "BETWEEN">
         <DateRangePicker v-model="queryForm.${fieldConfig.fieldName}" format="YYYY-MM-DD" @change="search" />
@@ -61,7 +65,7 @@
         </a-button>
       </template>
       <template #toolbar-right>
-        <a-button v-permission="['${apiModuleName}:${apiName}:add']" type="primary" @click="onAdd">
+        <a-button v-permission="['${apiModuleName}:${apiName}:create']" type="primary" @click="onAdd">
           <template #icon><icon-plus /></template>
           <template #default>新增</template>
         </a-button>
@@ -81,7 +85,7 @@
       </#list>
       <template #action="{ record }">
         <a-space>
-          <a-link v-permission="['${apiModuleName}:${apiName}:detail']" title="详情" @click="onDetail(record)">详情</a-link>
+          <a-link v-permission="['${apiModuleName}:${apiName}:get']" title="详情" @click="onDetail(record)">详情</a-link>
           <a-link v-permission="['${apiModuleName}:${apiName}:update']" title="修改" @click="onUpdate(record)">修改</a-link>
           <a-link
             v-permission="['${apiModuleName}:${apiName}:delete']"
@@ -96,16 +100,16 @@
       </template>
     </GiTable>
 
-    <${classNamePrefix}AddModal ref="${classNamePrefix}AddModalRef" @save-success="search" />
-    <${classNamePrefix}DetailDrawer ref="${classNamePrefix}DetailDrawerRef" />
-  </div>
+    <AddModal ref="AddModalRef" @save-success="search" />
+    <DetailDrawer ref="DetailDrawerRef" />
+  </GiPageLayout>
 </template>
 
 <script setup lang="ts">
-import ${classNamePrefix}AddModal from './${classNamePrefix}AddModal.vue'
-import ${classNamePrefix}DetailDrawer from './${classNamePrefix}DetailDrawer.vue'
+import type { TableInstance } from '@arco-design/web-vue'
+import AddModal from './AddModal.vue'
+import DetailDrawer from './DetailDrawer.vue'
 import { type ${classNamePrefix}Resp, type ${classNamePrefix}Query, delete${classNamePrefix}, export${classNamePrefix}, list${classNamePrefix} } from '@/apis/${apiModuleName}/${apiName}'
-import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useDownload, useTable } from '@/hooks'
 import { useDict } from '@/hooks/app'
 import { isMobile } from '@/utils'
@@ -133,7 +137,7 @@ const {
   search,
   handleDelete
 } = useTable((page) => list${classNamePrefix}({ ...queryForm, ...page }), { immediate: true })
-const columns = ref<TableInstanceColumns[]>([
+const columns: TableInstance['columns'] = [
 <#if fieldConfigs??>
   <#list fieldConfigs as fieldConfig>
   <#if fieldConfig.showInList>
@@ -154,9 +158,9 @@ const columns = ref<TableInstanceColumns[]>([
     width: 160,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['${apiModuleName}:${apiName}:detail', '${apiModuleName}:${apiName}:update', '${apiModuleName}:${apiName}:delete'])
+    show: has.hasPermOr(['${apiModuleName}:${apiName}:get', '${apiModuleName}:${apiName}:update', '${apiModuleName}:${apiName}:delete'])
   }
-]);
+]
 
 // 重置
 const reset = () => {
@@ -181,21 +185,21 @@ const onExport = () => {
   useDownload(() => export${classNamePrefix}(queryForm))
 }
 
-const ${classNamePrefix}AddModalRef = ref<InstanceType<typeof ${classNamePrefix}AddModal>>()
+const AddModalRef = ref<InstanceType<typeof AddModal>>()
 // 新增
 const onAdd = () => {
-  ${classNamePrefix}AddModalRef.value?.onAdd()
+  AddModalRef.value?.onAdd()
 }
 
 // 修改
 const onUpdate = (record: ${classNamePrefix}Resp) => {
-  ${classNamePrefix}AddModalRef.value?.onUpdate(record.id)
+  AddModalRef.value?.onUpdate(record.id)
 }
 
-const ${classNamePrefix}DetailDrawerRef = ref<InstanceType<typeof ${classNamePrefix}DetailDrawer>>()
+const DetailDrawerRef = ref<InstanceType<typeof DetailDrawer>>()
 // 详情
 const onDetail = (record: ${classNamePrefix}Resp) => {
-  ${classNamePrefix}DetailDrawerRef.value?.onOpen(record.id)
+  DetailDrawerRef.value?.onOpen(record.id)
 }
 </script>
 

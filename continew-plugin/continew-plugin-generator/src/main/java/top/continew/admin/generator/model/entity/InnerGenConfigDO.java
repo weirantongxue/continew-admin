@@ -20,7 +20,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import top.continew.starter.core.constant.StringConstants;
 
 import java.io.Serial;
@@ -34,7 +33,6 @@ import java.util.Set;
  * @since 2024/8/30 19:35
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 public class InnerGenConfigDO extends GenConfigDO {
 
     @Serial
@@ -99,6 +97,11 @@ public class InnerGenConfigDO extends GenConfigDO {
      * 是否包含 Time 包字段
      */
     private boolean hasTimeField;
+
+    /**
+     * 引入的包
+     */
+    private List<String> imports;
 
     public InnerGenConfigDO() {
     }

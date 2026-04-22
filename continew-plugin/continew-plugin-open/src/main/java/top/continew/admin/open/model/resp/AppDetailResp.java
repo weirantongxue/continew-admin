@@ -16,19 +16,19 @@
 
 package top.continew.admin.open.model.resp;
 
-import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-import com.alibaba.excel.annotation.ExcelProperty;
+import cn.idev.excel.annotation.ExcelIgnoreUnannotated;
+import cn.idev.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import top.continew.admin.common.base.BaseDetailResp;
+import top.continew.admin.common.base.model.resp.BaseDetailResp;
 import top.continew.admin.common.enums.DisEnableStatusEnum;
-import top.continew.starter.file.excel.converter.ExcelBaseEnumConverter;
+import top.continew.starter.excel.converter.ExcelBaseEnumConverter;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
 
 /**
- * 应用详情信息
+ * 应用详情响应参数
  *
  * @author chengzi
  * @author Charles7c
@@ -36,7 +36,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @ExcelIgnoreUnannotated
-@Schema(description = "应用详情信息")
+@Schema(description = "应用详情响应参数")
 public class AppDetailResp extends BaseDetailResp {
 
     @Serial

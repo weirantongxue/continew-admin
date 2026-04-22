@@ -18,6 +18,7 @@ package top.continew.admin.schedule.api;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
@@ -31,8 +32,9 @@ import cn.hutool.jwt.RegisteredPayload;
 import com.aizuda.snailjob.common.core.model.Result;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import top.continew.admin.schedule.constant.JobConstants;
+import top.continew.admin.schedule.exception.ScheduleClientException;
+import top.continew.admin.schedule.exception.ScheduleServerException;
 import top.continew.admin.schedule.model.JobPageResult;
 import top.continew.starter.cache.redisson.util.RedisUtils;
 import top.continew.starter.extension.crud.model.resp.PageResp;
@@ -74,12 +76,10 @@ public class JobClient {
      * @param <T>         响应类型
      * @return 响应信息
      */
-    public <T> T request(Supplier<ResponseEntity<Result<T>>> apiSupplier) {
-        ResponseEntity<Result<T>> responseEntity = apiSupplier.get();
-        this.checkResponse(responseEntity);
-        Result<T> result = responseEntity.getBody();
+    public <T> T request(Supplier<Result<T>> apiSupplier) {
+        Result<T> result = apiSupplier.get();
         if (!STATUS_SUCCESS.equals(result.getStatus())) {
-            throw new IllegalStateException(result.getMessage());
+            throw new ScheduleClientException(result.getMessage());
         }
         return result.getData();
     }
@@ -91,12 +91,10 @@ public class JobClient {
      * @param <T>         响应类型
      * @return 分页列表信息
      */
-    public <T> PageResp<T> requestPage(Supplier<ResponseEntity<JobPageResult<List<T>>>> apiSupplier) {
-        ResponseEntity<JobPageResult<List<T>>> responseEntity = apiSupplier.get();
-        this.checkResponse(responseEntity);
-        JobPageResult<List<T>> result = responseEntity.getBody();
+    public <T> PageResp<T> requestPage(Supplier<JobPageResult<List<T>>> apiSupplier) {
+        JobPageResult<List<T>> result = apiSupplier.get();
         if (!STATUS_SUCCESS.equals(result.getStatus())) {
-            throw new IllegalStateException(result.getMessage());
+            throw new ScheduleClientException(result.getMessage());
         }
         PageResp<T> page = new PageResp<>();
         page.setList(result.getData());
@@ -131,27 +129,19 @@ public class JobClient {
         paramMap.put("password", SecureUtil.md5(password));
         HttpRequest httpRequest = HttpUtil.createPost("%s%s".formatted(url, AUTH_URL));
         httpRequest.body(JSONUtil.toJsonStr(paramMap));
-        HttpResponse response = httpRequest.execute();
-        if (!response.isOk() || response.body() == null) {
-            throw new IllegalStateException("连接任务调度中心异常");
-        }
-        Result<?> result = JSONUtil.toBean(response.body(), Result.class);
-        if (!STATUS_SUCCESS.equals(result.getStatus())) {
-            log.warn("Password Authentication failed, expected a successful response. error msg: {}", result
-                .getMessage());
-            throw new IllegalStateException(result.getMessage());
-        }
-        return JSONUtil.parseObj(result.getData()).getStr("token");
-    }
-
-    /**
-     * 检查响应
-     *
-     * @param responseEntity 响应信息
-     */
-    private void checkResponse(ResponseEntity<?> responseEntity) {
-        if (!responseEntity.getStatusCode().is2xxSuccessful() || responseEntity.getBody() == null) {
-            throw new IllegalStateException("连接任务调度中心异常");
+        try (HttpResponse response = httpRequest.execute()) {
+            if (!response.isOk() || response.body() == null) {
+                throw new ScheduleServerException("连接任务调度中心异常");
+            }
+            Result<?> result = JSONUtil.toBean(response.body(), Result.class);
+            if (!STATUS_SUCCESS.equals(result.getStatus())) {
+                log.warn("Password Authentication failed, expected a successful response. error msg: {}", result
+                    .getMessage());
+                throw new ScheduleServerException(result.getMessage());
+            }
+            return JSONUtil.parseObj(result.getData()).getStr("token");
+        } catch (IORuntimeException e) {
+            throw new ScheduleServerException("无法连接任务调度中心，请检查调度中心服务");
         }
     }
 }

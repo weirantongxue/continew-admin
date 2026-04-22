@@ -18,9 +18,9 @@ package top.continew.admin.open.util;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.context.model.SaRequest;
-import cn.dev33.satoken.sign.SaSignTemplate;
+import cn.dev33.satoken.sign.template.SaSignTemplate;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Open Api 工具类
@@ -41,7 +41,7 @@ public class OpenApiUtils {
      */
     public static boolean isSignParamExists() {
         SaRequest saRequest = SaHolder.getRequest();
-        List<String> paramNames = saRequest.getParamNames();
+        Collection<String> paramNames = saRequest.getParamNames();
         return paramNames.stream().anyMatch(SaSignTemplate.sign::equals);
     }
 }

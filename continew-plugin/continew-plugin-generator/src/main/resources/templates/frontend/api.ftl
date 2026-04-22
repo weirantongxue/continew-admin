@@ -1,4 +1,5 @@
 import http from '@/utils/http'
+import type { LabelValueState } from '@/types/global'
 
 const BASE_URL = '/${apiModuleName}/${apiName}'
 
@@ -37,7 +38,7 @@ export interface ${classNamePrefix}PageQuery extends ${classNamePrefix}Query, Pa
 
 /** @desc 查询${businessName}列表 */
 export function list${classNamePrefix}(query: ${classNamePrefix}PageQuery) {
-  return http.get<PageRes<${classNamePrefix}Resp[]>>(`${'$'}{BASE_URL}`, query)
+  return http.get<PageRes<${classNamePrefix}Resp[]>>(BASE_URL, query)
 }
 
 /** @desc 查询${businessName}详情 */
@@ -47,7 +48,7 @@ export function get${classNamePrefix}(id: string) {
 
 /** @desc 新增${businessName} */
 export function add${classNamePrefix}(data: any) {
-  return http.post(`${'$'}{BASE_URL}`, data)
+  return http.post(BASE_URL, data)
 }
 
 /** @desc 修改${businessName} */
@@ -57,10 +58,15 @@ export function update${classNamePrefix}(data: any, id: string) {
 
 /** @desc 删除${businessName} */
 export function delete${classNamePrefix}(id: string) {
-  return http.del(`${'$'}{BASE_URL}/${'$'}{id}`)
+  return http.del(BASE_URL, { ids: [id] })
 }
 
 /** @desc 导出${businessName} */
 export function export${classNamePrefix}(query: ${classNamePrefix}Query) {
   return http.download(`${'$'}{BASE_URL}/export`, query)
+}
+
+/** @desc 查询${businessName}字典 */
+export function list${classNamePrefix}Dict(query?: ${classNamePrefix}Query) {
+return http.get<LabelValueState[]>(`${'$'}{BASE_URL}/dict`, query)
 }

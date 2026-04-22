@@ -1,5 +1,19 @@
 package ${packageName}.${subPackageName};
 
+import lombok.Data;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import cn.idev.excel.annotation.ExcelIgnoreUnannotated;
+import cn.idev.excel.annotation.ExcelProperty;
+
+import top.continew.admin.common.base.model.resp.BaseDetailResp;
+import top.continew.starter.excel.converter.ExcelBaseEnumConverter;
+<#if imports??>
+    <#list imports as className>
+import ${className};
+    </#list>
+</#if>
 import java.io.Serial;
 <#if hasTimeField>
 import java.time.*;
@@ -7,15 +21,6 @@ import java.time.*;
 <#if hasBigDecimalField>
 import java.math.BigDecimal;
 </#if>
-
-import lombok.Data;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
-import com.alibaba.excel.annotation.ExcelProperty;
-
-import top.continew.admin.common.base.BaseDetailResp;
 
 /**
  * ${businessName}详情信息
@@ -37,7 +42,11 @@ public class ${className} extends BaseDetailResp {
      * ${fieldConfig.comment}
      */
     @Schema(description = "${fieldConfig.comment}")
+    <#if fieldConfig.fieldType?ends_with("Enum")>
+    @ExcelProperty(value = "${fieldConfig.comment}", converter = ExcelBaseEnumConverter.class)
+    <#else>
     @ExcelProperty(value = "${fieldConfig.comment}")
+    </#if>
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
   </#list>
 </#if>
