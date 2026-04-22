@@ -34,7 +34,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import top.continew.admin.common.converter.FileToMultipartFileConverter;
 import top.continew.admin.common.model.dto.LoginUser;
-import top.continew.admin.common.util.ApiTokenUtils;
 import top.continew.admin.common.util.helper.LoginHelper;
 import top.continew.admin.front.mapper.DrawImgMapper;
 import top.continew.admin.front.mapper.DrawTaskMapper;
@@ -91,7 +90,7 @@ public class DrawServiceImpl implements DrawService {
         if (null != modelScriptVo && StringUtils.isNotBlank(modelScriptVo.getPrompt())) {
             preset = modelScriptVo.getPrompt();
         }
-         return cogview(drawReq, modelResp, loginUser.getDeptId(), loginUser.getId(), preset);
+        return cogview(drawReq, modelResp, loginUser.getDeptId(), loginUser.getId(), preset);
     }
 
     private R<DrawTaskVo> cogview(DrawReq drawReq, ModelDetailResp modelResp, Long deptId, Long userId, String preset) {
@@ -100,7 +99,7 @@ public class DrawServiceImpl implements DrawService {
             prompt = preset + "\n" + prompt;
         }
         DrawTaskVo drawTaskVo = new DrawTaskVo();
-       // String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
+        // String authToken = ApiTokenUtils.generateClientToken("9258a4b118cd7545ea2389bfe07334fc.St00V5LEAYBr7F0b");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("model", modelResp.getName());
         jsonObject.put("prompt", prompt);
@@ -160,7 +159,6 @@ public class DrawServiceImpl implements DrawService {
 
         return R.success(drawTaskVo);
     }
-
 
     @Override
     public R<Object> checkDrawTask(String taskId) {

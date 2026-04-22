@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 import top.continew.admin.common.constant.TimerConstant;
 import top.continew.admin.common.enums.EventNameType;
 import top.continew.admin.common.model.dto.LoginUser;
-import top.continew.admin.common.util.ApiTokenUtils;
 import top.continew.admin.common.util.StreamUtils;
 import top.continew.admin.common.util.WsUtils;
 import top.continew.admin.common.util.helper.LoginHelper;
@@ -74,8 +73,9 @@ public class ChatGlmServiceImpl implements ChatGlmService {
             GPTEventSourceListener gptEventSourceListener = new GPTEventSourceListener(userId, messageId, chatMessageService, message, timer, loginUser
                 .getDeptId());
             //String authToken = ApiTokenUtils.generateClientToken(modelDetailResp.getApiKey());
-            StreamUtils.streamCompletion(modelDetailResp.getUrl(), modelDetailResp.getApiKey(), gptEventSourceListener, ChatMessageUtils
-                .convertModelRequest(messageCreateValidate, modelDetailResp, modelScriptDetailResp));
+            StreamUtils.streamCompletion(modelDetailResp.getUrl(), modelDetailResp
+                .getApiKey(), gptEventSourceListener, ChatMessageUtils
+                    .convertModelRequest(messageCreateValidate, modelDetailResp, modelScriptDetailResp));
         } catch (Exception e) {
             log.error("Glm6B请求失败");
         }
